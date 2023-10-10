@@ -16,9 +16,9 @@
                     </div>
                 </div>
                     <div class="section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <AgentItem v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.agents"/>
-                        <BookItem v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.books"/>
-                        <MarkItem v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.marks"/>
+                        <AgentItem v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
+                        <BookItem v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
+                        <MarkItem v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
                     </div>
             </div>
         </div>

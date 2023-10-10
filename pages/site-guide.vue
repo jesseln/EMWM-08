@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ViewDesigner v-if="viewStore.formattedLibrary.length" />
+        <!-- <ViewDesigner v-if="viewStore.formattedLibrary.length" /> -->
     </div>
 </template>
 
