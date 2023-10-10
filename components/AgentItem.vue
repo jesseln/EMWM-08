@@ -54,7 +54,7 @@
                          <p>{{ getIDP(item, 'colour') }}</p>  <!-- Was itemBundle.collectionProp2 array fix required for multiple colour values -->
                     </li>
                 </ul>
-                <div class="item-view">
+                <!-- <div class="item-view">
                 <div class="item-view-header-container">
                     <h2 class="item-view-header">View Features</h2>
                 </div>
@@ -72,7 +72,7 @@
                         <h4>{{libraryDisplay.viewType[itemBundle.viewProp2] }}
                             |
                             {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp2])[libraryDisplay.view[itemBundle.viewProp2]] }}</h4>    
-                        <h3>{{ getIDP(item, 'colour') }}</h3> <!-- Was itemBundle.viewProp22 array fix required for multiple colour values -->
+                        <h3>{{ getIDP(item, 'colour') }}</h3> 
                     </li>
                     <li>
                         <p class="item-view-subheader-type">{{itemBundle.viewProp3}}</p>
@@ -89,7 +89,7 @@
                         <h3>{{ getIDP(item, itemBundle.viewProp4) }}</h3>
                     </li>
                 </ul>
-            </div>
+            </div> -->
             </div>
         </div>
         </template>

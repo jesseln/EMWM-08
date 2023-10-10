@@ -75,6 +75,7 @@ export const useViewStore = defineStore('view', ()=>{
     const itemHeight = ref()
     const itemColour = ref()
     const colourSet = ref()
+    const ordinalColourMap = ref()
 
     
 
@@ -87,6 +88,8 @@ export const useViewStore = defineStore('view', ()=>{
         itemColour.value = formatColour();
         //Colour Categories
         colourSet.value = getColourSet.value //Included here to prevent computed from firing before library.data is returned
+
+        ordinalColourMap.value = getOrdinalColourMap();
         }
     })
 
@@ -192,7 +195,7 @@ export const useViewStore = defineStore('view', ()=>{
             const viewModeType = libraryDisplay.viewType[viewMode]
             const colourFunction = viewMap.get(viewModeType)[viewSelection].func
             const colourScheme = viewMap.get(viewModeType)[viewSelection].scheme
-            const colourScale = colourBandscale(getColourSet.value)
+            const colourScale = colourBandscale(getColourSet.value) // Returns bandscale for colour values
             const colourFunc = d3[colourFunction](d3[colourScheme]) //Applies colour functions and schemes from Object. Domain defaults to [0,1]
             return (
                     (value) => colourFunc(colourScale(value)) //Returns nested scale function after applying band function (IIFE)
@@ -200,6 +203,18 @@ export const useViewStore = defineStore('view', ()=>{
         }else{
             return (_)=> {return '#fff281'}
         }    
+    }
+
+    function getOrdinalColourMap(){
+        const ordinalMap = Array.from(getColourSet.value).map((category)=>{
+            return {'colour': itemColour.value(category), 'category': category}
+        })
+
+        // const ordinalReduce = ordinalMap.reduce((acc, curr)=>({
+        //     ...acc,
+        //     [curr.colour] : curr.category, ...(acc[curr.colour] || {})
+        // }), {})
+        return  d3.flatGroup(ordinalMap, d => d.colour)
     }
 
     function colourBandscale(colourSet){
@@ -327,6 +342,7 @@ export const useViewStore = defineStore('view', ()=>{
                 itemHeight,
                 itemColour,
                 colourSet, 
+                ordinalColourMap,
                 viewHeightBounds, 
                 viewColourSet,
                 parseDatabase,

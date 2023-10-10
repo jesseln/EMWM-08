@@ -71,7 +71,7 @@
                         <p>{{ getIDP(item, itemBundle.collectionProp2) }}</p>
                     </li>
                 </ul>
-                <div class="item-view">
+                <!-- <div class="item-view">
                 <div class="item-view-header-container">
                     <h2 class="item-view-header">View Features</h2>
                 </div>
@@ -108,7 +108,7 @@
                 </ul>
 
                 
-            </div>
+            </div> -->
             </div>
         </div>
         </template>

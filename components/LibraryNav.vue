@@ -162,14 +162,20 @@
     </div>
     <div class="library-nav-colour-wrapper">
         <div class="library-nav-title-block">
-        <h3 class="library-nav-view-colour">Colour Categories</h3>
-        </div>  
-        <div  v-for="item in  colourSet" :key="item">
+            <h2 class="library-nav-view-colour">Colour Categories</h2>
+        </div>
+        <div class="library-nav-colour-block"> 
+        <div  v-for="colour in  ordinalColourMap" :key="colour">
             <div class="library-nav-colour-item">
-                <div class="library-nav-colour-category" :style="{ background: itemColour(item)}"></div>
-                <h2 class="library-nav-colour-label">{{item}}</h2>
+
+                <div class="library-nav-colour-label-list" v-for="item in colour[1]" :key="item">
+                    <div class="library-nav-colour-category" :style="{ background: colour[0]}">
+                        <h3 class="library-nav-colour-label" :style="{ color: contrastHandler(colour[0])}">{{item.category}}</h3>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 </template>
@@ -185,6 +191,7 @@ const { libraryData,
         itemHeight,
         itemColour, 
         colourSet,
+        ordinalColourMap,
         viewHeightBounds, 
         viewColourSet } = storeToRefs(viewStore)
         const { parseDatabase,
@@ -199,6 +206,10 @@ const { categoryMap,
         invCategoryMap, 
         colourMapFiltered,
         scales } = storeToRefs(referenceStore)
+
+        //Utility Functions
+const { handleObjectProperty,
+        contrastHandler } = useUtils();
 
 
         console.log('Array.from colourSet',viewStore.getColourSet)
@@ -277,64 +288,86 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     onClickOutside(height, (event) => visible.height? visible.height = !visible.height : null)
     onClickOutside(colour, (event) => visible.colour? visible.colour = !visible.colour : null)
 
+    watchEffect(()=>{
+        console.log('ordinal olour map',viewStore.ordinalColourMap)
+    })
+
 		
 </script>
 
 <style lang="scss" scoped>
 
 .library-nav-container{
-    min-width: 10rem;
     margin: 1rem var(--sideMargins) 3rem;
     display: grid;
     grid-template-rows: auto auto;
-
+    justify-content: center;
 }
 .library-nav-wrapper{
     grid-row: 1 / 2;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
-
+    // background-color: rgba(255,255,255,0.8);
 }
 .library-nav-colour-wrapper{
-    grid-row: 2 / 3;
+    grid-row: 2/3;
     display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    gap: 2rem;
-    padding: 0 0 1rem;
+    flex-flow: column wrap;
+    justify-content: center;
+    padding: 0 0 0.5rem;
+    // background-color: rgba(255, 255, 255, 0.8);
+    border-bottom: 2px solid rgb(255, 255, 255);
+    // border-radius: 10rem;
+    // width: 100%;
+    // overflow: hidden;
 
 }
 
+.library-nav-colour-block{
+    grid-row: 2/3;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    padding: 0 0 0.5rem;
+    // background-color: rgba(255, 255, 255, 0.8);
+    border-bottom: 2px solid rgb(255, 255, 255);
+}
 .library-nav-colour-item{
     // position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     // align-content: center;
-    align-items: baseline;
+    align-items: center;
 }
 .library-nav-colour-category{
-        align-self: center;
-	// position: absolute;
-	// bottom: 2px;
-	// left: 2px;
-	padding: 0.5rem;
-    margin:  0 0.5rem; 
-    // display: flex;
-    // flex-wrap: nowrap;
-    // flex-direction: column;
-    // justify-content: flex-start;
-    // align-content: center;
-    // align-items: center;
+	padding: 0.25rem 0.2rem;
+    margin:  0.05rem 0.5rem; 
 	border-radius: 20rem;
+    width: 100%;
+    border: 1px solid rgb(255, 255, 255);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    min-width:5rem;
+    // box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px;
+}
+
+.library-nav-colour-label-list{
+    padding: 0 0.1rem;
+    margin: 0 0.1rem;
+    display: flex;
+    align-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+
 }
 .library-nav-colour-label{
-    align-self: center;
-    font-family: 'Raleway', sans-serif;
-	font-size: 0.85rem;
-	font-weight: 450;
-    letter-spacing: 0.05rem;
-    line-height: 1.25rem;
+    // align-self: center;
+    text-align: center;
+	font-family: 'Raleway', sans-serif;
+	font-size: 0.7rem;
+	font-weight: 500;
+    line-height: 0.8rem;
 	color: black;
     width: 100%;
 }
@@ -345,8 +378,10 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     align-items: center;
 }
 
+
 .library-nav-title-block{
-    margin: 0 1rem;
+    margin: 0.2rem 1rem;
+    align-self: center;
 }
 
 .library-nav-view{
@@ -361,15 +396,18 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 }
 
 .library-nav-view-colour{
-    align-self: center;
+
+    display: flex;
+    flex-flow: row wrap;
     // margin: 0.5rem 0 0 0;
     font-family: 'Raleway', sans-serif;
 	font-size: 0.85rem;
-	font-weight: 450;
+	font-weight: 500;
     letter-spacing: 0.05rem;
     line-height: 1.25rem;
 	color: black;
-    width: 100%;
+    flex-shrink: 1;
+    letter-spacing: 0.2rem;
 }
 
 

@@ -127,9 +127,9 @@ const { categoryMap,
         z-index: 5;
         position: sticky;
         top: 0;
-        background-color: white;
+        background-color: rgba(255,255,255,0.9);
         width: 100%;
-        opacity: 100%;
+        // opacity: 100%;
     }
 
     // .nav-div:hover{

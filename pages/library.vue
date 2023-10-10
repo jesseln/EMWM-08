@@ -1,8 +1,7 @@
 <template>
     <div >
-        <h1>Hello, I'm an inDex page</h1>
 
-    <NuxtPage />
+    <NuxtPage :setQuery="agent01"/>
 
     
     </div>
@@ -11,6 +10,8 @@
   </template>
   
   <script setup>
+    // ROUTE MANAGERS
+    const route = useRoute()
 
   </script>
   
