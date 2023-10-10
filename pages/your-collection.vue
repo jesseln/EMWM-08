@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <YourShelf /> -->
+        <YourShelf />
         <button ref="toTopButton" @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
             🖊️
         </button>

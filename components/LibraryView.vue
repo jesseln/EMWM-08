@@ -1,7 +1,4 @@
 <template>
-    <div>
-        <!-- <h1 class="library-title">The Library of Libraries</h1> -->
-    </div>
     <div class="shelf" v-for="shelf in formattedLibrary" :key="shelf">
         <div class="shelf-title-box">
             <h2 class="shelf-title">{{shelf[0]}}</h2>
