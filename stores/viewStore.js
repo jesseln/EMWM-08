@@ -71,49 +71,77 @@ export const useViewStore = defineStore('view', ()=>{
     })
 
     // LIBRARY DATA //
-    const formattedLibrary = ref([])
-    const itemHeight = ref()
-    const itemColour = ref()
-    const colourSet = ref()
-    const ordinalColourMap = ref()
-
+    const formattedLibrary = ref([]);
+    const itemHeight = ref();
+    const itemColour = ref();
+    const colourSet = ref();
+    const ordinalColourMap = ref();
+    const colourScale = ref();
+    const colourScaleConverter = ref();
+    const domainIndex = ref();
+    const viewHeightBounds = ref();
+    const domainColourIndex = ref();
+    const viewColourBounds = ref();
     
 
     watch([libraryData, libraryDisplay],() => {
         if(libraryData.value.length !== undefined){
         formattedLibrary.value =  formatLibrary(libraryData.value); //Reactive when not testing
+
+        domainIndex.value = getDomainIndex('height');
+        viewHeightBounds.value = getIndexItems('height');
+
+        domainColourIndex.value = getDomainIndex('colour');
+        viewColourBounds.value = getIndexItems('colour');
+
+
         //Item Height - Returns d3 Scale Function
-        itemHeight.value = formatHeight(libraryData.value);
+        itemHeight.value = formatHeight();
         //Item Colour - Returns d3 Scale Function
         itemColour.value = formatColour();
         //Colour Categories
         colourSet.value = getColourSet.value //Included here to prevent computed from firing before library.data is returned
 
+        colourScale.value = colourBandscale();
+
+        colourScaleConverter.value =  colourFunction();
+
         ordinalColourMap.value = getOrdinalColourMap();
+
         }
     })
+    
 
-
-    // INTERNAL GETTERS //
     //Get item height bounds
-    const getDomainIndex = computed (() => {
-        return {min: d3.minIndex(libraryData.value, d => getIDP(d, 'height')), 
-                max: d3.maxIndex(libraryData.value, d => getIDP(d, 'height'))}
-    })
+    function getDomainIndex(viewMode) {
+        return {min: d3.minIndex(libraryData.value, d => getIDP(d, viewMode)), 
+                max: d3.maxIndex(libraryData.value, d => getIDP(d, viewMode))}
+    }
+
+    function getIndexItems(viewMode) {
+        if(viewMode === 'height'){
+            return [libraryData.value[domainIndex.value.min],
+                    libraryData.value[domainIndex.value.max]]
+        }
+        if(viewMode === 'colour'){
+            return [libraryData.value[domainColourIndex.value.min],
+                    libraryData.value[domainColourIndex.value.max]]
+        }
+    }
+
+
+    
+    //Get item colour bounds
+
+
+
+
 
     //Get unique values in colour set
     const getColourSet = computed (() => {
         return processColourSet(libraryData.value)
     })
-    
-    // EXTERNAL GETTERS //
-    //Library Structure
 
-    // CREATE VIEW EDITOR //
-    const viewHeightBounds = computed (() => {
-        return [libraryData.value[getDomainIndex.value.min],
-                libraryData.value[getDomainIndex.value.max]]
-    })
     //Currently applies to Arrays only
     const viewColourSet = computed (() => {
         return processColourItems(libraryData.value, getColourSet.value)
@@ -152,14 +180,14 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
     // HANDLE HEIGHT //
-    function formatHeight(data) {
+    function formatHeight() {
         const viewSelection = libraryDisplay.view.height
         if(viewSelection !== "Not Selected") {
             //Returns a function which takes the log scale of the input then invokes the d3 scale function (IIFE)
             if(heightCategory.logarithmic.includes(viewSelection)){
                 return (value)=>{ 
                     return (d3.scaleLinear()
-                                .domain(chooseHeightDomain(data).map(d => Math.log(d))) 
+                                .domain(chooseHeightDomain(libraryData.value).map(d => Math.log(d))) 
                                 .unknown(scales.maxItemHeight) //Set all non-numeric values to max height
                                 .range([scales.minItemHeight, scales.maxItemHeight])
                                 .clamp(true)
@@ -167,7 +195,7 @@ export const useViewStore = defineStore('view', ()=>{
                 }
             }else{
                 return d3.scaleLinear()
-                            .domain(chooseHeightDomain(data)) 
+                            .domain(chooseHeightDomain(libraryData.value)) 
                             .unknown(scales.maxItemHeight) //Set all non-numeric values to max height
                             .range([scales.minItemHeight, scales.maxItemHeight])
                             .clamp(true);     
@@ -179,26 +207,31 @@ export const useViewStore = defineStore('view', ()=>{
     
     function chooseHeightDomain(data){   
             const viewSelection = libraryDisplay.view.height
-            const domainIndex = getDomainIndex.value
             if(heightCategory.year.includes(viewSelection)) {
                 return [1450, 1750] //was - clamp(1450, longestNumber, 1750)
             }else{
-                return [getIDP(data[domainIndex.min], 'height'), getIDP(data[domainIndex.max], 'height')]
+                return [getIDP(data[domainIndex.value.min], 'height'), getIDP(data[domainIndex.value.max], 'height')]
             }
     }
+
+
+
+    function colourFunction() {
+        const viewMode = 'colour'
+        const viewSelection = libraryDisplay.view[viewMode]
+        const viewModeType = libraryDisplay.viewType[viewMode]
+        const colourFunction = viewMap.get(viewModeType)[viewSelection].func
+        const colourScheme = viewMap.get(viewModeType)[viewSelection].scheme
+        return d3[colourFunction](d3[colourScheme]) //Applies colour functions and schemes from Object. Domain defaults to [0,1]
+    }
+   
+
 
     // HANDLE COLOUR //
     function formatColour(){
         if(libraryDisplay.view.colour !== "Not Selected"){
-            const viewMode = 'colour'
-            const viewSelection = libraryDisplay.view[viewMode]
-            const viewModeType = libraryDisplay.viewType[viewMode]
-            const colourFunction = viewMap.get(viewModeType)[viewSelection].func
-            const colourScheme = viewMap.get(viewModeType)[viewSelection].scheme
-            const colourScale = colourBandscale(getColourSet.value) // Returns bandscale for colour values
-            const colourFunc = d3[colourFunction](d3[colourScheme]) //Applies colour functions and schemes from Object. Domain defaults to [0,1]
             return (
-                    (value) => colourFunc(colourScale(value)) //Returns nested scale function after applying band function (IIFE)
+                    (colourByValue) => colourScaleConverter.value(colourScale.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
                 )   
         }else{
             return (_)=> {return '#fff281'}
@@ -217,10 +250,9 @@ export const useViewStore = defineStore('view', ()=>{
         return  d3.flatGroup(ordinalMap, d => d.colour)
     }
 
-    function colourBandscale(colourSet){
-        // console.log('Array.from colourSet',Array.from(colourSet))
-        return d3.scaleBand()
-                    .domain(Array.from(colourSet)) //Range defaults to [0,1]
+    //Returns bandscale for colour values
+    function colourBandscale(){
+        return d3.scaleBand().domain(Array.from(getColourSet.value)) //Range defaults to [0,1]
     }
 
     function processColourSet(data){
@@ -341,10 +373,15 @@ export const useViewStore = defineStore('view', ()=>{
                 heightCategory,
                 itemHeight,
                 itemColour,
+                colourScale,
+                colourScaleConverter,
                 colourSet, 
                 ordinalColourMap,
-                viewHeightBounds, 
                 viewColourSet,
+                domainIndex,
+                viewHeightBounds,
+                domainColourIndex,
+                viewColourBounds,
                 parseDatabase,
                 handleViewSelection,
                 getIDP,

@@ -9,6 +9,7 @@
     <div class="nav-div">
         <LibraryNav />
     </div>
+    <!-- <ViewSidebar /> -->
     <div class="library-type-title-box">
         <h1 class="library-type-title">{{ libraryDisplay.pageText.libraryTypeTitle }}</h1>
         <p class="library-type-subtitle">{{ libraryDisplay.pageText.libraryTypeSubtitle }}</p>
@@ -16,7 +17,10 @@
     <div v-if="dataCheck">
         <LibraryView />
     </div>
-
+    
+    <div class="nav-bottom-div">
+        <LibraryBottomNav />
+    </div>
     <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
         🖊️
     </button>
@@ -127,9 +131,22 @@ const { categoryMap,
         z-index: 5;
         position: sticky;
         top: 0;
-        background-color: rgba(255,255,255,0.9);
-        width: 100%;
+        background-color: rgba(255,255,255,0.94);
+        // width: 100%;
+        // height: 100%;
         // opacity: 100%;
+
+    }
+
+    .nav-bottom-div{
+        z-index: 5;
+        position: sticky;
+        bottom: -1px;
+        background-color: rgba(255,255,255,0.94);
+        // width: 100%;
+        // height: 100%;
+        // opacity: 100%;
+
     }
 
     // .nav-div:hover{

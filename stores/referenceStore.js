@@ -86,7 +86,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
     const scales = reactive({
         maxItemHeight: 100 * heightScale,
         maxShelfHeight: 110 * heightScale,
-        minItemHeight: 35 * heightScale,
+        minItemHeight: 50 * heightScale,
         minItemWidth: 16 * widthScale     
     })
 
