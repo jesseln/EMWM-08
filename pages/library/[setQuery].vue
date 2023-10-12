@@ -1,7 +1,9 @@
 <template>
-    <div>
+    <div class="library-explorer-container">
+        <FilterSidebar />
+
     <div class="query-box">
-        <h1 class="query-type"> {{ libraryDisplay.pageText.queryType }} </h1>
+        <!-- <h1 class="query-type"> {{ libraryDisplay.pageText.queryType }} </h1> -->
         <h2 class="query-breadcrumb"> {{ libraryDisplay.pageText.queryBreadcrumb }}</h2>
         <h2 class="query-breadcrumb">Total Items: {{ dataSize }}</h2>
     </div>
@@ -9,7 +11,6 @@
     <div class="nav-div">
         <LibraryNav />
     </div>
-    <!-- <ViewSidebar /> -->
     <div class="library-type-title-box">
         <h1 class="library-type-title">{{ libraryDisplay.pageText.libraryTypeTitle }}</h1>
         <p class="library-type-subtitle">{{ libraryDisplay.pageText.libraryTypeSubtitle }}</p>
@@ -24,7 +25,7 @@
     <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
         🖊️
     </button>
-    <AnnotationPanel v-if="showAnnotations"/>
+        <AnnotationPanel v-if="showAnnotations"/>
     <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button>
 
 
@@ -127,6 +128,8 @@ const { categoryMap,
 </script>
 
 <style lang="scss" scoped>
+
+
     .nav-div{
         z-index: 5;
         position: sticky;

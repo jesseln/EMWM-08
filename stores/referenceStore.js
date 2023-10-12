@@ -193,7 +193,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
         },
         pageText: {
             queryType: 'Agents ',
-            queryBreadcrumb: '/ How many agents are in the collection ?',
+            queryBreadcrumb: 'How many agents are in the collection ?',
             libraryTypeTitle: 'The Agents',
             libraryTypeSubtitle: 'in the libraries',
         }
@@ -218,7 +218,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
         },
         pageText: {
             queryType: 'Agents ',
-            queryBreadcrumb: '/ How many agents are in the collection ?',
+            queryBreadcrumb: 'How many agents are in the collection ?',
             libraryTypeTitle: 'The Agents',
             libraryTypeSubtitle: 'of the libraries',
         }

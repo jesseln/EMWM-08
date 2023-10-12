@@ -1,6 +1,6 @@
 <template>
     <div class="library-nav-container">
-    <div v-if="libraryDisplay.viewType.colour !== 'Not Selected'" class="library-nav-colour-wrapper">
+    <div v-if="libraryDisplay.viewType.colour !== 'NotSelected'" class="library-nav-colour-wrapper">
         <div v-if="viewMap.get(libraryDisplay.viewType.colour)[libraryDisplay.view.colour].func === 'scaleOrdinal'"
             class="library-nav-colour-block"> 
 
@@ -45,13 +45,13 @@
 
         <div class="bottom-label">
             <div class="library-nav-title-block-colour">
-                <h2 class="library-nav-view-colour"></h2>
+                <h3 class="library-nav-view">Colour categories:</h3>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" :width="43*iconScaleFactor" :height="38*iconScaleFactor" viewBox="0 0 43 38" fill="none">
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" :width="43*iconScaleFactor" :height="38*iconScaleFactor" viewBox="0 0 43 38" fill="none">
                 <circle cx="32.7285" cy="28.0532" r="9.35102" fill="#B3DE69"/>
                 <circle cx="21.0395" cy="9.35102" r="9.35102" fill="#BDB9D9"/>
                 <circle cx="9.35102" cy="28.351" r="9.35102" fill="#FB8072"/>
-            </svg>
+            </svg> -->
             <p v-if="libraryDisplay.viewType['colour'] !== 'NotSelected'">
                 {{libraryDisplay.viewType['colour']}} | 
                 {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
@@ -217,9 +217,7 @@ const iconScaleFactor = ref(0.5)
     max-height: fit-content;
 }
 .library-nav-title-block-colour{
-    margin: 0 0 0.25rem;
-    align-self: center;
-    text-align: center;
+
     max-height: 2rem;
 }
 
@@ -238,6 +236,7 @@ const iconScaleFactor = ref(0.5)
     display: flex;
     flex-flow: row wrap;
     // margin: 0.5rem 0 0 0;
+    justify-content: center;
     font-family: 'Raleway', sans-serif;
 	font-size: 0.7rem;
 	font-weight: 450;
@@ -349,7 +348,7 @@ const iconScaleFactor = ref(0.5)
         align-items: center;
         gap: 0.5rem;
         min-width: 16rem;
-        padding: 0.3rem 1.25rem 0.1rem 0.5rem;
+        padding: 0.3rem 1.25rem 0.2rem 0.5rem;
         font-family: "Raleway", sans-serif;
         font-size: 0.725rem;
         font-weight: 500;

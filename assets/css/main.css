@@ -24,8 +24,8 @@
 
     /* FIXED WIDTHS AND BORDERS */
     --mediaWidth: 600px;
-    --sideMargins: clamp(2rem, 6vw, 5rem);
-    --libraryMargins: clamp(4rem, 12vw, 10rem);
+    --sideMargins: clamp(5rem, 12vw, 12rem);
+    --libraryMargins: clamp(6rem, 20vw, 15rem);
     --borderWidth: 3px;
     --borderWidth-S: 1.75px;
 
@@ -38,7 +38,8 @@
     --ff-body-italic: "lato-italic", sans-serif;
     --ff-body-bold: "lato-bold", sans-serif; */
   }
-  
+
+
 
 body {
 	background-color: white;
@@ -97,7 +98,7 @@ body {
 .main-navbar{
 	grid-area: navbar;
 	padding: 1rem 0 0.5rem 0;
-	margin: 1rem var(--sideMargins);
+	margin: 1rem 0;
 	display: flex;
     flex-direction: row;
 	border-bottom: 2px solid;
@@ -807,7 +808,11 @@ body {
     overflow-y: auto;
     cursor: default;
   }
-  
+
+  /* .scrollable:hover{
+    background-color: rgb(97, 97, 97); 
+  }
+   */
 .item-menu{
 	margin: 0.5rem;
 	display: flex;
@@ -1057,100 +1062,6 @@ body {
 	display: block;
   }
 
-
-  /* View SideBar */
-  
-.sidebar {
-	display: grid;
-	grid-template-rows: 2rem repeat(4, 1fr);
-	border-radius: 100px 100px 100px 100px;
-	color: black;
-	background-color: white;
-	float: left;
-	position: fixed;
-	z-index: 2;
-	top: 15vw;
-	left: 0;
-	bottom: 15vw;
-	padding: 0.5em;
-	transition: 0.3s ease-in-out;
-	box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.1), 1px 0 2px 0 rgba(0, 0, 0, 0.06);
-  }
-  
-  .sidebar h1 {
-	height: 2.5em;
-  }
-
-  
-  .sidebar h3{
-	color: #111827;
-	font-family:'Raleway', sans-serif;
-	font-size: 1rem;
-	font-weight: 500;
-	line-height: 1.2rem;
-	padding: 0.8rem 0;
-  }
-  
-  .collapse-icon {
-	grid-column-start: 1;
-	grid-column-end: 2;
-	position: absolute;
-	top: 0.5vw;
-	left: 22.1vw;
-	margin: 0.55em;
-	/* color: rgba(255, 255, 255, 0.7); */
-	cursor: pointer;
-	color: rgb(63, 63, 63);
-	transition: 0.3s ease-in-out;
-  }
-  
-  .rotate-180 {
-	transform: translate(-22vw, 0) rotate(180deg);
-	transition: 0.3s ease-in-out;
-  }
-
-  .colour-icon {
-	grid-row-start: 2;
-	grid-row-end: 3;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	/* cursor: pointer; */
-  }
-
-  .size-icon {
-	grid-row-start: 3;
-	grid-row-end: 4;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	/* cursor: pointer; */
-
-  }
-
-  .label-icon{
-	grid-row-start: 4;
-	grid-row-end: 5;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	/* cursor: pointer; */
-  }
-
-.arrange-icon{
-	grid-row-start: 5;
-	grid-row-end: 6;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	/* cursor: pointer; */
-  }
-
-  
 
   /* 
   FROM VUE DRAW

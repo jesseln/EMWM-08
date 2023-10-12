@@ -2,7 +2,7 @@
     <VMenu
         placement="top" 
         :delay="{ show: 50, hide: 200 }"
-        
+        theme="item-menu"
     >
     <div class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}"> 
 

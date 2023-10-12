@@ -1,6 +1,20 @@
 <template>
     <div class="library-menu-wrapper">
-        <h2 class="menu-title">Select a question to explore the libraries...</h2>
+        <h2 class="menu-title">View the Libraries by Category</h2>
+        <div class="menu-page" >
+            <div>
+                <div class="index-list">
+                    <h3>Agents</h3>   
+                </div>
+                <div class="index-list">
+                <h3>Books</h3>
+                </div>
+                <div class="index-list">
+                    <h3>Marks</h3>
+                </div>
+            </div>
+        </div>
+        <h2 class="menu-title">or select a question to explore the libraries with a preset view...</h2>
         <div class="menu-page" >
             <div>
                 <div class="index-list">

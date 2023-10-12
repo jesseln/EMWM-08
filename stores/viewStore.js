@@ -242,11 +242,6 @@ export const useViewStore = defineStore('view', ()=>{
         const ordinalMap = Array.from(getColourSet.value).map((category)=>{
             return {'colour': itemColour.value(category), 'category': category}
         })
-
-        // const ordinalReduce = ordinalMap.reduce((acc, curr)=>({
-        //     ...acc,
-        //     [curr.colour] : curr.category, ...(acc[curr.colour] || {})
-        // }), {})
         return  d3.flatGroup(ordinalMap, d => d.colour)
     }
 

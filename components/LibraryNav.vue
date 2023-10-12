@@ -17,7 +17,11 @@
                             {{categoryMap.get(libraryDisplay.viewType['shelf'])[libraryDisplay.view['shelf']]}}
                         </p>
                     </div>
-                    <div class="arrow" :class="{ expanded : visible }"></div>
+                    <div class="arrow" :class="{ expanded : visible }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none">
+                            <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="grey" stroke-width="1.3" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
                     <div class="categories" :class="{ hidden : !visible.section }">
                         <ul class="scrollable">
                             <li :class="{ current : `NotSelected:${item.category}` === value.section }" v-for="item in sectionCategories.NotSelected" 
@@ -62,7 +66,11 @@
                             {{categoryMap.get(libraryDisplay.viewType['bookend'])[libraryDisplay.view['bookend']]}}
                         </p>
                     </div>
-                    <div class="arrow" :class="{ expanded : visible }"></div>
+                    <div class="arrow" :class="{ expanded : visible }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none">
+                            <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="grey" stroke-width="1.3" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
                     <div class="categories" :class="{ hidden : !visible.sort }">
                         <ul class="scrollable">
                             <li :class="{ current : `NotSelected:${item.category}` === value.sort }" v-for="item in sortCategories.NotSelected" 
@@ -106,7 +114,11 @@
                             {{categoryMap.get(libraryDisplay.viewType['height'])[libraryDisplay.view['height']]}}
                         </p>
                     </div>
-                    <div class="arrow" :class="{ expanded : visible }"></div>
+                    <div class="arrow" :class="{ expanded : visible }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none">
+                            <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="grey" stroke-width="1.3" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
                     <div class="categories" :class="{ hidden : !visible.height }">
                         <ul class="scrollable">
                             <li :class="{ current : `NotSelected:${item.category}` === value.height }" v-for="item in heightCategories.NotSelected" 
@@ -132,7 +144,7 @@
         </div>
         <div class="library-nav-dropdown">
             <div class="library-nav-title-block">
-                <h3 class="library-nav-view">Colour by</h3>
+                <h3 class="library-nav-view">Colour by:</h3>
             </div>
             <div class="aselect" >
                 <div ref="colour" class="selector" @click="toggle('colour')">
@@ -150,7 +162,11 @@
                             {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
                         </p>
                     </div>
-                    <div class="arrow" :class="{ expanded : visible }"></div>
+                    <div class="arrow" :class="{ expanded : visible }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none">
+                            <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="grey" stroke-width="1.3" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
                     <div class="categories" :class="{ hidden : !visible.colour }">
                         <ul class="scrollable">
                             <li :class="{ current : `NotSelected:${item.category}` === value.colour }" v-for="item in colourCategories.NotSelected" 
@@ -281,7 +297,6 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     const colour = ref(false)
 
    const toggle = (option)=> {
-       console.log(option)
        visible[option] = !visible[option]
     }
 
@@ -482,23 +497,23 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     .arrow {
             position: absolute;
             right: 10px;
-            top: 45%;
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-bottom: 8px solid #adadad;
+            top: 0;
+            // width: 0;
+            // height: 0;
+            // border-left: 5px solid transparent;
+            // border-right: 5px solid transparent;
+            // border-bottom: 8px solid #adadad;
             // transform: rotate(90deg);
             // transition-duration: 0.3s;
             // transition-timing-function: cubic-bezier(.59,1.39,.37,1.01);
         }
 
         .expanded {
-            transform: rotateZ(180deg) translateY(2px);
+            transform: rotateZ(0deg) translateY(2px);
         }
 
     .selector:hover {
-        background:#f7e8f777;
+        background:#f5f5f5;
     }
 
     ul {
@@ -528,14 +543,15 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
         cursor: pointer;
         &:hover {
             // color: white;
-            background:#f7e8f777;
+            background:#f5f5f5;
+            // colour was #f7e8f777;
         }
     }
     .current {
         font-size: 0.725rem;
         font-weight: 500;
         color:  black;
-        background: #f7e8f777;
+        background: #f5f5f5;
     }
     .hidden {
         visibility: hidden;
