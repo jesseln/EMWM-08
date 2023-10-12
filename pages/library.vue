@@ -1,7 +1,7 @@
 <template>
     <div >
 
-    <NuxtPage :setQuery="agent01"/>
+    <NuxtPage />
 
     
     </div>

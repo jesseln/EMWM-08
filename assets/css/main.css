@@ -1064,7 +1064,37 @@ body {
 
 
   /* 
-  FROM VUE DRAW
+  POP-UP THEMES
   */
+
+  
+.v-popper--theme-filter-menu .v-popper__inner {
+    background: #ff0000;
+    /* background: #fff; */
+  color: black;
+  padding: 24px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
+}
+
+.v-popper--theme-filter-menu .v-popper__arrow-outer {
+    border-color: #00ff00;
+}
+
+.v-popper--theme-item-menu .v-popper__inner {
+    background: #ff0000;
+    /* background: #fff; */
+  color: black;
+  padding: 24px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
+}
+
+.v-popper--theme-item-menu .v-popper__arrow-outer {
+    border-color: #570711;
+}
+  
 
   

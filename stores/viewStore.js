@@ -1,8 +1,9 @@
 import * as d3 from "d3";
 
 export const useViewStore = defineStore('view', ()=>{
-    const { viewMap, colourMapFiltered, scales } = useReferenceStore();
-    const { handleNumeric,
+    const { viewMap, filterMap, colourMapFiltered, scales } = useReferenceStore();
+    const { alphabetically,
+            handleNumeric,
             handleObjectPath,
             handleValue,
             handleArray,
@@ -111,6 +112,7 @@ export const useViewStore = defineStore('view', ()=>{
         }
     })
     
+
 
     //Get item height bounds
     function getDomainIndex(viewMode) {
@@ -300,7 +302,7 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
     //Dynamic Path
-    //Returns the path from the itemType (via the ID name) to the itemType of the viewMode (via viewType LookUp)
+    //Returns the desintation value by selecting the correct path using the itemType (via the ID name) to the itemType of the viewMode (via viewType LookUp)
     //getIDP - getItemDisplayPath - Condensed for frequent use.
     function getIDP(item, viewMode) {
         let value;
@@ -329,36 +331,40 @@ export const useViewStore = defineStore('view', ()=>{
             return value ? value : "no data"
     }
 
+    //Dynamic Path
+    //Returns the desintation value by selecting the correct path using the itemType (via the ID name) and the viewModeType
+    //getIFP - getItemFilterPath - Condensed for frequent use.
+    function getIFP(item, viewSelection, viewModeType) {
+        let value;
+        let itemType = itemTypeCheck(item)
+        if(!item) return null
+        const viewMethod = null;
+
+        if(itemType === 'Agent'){
+            //Agent Item paths
+            if(viewModeType === 'Agent') value = handleObjectPath(item, viewMethod, viewSelection)
+            if(viewModeType === 'Mark') value = handleObjectPath(item, viewMethod, 'Marks', 0, viewSelection)
+            if(viewModeType === 'Book') value = handleObjectPath(item, viewMethod, 'Marks', 0, 'Books', viewSelection)
+        }else if(itemType === 'Book'){
+            //Book Item paths                 
+            if(viewModeType === 'Book') value = handleObjectPath(item, viewMethod, viewSelection)
+            if(viewModeType === 'Mark') value = handleObjectPath(item, viewMethod,'Marks',0,viewSelection)
+            if(viewModeType === 'Agent') value = handleObjectPath(item, viewMethod, 'Marks', 0, 'Agents', viewSelection)
+        }else if(itemType === 'Mark'){
+            //Mark Item paths
+            if(viewModeType === 'Mark') value = handleObjectPath(item, viewMethod, viewSelection)
+            if(viewModeType === 'Agent') value = handleObjectPath(item, viewMethod, 'Agents', viewSelection) 
+            if(viewModeType === 'Book') value = handleObjectPath(item, viewMethod, 'Books', viewSelection)
+        }
+            return value ? value : "no data"
+    }
+
     function itemTypeCheck(item){
         return  item['FemaleAgentID'] ? 'Agent' :
                 item['BookID'] ? 'Book' :
                 item['MargID'] ? 'Mark' : ''
     }
 
-    function alphabetically(ascending) {
-        return function (a, b) {
-          // equal items sort equally
-          if (a === b) {
-              return 0;
-          }
-      
-          // nulls sort after anything else
-          if (a === 'no data') {
-              return 1;
-          }
-          if (b === 'no data') {
-              return -1;
-          }
-      
-          // otherwise, if we're ascending, lowest sorts first
-          if (ascending) {
-              return a < b ? -1 : 1;
-          }
-      
-          // if descending, highest sorts first
-          return a < b ? 1 : -1;
-        };
-      }
 
 
       return {  libraryData,
@@ -380,6 +386,7 @@ export const useViewStore = defineStore('view', ()=>{
                 parseDatabase,
                 handleViewSelection,
                 getIDP,
+                getIFP,
                 itemTypeCheck  }
   })
 

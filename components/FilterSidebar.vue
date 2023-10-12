@@ -5,32 +5,11 @@
     </div>
     <!-- <div class="shelf-separator-container"><div class="shelf-separator"></div></div> -->
 <div class="sidebar-content">
-    <!-- <div class="filters">
-        <h2>Filters</h2>
-    </div>
-
-    <div class="highlights">
-        <h2>Highlights</h2>
-    </div> -->
 
     <div class="library-catalogue-title-box">
         <h2 class="library-catalogue-title">Library Catalogue</h2>
         <h3 class="library-catalogue-subtitle">Filter and Highlight</h3>
 
-        <!-- <button v-tooltip="{
-  content: 'You have ',
-  theme: 'info-tooltip'
-}">dsfghf</button> -->
-
-<!-- <Vmenu>
-    <template>
-        <h1>hhh</h1>
-    </template>
-</Vmenu> -->
-        <!-- <button v-tooltip="{
-  content: 'Roll your eyes colors',
-  theme: 'filter-menu'
-}">d</button> -->
     </div>
     <div class="library-catalogue">
         <div class="catalogue-title-box"  @click="toggle('Agent')">
@@ -41,19 +20,21 @@
         </div>
         <div class="catalogue-container" :class="{ hidden : !visible.Agent, visible : visible.Agent}">  
 
-            <div class="catalogue" v-for="item in referenceStore.categoryMap.get('Agent')">
-                <VMenu
+            <div class="catalogue" v-for="item in Object.keys(filterMap.get('Agent'))">
+                <VDropdown
                 placement="right" 
+                :triggers="['click']"
+                :popperTriggers="['']"
                 :delay="{ show: 0, hide: 0 }"
-                theme="filter-menu"
                 >
-                <p>{{ item }}</p>
-                <template #popper >
-                <h1>hello</h1>
-            </template>
-        </VMenu>
+                    <p>{{ categoryMap.get('Agent')[item] }}</p>
+                    <template #popper >
+                        <div v-for="value in filterObject.get('Agent')[item]">
+                            <p>{{ value }}</p>
+                        </div>
+                    </template>
+                </VDropdown>
             </div>
-
         </div>
         <div class="catalogue-title-box" @click="toggle('Book')">
             <h4 class="catalogue-title">Books</h4>
@@ -62,8 +43,20 @@
             </svg>
         </div>
         <div class="catalogue-container" :class="{ hidden : !visible.Book }">    
-            <div class="catalogue" v-for="item in referenceStore.categoryMap.get('Book')">
-                <p>{{ item }}</p>
+            <div class="catalogue" v-for="item in Object.keys(filterMap.get('Book'))">
+                <VDropdown
+                placement="right" 
+                :triggers="['click']"
+                :popperTriggers="['']"
+                :delay="{ show: 0, hide: 0 }"
+                >
+                    <p>{{ categoryMap.get('Book')[item] }}</p>
+                    <template #popper >
+                        <div v-for="value in filterObject.get('Book')[item]">
+                            <p>{{ value }}</p>
+                        </div>
+                    </template>
+                </VDropdown>
             </div>
         </div>
         <div class="catalogue-title-box" @click="toggle('Mark')">
@@ -73,8 +66,20 @@
             </svg>
         </div>
         <div class="catalogue-container" :class="{ hidden : !visible.Mark }">    
-            <div class="catalogue" v-for="item in referenceStore.categoryMap.get('Mark')">
-                <p>{{ item }}</p>
+            <div class="catalogue" v-for="item in Object.keys(filterMap.get('Mark'))">
+                <VDropdown
+                placement="right" 
+                :triggers="['click']"
+                :popperTriggers="['']"
+                :delay="{ show: 0, hide: 0 }"
+                >
+                    <p>{{ categoryMap.get('Mark')[item] }}</p>
+                    <template #popper >
+                        <div v-for="value in filterObject.get('Mark')[item]">
+                            <p>{{ value }}</p>
+                        </div>
+                    </template>
+                </VDropdown>
             </div>
         </div>
     </div>
@@ -87,7 +92,7 @@
 import { storeToRefs } from "pinia";
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
-const nuxtApp = useNuxtApp()
+// import VDropdown from 'floating-vue/dist/components/Dropdown.vue.d.ts'
 
 // STATE MANAGERS IMPORT //    
 
@@ -107,7 +112,11 @@ const { libraryData,
 const { parseDatabase,
         handleViewSelection,
         getIDP,
+        getIFP,
         itemTypeCheck } = useViewStore();
+
+    //Utils
+    const { alphabetically } = useUtils();
 
 
 //Your Shelf State
@@ -119,7 +128,8 @@ const { addToShelf,
 //Reference Constants
 const referenceStore = useReferenceStore();
 const { categoryMap, 
-        invCategoryMap, 
+        invCategoryMap,
+        filterMap, 
         colourMapFiltered,
         scales,
         viewRouteQueries,
@@ -160,49 +170,52 @@ const toggle = (option)=> {
     visible[option] = !visible[option]
 }
 
+function getFilterObject(targetFormat, sourceObject, viewModeType){
+        let filterObject = {};
+        for (let i = 0, formatKeys = Object.keys(targetFormat); i < formatKeys.length; i++) {
+                filterObject[formatKeys[i]] = []
+            }
+        
+        for (let i = 0, sourceKeys = Object.keys(sourceObject); i < sourceKeys.length; i++) {
+            for (let j = 0, targetKeys = Object.keys(filterObject); j < targetKeys.length; j++) {
+                filterObject[targetKeys[j]].push(getIFP(sourceObject[i], targetKeys[j], viewModeType)) 
+            }
+        }
+        for (let i = 0, targetKeys = Object.keys(filterObject); i < targetKeys.length; i++) {
+            filterObject[targetKeys[i]] = new Set(filterObject[targetKeys[i]]);
+            filterObject[targetKeys[i]] = Array.from(filterObject[targetKeys[i]]).sort(alphabetically(true))
+        }
+        return filterObject
+}
+
+
+
+const filterObject = reactive(new Map())
+
+onMounted(()=>{
+    watchEffect(()=>{
+        filterObject.set('Agent', getFilterObject(referenceStore.filterMap.get('Agent'), viewStore.libraryData, 'Agent'))
+        filterObject.set('Book', getFilterObject(referenceStore.filterMap.get('Book'), viewStore.libraryData, 'Book'))
+        filterObject.set('Mark', getFilterObject(referenceStore.filterMap.get('Mark'), viewStore.libraryData, 'Mark'))
+
+        console.log('new filter Object',    filterObject)
+        console.log('filter map Marks',    referenceStore.filterMap.get('Mark'))
+    
+  })
+})
+
+// console.log('filter map format',     Object.entries(referenceStore.filterMap.get('Agent')))
+//     console.log('new filter Object',    agentsFilter)
+
+
+
+
 </script>
 
 
-<style  >
 
-.v-popper--theme-filter-menu .v-popper__inner {
-    background: #ff0000;
-    /* background: #fff; */
-  color: black;
-  padding: 24px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
-}
+<style lang="scss" scoped>
 
-.v-popper--theme-filter-menu .v-popper__arrow-outer {
-    border-color: #00ff00;
-}
-
-.v-popper--theme-item-menu .v-popper__inner {
-    background: #ff0000;
-    /* background: #fff; */
-  color: black;
-  padding: 24px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
-}
-
-.v-popper--theme-item-menu .v-popper__arrow-outer {
-    border-color: #570711;
-}
-  
-
-.v-popper--theme-info-tooltip {
-  .v-popper__inner {
-    background: #004499;
-  }
-
-  .v-popper__arrow-inner {
-    border-color: #004499;
-  }
-}
 
 
   .sidebar {
@@ -317,8 +330,12 @@ const toggle = (option)=> {
 	font-size: 0.8rem;
 	font-weight: 350;
 	line-height: 1.2rem;
-	padding: 0.2rem 0 0.2rem 0.5rem;
+	// padding: 0.2rem 0 0.2rem 0.5rem;
     cursor: pointer;
+}
+.catalogue p{
+
+	padding: 0.2rem 0 0.2rem 0.5rem;
 }
 
 .catalogue:hover{

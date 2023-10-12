@@ -177,8 +177,34 @@ export const useUtils = () => {
         }, {});
     }
 
+    function alphabetically(ascending: any) {
+        return function (a: any, b: any) {
+          // equal items sort equally
+          if (a === b) {
+              return 0;
+          }
+      
+          // nulls sort after anything else
+          if (a === 'no data') {
+              return 1;
+          }
+          if (b === 'no data') {
+              return -1;
+          }
+      
+          // otherwise, if we're ascending, lowest sorts first
+          if (ascending) {
+              return a < b ? -1 : 1;
+          }
+      
+          // if descending, highest sorts first
+          return a < b ? 1 : -1;
+        };
+      }
+
 
     return {
+        alphabetically,
         handleNumeric,
         clamp,
         longestNumberString,

@@ -145,6 +145,107 @@ export const useReferenceStore = defineStore('reference', ()=>{
             ['Other notes']: {sortMethod: 'A', category: 'Other notes', useColour: false, useSection: true, useOrder: true, useHeight: false},
     })
 
+    const filterMap = reactive(new Map());
+    filterMap
+  .set('Book', {
+          ['BookID']: [],
+          ['Repository']: [], 
+          ['Date of publication']: [], 
+          ['Genre/Identity']: [],
+          ['Title']: [],
+          ['Author']: [],
+          ['Place of publication']: [],
+          ['Size']: [],
+          ['Book Notes']:[],
+          ['Print or manuscript']: [],
+          ['STC or Wing']: [],
+          ['Shelfmark']: [],
+        //   ['Marginal Marks']: [],
+        //   ['Book image/s']: [],
+          ['Number of marks']: [],
+          ['Number of book images']: [],
+  })
+  filterMap
+  .set('Agent', {
+          ['FemaleAgentID']: [],
+          ['Female agent name']: [], 
+          ['Female agent date']: [], 
+          ['Female agent bio']: [],
+          ['Number of marks']: [],
+  })
+  filterMap
+  .set('Mark', {
+          ['MargID']: [],
+          ['Notes']: [],
+          ['Ownership type']: [],
+          ['Distribution']: [],
+          ['Female agent status']: [],
+          ['Annotation type']: [],
+          ['Location sig. ; p. ; pp.']: [],
+          ['Recording type']: [],
+          ['Transcription']: [],
+          ['Mark type (Mark of?)']: [],
+        //   ['Images of marginal mark']: [],
+          ['Class']: [],
+          ['Position on page']: [],
+          ['Location other']: [],
+          ['Added text type']: [],
+          ['Drawing type']: [],
+          ['Graffiti type']: [],
+          ['Agent role']: [],
+          ['Other notes']: [],
+  })
+
+  const pathMap = reactive(new Map());
+  pathMap
+.set('Book', {
+        ['BookID']: 'Book',
+        ['Repository']: 'Book', 
+        ['Date of publication']: 'Book', 
+        ['Genre/Identity']: 'Book',
+        ['Title']: 'Book',
+        ['Author']: 'Book',
+        ['Place of publication']: 'Book',
+        ['Size']: 'schemePaired',
+        ['Book Notes']:'Book',
+        ['Print or manuscript']: 'Book',
+        ['STC or Wing']: 'Book',
+        ['Shelfmark']: 'Book',
+        ['Marginal Marks']: 'Book',
+        ['Book image/s']: 'Book',
+        ['Number of marks']: 'Book',
+        ['Number of book images']: 'Book',
+})
+pathMap
+.set('Agent', {
+        ['FemaleAgentID']: 'Agent',
+        ['Female agent name']: 'Agent', 
+        ['Female agent date']: 'Agent', 
+        ['Female agent bio']: 'Agent',
+        ['Number of marks']: 'Agent',
+})
+pathMap
+.set('Mark', {
+        ['MargID']: 'Mark',
+        ['Notes']: 'Mark',
+        ['Ownership type']: 'Mark',
+        ['Distribution']: 'Mark',
+        ['Female agent status']: 'Mark',
+        ['Annotation type']: 'Mark',
+        ['Location sig. ; p. ; pp.']: 'Mark',
+        ['Recording type']: 'Mark',
+        ['Transcription']: 'Mark',
+        ['Mark type (Mark of?)']: 'Mark',
+        ['Images of marginal mark']: 'Mark',
+        ['Class']: 'Mark',
+        ['Position on page']: 'Mark',
+        ['Location other']: 'Mark',
+        ['Added text type']: 'Mark',
+        ['Drawing type']: 'Mark',
+        ['Graffiti type']: 'Mark',
+        ['Agent role']: 'Mark',
+        ['Other notes']: 'Mark',
+})
 
 
     // FILTERED MAP ADJUSTMENTS //
@@ -199,33 +300,62 @@ export const useReferenceStore = defineStore('reference', ()=>{
         }
     })
 
-    const agentsYearsofMarks = ({
-        //Query - In what years did the agents make their marks?
+    const booksTheyRead = ({
+        //Query - What Kinds of Books did people read?
         view: {
-            itemType: "Agent",
-            id: 'FemaleAgentID',
+            itemType: "Book",
+            id: 'BookID',
             shelf: 'Not Selected', //Primary sort
-            bookend: 'Not Selected', //Secondary sort
-            height: 'Number of marks',
-            colour: 'Female agent status',
+            bookend: 'Genre/Identity', //Secondary sort
+            height: 'Size',
+            colour: 'Size',
         },
         viewType: {
-            id: 'Agent',
+            id: 'Book',
             shelf: 'NotSelected',
-            bookend: 'NotSelected',
-            height: 'Agent',
-            colour: 'Mark',
+            bookend: 'Book',
+            height: 'Book',
+            colour: 'Book',
         },
         pageText: {
-            queryType: 'Agents ',
-            queryBreadcrumb: 'How many agents are in the collection ?',
-            libraryTypeTitle: 'The Agents',
-            libraryTypeSubtitle: 'of the libraries',
+            queryType: 'Books ',
+            queryBreadcrumb: 'What kinds of books did people read ?',
+            libraryTypeTitle: 'The Books',
+            libraryTypeSubtitle: 'in the libraries',
         }
     })
 
+    const marksTheyMade = ({
+        //Query - What Kinds of Books did people read?
+        view: {
+            itemType: "Mark",
+            id: 'MargID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Number of marks',
+            colour: 'Mark type (Mark of?)',
+        },
+        viewType: {
+            id: 'Mark',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'Book',
+            colour: 'Mark',
+        },
+        pageText: {
+            queryType: 'Marks ',
+            queryBreadcrumb: 'What types of marks did each agent make ?',
+            libraryTypeTitle: 'The Marks',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
+
+
+
     const viewRouteQueries = reactive({
-        agent01: agentsInCollection
+        agent01: agentsInCollection,
+        book01: booksTheyRead,
+        mark01: marksTheyMade,
     })
 
     //Objects passed to Components 
@@ -322,6 +452,8 @@ export const useReferenceStore = defineStore('reference', ()=>{
       return {  categoryMap, 
                 invCategoryMap, 
                 viewMap, 
+                filterMap,
+                pathMap,
                 colourMapFiltered, 
                 scales, 
                 viewRouteQueries,

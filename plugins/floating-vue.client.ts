@@ -1,17 +1,29 @@
-import Vmenu from 'floating-vue'
+import VMenu from 'floating-vue'
+import VDropdown from 'floating-vue'
+import FloatingVue from 'floating-vue'
 import { defineNuxtPlugin } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
-    Vmenu.options.themes['filter-menu'] = {
-        ...Vmenu.options.themes.menu,
+    VMenu.options.themes['filter-menu'] = {
+        ...VMenu.options.themes.menu,
         '$resetCss': true,
         placement: 'left',
     }
-    Vmenu.options.themes['item-menu'] = {
-        ...Vmenu.options.themes.menu,
+    VMenu.options.themes['item-menu'] = {
+        ...VMenu.options.themes.menu,
         '$resetCss': true,
         placement: 'left',
     }
-    nuxtApp.vueApp.use(Vmenu) // <-- I am not sure if we need this
+    VDropdown.options.themes['filter-dropdown'] = {
+        ...VDropdown.options.themes.menu,
+        '$resetCss': true,
+        placement: 'left',
+    }
+    VDropdown.options.themes['item-dropdown'] = {
+        ...VDropdown.options.themes.menu,
+        '$resetCss': true,
+        placement: 'left',
+    }
+    nuxtApp.vueApp.use(VDropdown) // <-- I am not sure if we need this
     return
 });

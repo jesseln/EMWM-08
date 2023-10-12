@@ -29,7 +29,9 @@
                 <div class="index-list">
                 <h3>Books</h3>
                     <ul class="library-query">  
-                        <li>What kinds of books did people read?</li>
+                        <NuxtLink to="/library/book01" @click="$emit('modalClicked')" >
+                            <li>What kinds of books did people read?</li>
+                        </NuxtLink>
                         <li>How many books did each agent own?</li>
                         <li>What years were the books published?</li>
                     </ul>
@@ -37,7 +39,9 @@
                 <div class="index-list">
                     <h3>Marks</h3>
                     <ul class="library-query">  
+                        <NuxtLink to="/library/mark01" @click="$emit('modalClicked')" >
                         <li>What types of marks did each agent make?</li>
+                        </NuxtLink>
                         <li>How many marks did each agent make?</li>
                     </ul>
                 </div>
