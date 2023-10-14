@@ -5,6 +5,7 @@ export const useViewStore = defineStore('view', ()=>{
     const { alphabetically,
             handleNumeric,
             handleObjectPath,
+            handleFilterValue,
             handleValue,
             handleArray,
             handleColourValue,
@@ -154,19 +155,19 @@ export const useViewStore = defineStore('view', ()=>{
     // FORMAT LIBRARY //
     //Set Shelves
     function formatShelf(data, viewMode){
-        return d3.flatGroup(d3.sort(data, d=> getIDP(d, viewMode)), d => getIDP(d, viewMode)); 
+        return d3.flatGroup(d3.sort(data,(a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d => getIDP(d, viewMode)); 
     }
     function formatNullShelf(data, viewMode){
-        return d3.flatGroup(d3.sort(data, d=> getIDP(d, viewMode)), d => 'All Items'); 
+        return d3.flatGroup(d3.sort(data,(a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d => 'All Items'); 
     }
     //Set Bookends
     function formatBookend(data, viewMode){
         return data
-        .map(d => [d[0],d3.flatGroup(d3.sort(d[1], d=> getIDP(d, viewMode)), d=> getIDP(d, viewMode))]);  
+        .map(d => [d[0],d3.flatGroup(d3.sort(d[1], (a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d=> getIDP(d, viewMode))]);  
     }
     function formatNullBookend(data, viewMode){
         return data
-        .map(d => [d[0],d3.flatGroup(d3.sort(d[1], d=> getIDP(d, viewMode)), d=> 'All Items')]);  
+        .map(d => [d[0],d3.flatGroup(d3.sort(d[1], (a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d=> 'All Items')]);  
     }
     //Combine Shelves & Bookend
     function formatLibrary(data) {
@@ -253,12 +254,12 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
     function processColourSet(data){
-       return new Set(data.flatMap(d=> getIDP(d, 'colour')).sort(alphabetically(true)))
+       return new Set(data.flatMap(d=> getIDP(d, 'colour')).sort((a,b)=>alphabetically(true)(handleFilterValue(a), handleFilterValue(b))))
     }
 
     function processColourItems(data, colourSet){
         let tempColourSet = colourSet;
-        const uniqueColours = data.filter((d) => {
+        let uniqueColours = data.filter((d) => {
             const value = getIDP(d, 'colour')
             if(tempColourSet.has(value)){
                 return tempColourSet.delete(value) //Returns true if deletion successful
@@ -266,7 +267,7 @@ export const useViewStore = defineStore('view', ()=>{
                 return false
             }
         })
-        return  new Set(uniqueColours.sort((a, b) => alphabetically(true)(getIDP(a, 'colour'), getIDP(b, 'colour'))))
+        return  new Set(uniqueColours.sort((a, b) => alphabetically(true)(getISP(a, 'colour'), getISP(b, 'colour')))) //Sort uses separate path access function getISP()
     }
 
     // EXTERNAL FUNCTIONS //
@@ -337,8 +338,40 @@ export const useViewStore = defineStore('view', ()=>{
     function getIFP(item, viewSelection, viewModeType) {
         let value;
         let itemType = itemTypeCheck(item)
+        const viewMethod = 'filter';
+        if(!item) return null;
+        
+        if(itemType === 'Agent'){
+            //Agent Item paths
+            if(viewModeType === 'Agent') value = handleObjectPath(item, viewMethod, viewSelection)
+            if(viewModeType === 'Mark') value = handleObjectPath(item, viewMethod, 'Marks', 0, viewSelection)
+            if(viewModeType === 'Book') value = handleObjectPath(item, viewMethod, 'Marks', 0, 'Books', viewSelection)
+        }else if(itemType === 'Book'){
+            //Book Item paths                 
+            if(viewModeType === 'Book') value = handleObjectPath(item, viewMethod, viewSelection)
+            if(viewModeType === 'Mark') value = handleObjectPath(item, viewMethod,'Marks',0,viewSelection)
+            if(viewModeType === 'Agent') value = handleObjectPath(item, viewMethod, 'Marks', 0, 'Agents', viewSelection)
+        }else if(itemType === 'Mark'){
+            //Mark Item paths
+            if(viewModeType === 'Mark') value = handleObjectPath(item, viewMethod, viewSelection)
+            if(viewModeType === 'Agent') value = handleObjectPath(item, viewMethod, 'Agents', viewSelection) 
+            if(viewModeType === 'Book') value = handleObjectPath(item, viewMethod, 'Books', viewSelection)
+        }
+            return value ? value : "no data"
+    }
+
+    
+    //Dynamic Path
+    //Returns the desintation value by selecting the correct path using the itemType (via the ID name) to the itemType of the viewMode (via viewType LookUp)
+    //getISP - getItemSortPath - Condensed for frequent use.
+    function getISP(item, viewMode) {
+        let value;
+        let viewMethod = 'filter'
         if(!item) return null
-        const viewMethod = null;
+        if(viewMode === 'Not Selected') return 'Not Selected'
+        const viewSelection = libraryDisplay.view[viewMode]
+        const viewModeType = libraryDisplay.viewType[viewMode]
+        const itemType = itemTypeCheck(item)
 
         if(itemType === 'Agent'){
             //Agent Item paths
@@ -358,6 +391,7 @@ export const useViewStore = defineStore('view', ()=>{
         }
             return value ? value : "no data"
     }
+
 
     function itemTypeCheck(item){
         return  item['FemaleAgentID'] ? 'Agent' :

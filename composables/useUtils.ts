@@ -47,6 +47,8 @@ export const useUtils = () => {
               return handleColourValue(obj);
             }else if(viewMode === 'height'){
               return handleValue(obj);
+            }else if(viewMode === 'filter'){
+              return handleFilterValue(obj);
           }else{
               return handleValue(obj);
           }
@@ -107,6 +109,21 @@ export const useUtils = () => {
 
         }
     }
+
+        //Returns values for special case of Colour viewMode
+        function handleFilterValue(value: any){
+            if(!value || value.length === 0) return false
+    
+            if(isNumber(value)){
+                return handleNumeric(value)
+                
+            }else if(isString(value)){
+                return value
+    
+            }else if(isArray(value)){
+                return value
+            }
+        }
 
     const contrastHandler = function (inputColour: string) {
         if(!inputColour) return '#303030'
@@ -194,7 +211,10 @@ export const useUtils = () => {
       
           // otherwise, if we're ascending, lowest sorts first
           if (ascending) {
-              return a < b ? -1 : 1;
+            if(isString(a) && isString(b)) return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
+            if(isNumber(a) && isNumber(b)) return handleNumeric(a) < handleNumeric(b) ? -1 : 1;
+            if(isNumber(a)) return -1;
+            if(isNumber(b)) return 1;
           }
       
           // if descending, highest sorts first
@@ -210,6 +230,7 @@ export const useUtils = () => {
         longestNumberString,
         handleObjectPath,
         handleObjectProperty,
+        handleFilterValue,
         handleValue,
         handleArray,
         handleColourValue,

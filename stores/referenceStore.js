@@ -272,11 +272,113 @@ pathMap
     colourMapFiltered.set('Book', bookFilter)
     colourMapFiltered.set('Agent', agentFilter)
     colourMapFiltered.set('Mark', markFilter)
+
+    // Standard Views //
+    const agentsView = ({
+        //Query - How Many Agents In Collection?
+        view: {
+            itemType: "Agent",
+            id: 'FemaleAgentID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Not Selected',
+            colour: 'Number of marks',
+        },
+        viewType: {
+            id: 'Agent',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'NotSelected',
+            colour: 'Agent',
+        },
+        pageText: {
+            queryType: 'Agents ',
+            queryBreadcrumb: '',
+            libraryTypeTitle: 'The Agents',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
+
+    const booksView = ({
+        //Query - How Many Agents In Collection?
+        view: {
+            itemType: "Book",
+            id: 'BookID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Not Selected',
+            colour: 'Number of marks',
+        },
+        viewType: {
+            id: 'Book',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'NotSelected',
+            colour: 'Book',
+        },
+        pageText: {
+            queryType: 'Books ',
+            queryBreadcrumb: '',
+            libraryTypeTitle: 'The Books',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
+
+    const marksView = ({
+        //Query - How Many Agents In Collection?
+        view: {
+            itemType: "Mark",
+            id: 'MargID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Not Selected',
+            colour: 'Mark type (Mark of?)',
+        },
+        viewType: {
+            id: 'Mark',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'NotSelected',
+            colour: 'Mark',
+        },
+        pageText: {
+            queryType: 'Mark ',
+            queryBreadcrumb: '',
+            libraryTypeTitle: 'The Marks',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
+
     
     //View Query Configurations //
+    
     // How many agents are in the collection? 
     const agentsInCollection = ({
         //Query - How Many Agents In Collection?
+        view: {
+            itemType: "Agent",
+            id: 'FemaleAgentID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Not Selected',
+            colour: 'Female agent status',
+        },
+        viewType: {
+            id: 'Agent',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'NotSelected',
+            colour: 'Mark',
+        },
+        pageText: {
+            queryType: 'Agents ',
+            queryBreadcrumb: 'How many agents are in the collection ?',
+            libraryTypeTitle: 'The Agents',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
+    const agentsYearsMade = ({
+        //Query - What years did each agent make their marks?
         view: {
             itemType: "Agent",
             id: 'FemaleAgentID',
@@ -325,6 +427,56 @@ pathMap
         }
     })
 
+    const booksLibraryofLibraries = ({
+        //Query - Where can you find the books today?
+        view: {
+            itemType: "Book",
+            id: 'BookID',
+            shelf: 'Repository', //Primary sort
+            bookend: 'Date of publication', //Secondary sort
+            height: 'Number of marks',
+            colour: 'Mark type (Mark of?)',
+        },
+        viewType: {
+            id: 'Book',
+            shelf: 'Book',
+            bookend: 'Book',
+            height: 'Book',
+            colour: 'Mark',
+        },
+        pageText: {
+            queryType: 'Books ',
+            queryBreadcrumb: 'Where can you find the books today ?',
+            libraryTypeTitle: 'The Books',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
+
+    const booksYearsPublished = ({
+        //Query - What years were the books published?
+        view: {
+            itemType: "Book",
+            id: 'BookID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Genre/Identity', //Secondary sort
+            height: 'Size',
+            colour: 'Size',
+        },
+        viewType: {
+            id: 'Book',
+            shelf: 'NotSelected',
+            bookend: 'Book',
+            height: 'Book',
+            colour: 'Book',
+        },
+        pageText: {
+            queryType: 'Books ',
+            queryBreadcrumb: 'What kinds of books did people read ?',
+            libraryTypeTitle: 'The Books',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
+
     const marksTheyMade = ({
         //Query - What Kinds of Books did people read?
         view: {
@@ -350,12 +502,43 @@ pathMap
         }
     })
 
+    const marksHowMany = ({
+        //Query - How many marks did each agent make?
+        view: {
+            itemType: "Mark",
+            id: 'MargID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Number of marks',
+            colour: 'Mark type (Mark of?)',
+        },
+        viewType: {
+            id: 'Mark',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'Book',
+            colour: 'Mark',
+        },
+        pageText: {
+            queryType: 'Marks ',
+            queryBreadcrumb: 'What types of marks did each agent make ?',
+            libraryTypeTitle: 'The Marks',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
 
 
     const viewRouteQueries = reactive({
+        agents: agentsView,
+        books: booksView,
+        marks: marksView,
         agent01: agentsInCollection,
+        agent02: agentsYearsMade,
         book01: booksTheyRead,
+        book02: booksLibraryofLibraries,
+        book03: booksYearsPublished,
         mark01: marksTheyMade,
+        mark02: marksHowMany,
     })
 
     //Objects passed to Components 

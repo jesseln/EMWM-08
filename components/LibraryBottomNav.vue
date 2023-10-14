@@ -187,14 +187,15 @@ const iconScaleFactor = ref(0.5)
 
 }
 .library-nav-colour-label{
-    // align-self: center;
+    padding: 0 0.2rem;
     text-align: center;
-	font-family: 'Raleway', sans-serif;
-	font-size: 0.7rem;
-	font-weight: 500;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
     line-height: 0.8rem;
-	color: black;
+    color: black;
     width: 100%;
+    white-space: nowrap;
 }
 .library-nav-dropdown{
     display: flex;

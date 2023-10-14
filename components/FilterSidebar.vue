@@ -116,7 +116,8 @@ const { parseDatabase,
         itemTypeCheck } = useViewStore();
 
     //Utils
-    const { alphabetically } = useUtils();
+    const { alphabetically,
+            isArray } = useUtils();
 
 
 //Your Shelf State
@@ -178,7 +179,9 @@ function getFilterObject(targetFormat, sourceObject, viewModeType){
         
         for (let i = 0, sourceKeys = Object.keys(sourceObject); i < sourceKeys.length; i++) {
             for (let j = 0, targetKeys = Object.keys(filterObject); j < targetKeys.length; j++) {
-                filterObject[targetKeys[j]].push(getIFP(sourceObject[i], targetKeys[j], viewModeType)) 
+                let value = getIFP(sourceObject[i], targetKeys[j], viewModeType)
+                if(isArray(value)) {filterObject[targetKeys[j]].push(...value) }
+                else {filterObject[targetKeys[j]].push(value) }
             }
         }
         for (let i = 0, targetKeys = Object.keys(filterObject); i < targetKeys.length; i++) {

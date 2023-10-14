@@ -11,11 +11,13 @@
     <div class="nav-div">
         <LibraryNav />
     </div>
-    <div class="library-type-title-box">
-        <h1 class="library-type-title">{{ libraryDisplay.pageText.libraryTypeTitle }}</h1>
-        <p class="library-type-subtitle">{{ libraryDisplay.pageText.libraryTypeSubtitle }}</p>
-    </div>
-    <div v-if="dataCheck">
+        <div class="icon-container">
+        </div>
+        <div class="library-type-title-box">
+            <h1 class="library-type-title">{{ libraryDisplay.pageText.libraryTypeTitle }}</h1>
+            <p class="library-type-subtitle">{{ libraryDisplay.pageText.libraryTypeSubtitle }}</p>
+        </div>
+        <div v-if="dataCheck">
         <LibraryView />
     </div>
     
@@ -102,6 +104,37 @@ const { categoryMap,
     //     throw createError({ statusCode: 404, statusMessage: "View not Found"})
     // }
 
+    //Function format written to use local vairables and return to reactive value
+    // function iconDimensions(){
+    //     const scaleWidth = 1.5;
+    //     const scaleHeight = 1.5;
+    //     const fill = '#333';
+    //     return {
+    //         agentIcon:{
+    //             iconHeight: 0.9  * scaleHeight,
+    //             iconWidth: 0.7 * scaleWidth,
+    //             iconFill: fill,
+    //         },
+    //         bookIcon:{
+    //             iconHeight: 1 * scaleHeight,
+    //             iconWidth: 0.7 * scaleWidth,
+    //             iconFill: fill,
+    //         },
+    //         markIcon:{
+    //             iconHeight: 0.9 * scaleHeight,
+    //             iconWidth: 0.75 * scaleWidth,
+    //             iconFill: fill,
+    //         },
+    //     }
+    // }
+
+    // const icons = ref()
+
+    // watchEffect(()=>{
+    //     icons.value = iconDimensions()
+    // })
+
+
 
     const showAnnotations = ref(false)
 
@@ -128,8 +161,6 @@ const { categoryMap,
 </script>
 
 <style lang="scss" scoped>
-
-
     .nav-div{
         z-index: 5;
         position: sticky;
