@@ -11,6 +11,19 @@
         <h3 class="library-catalogue-subtitle">Filter and Highlight</h3>
 
     </div>
+
+    <div v-if="getActiveFilters.length">
+        <h4 class="catalogue-title">Active Filters</h4>
+        <div class="catalogue-filter-category-container">
+        <button 
+        v-for="filterValue in getActiveFilters"
+            @click="filterActiveToggle(filterValue, filterValue.category, filterValue.itemType)" 
+            class="catalogue-filter-category-box"
+            :class="{ filterActive : filterObject.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
+                <p class="catalogue-filter-category" > {{ filterValue.itemType }} | {{categoryMap.get(filterValue.itemType)[filterValue.category]}} | {{filterValue.name}}</p>
+        </button>
+        </div>
+    </div>
     <div class="library-catalogue">
         <div class="catalogue-title-box"  @click="toggle('Agent')">
             <h4 class="catalogue-title">Agents</h4>
@@ -20,17 +33,29 @@
         </div>
         <div class="catalogue-container" :class="{ hidden : !visible.Agent, visible : visible.Agent}">  
 
-            <div class="catalogue" v-for="item in Object.keys(filterMap.get('Agent'))">
+            <div class="catalogue" v-for="category in Object.keys(filterMap.get('Agent'))">
                 <VDropdown
                 placement="right" 
                 :triggers="['click']"
                 :popperTriggers="['']"
-                :delay="{ show: 0, hide: 0 }"
+                :delay="{ show: 0, hide: 0 }" 
+                theme = "filter-dropdown"
                 >
-                    <p>{{ categoryMap.get('Agent')[item] }}</p>
+                    <p>{{ categoryMap.get('Agent')[category] }}</p>
                     <template #popper >
-                        <div v-for="value in filterObject.get('Agent')[item]">
-                            <p>{{ value }}</p>
+                        <div class="catalogue-filter-category-title-box">
+                            <h3>Catalogue Values</h3>
+                            <h2>Agent | {{ categoryMap.get('Agent')[category] }}</h2>
+                            <p>Select a value to filter the library</p>
+                        </div>
+                        <div class="catalogue-filter-category-container">
+                            <button 
+                            v-for="filterValue in filterObject.get('Agent')[category]"
+                            @click="viewStore.filterActiveToggle(filterValue, category, 'Agent')" 
+                            class="catalogue-filter-category-box"
+                            :class="{ filterActive : filterObject.get('Agent')[category][filterValue.name].active }">
+                                <p class="catalogue-filter-category" >{{ filterValue.name }}</p>
+                            </button>
                         </div>
                     </template>
                 </VDropdown>
@@ -43,17 +68,29 @@
             </svg>
         </div>
         <div class="catalogue-container" :class="{ hidden : !visible.Book }">    
-            <div class="catalogue" v-for="item in Object.keys(filterMap.get('Book'))">
+            <div class="catalogue" v-for="category in Object.keys(filterMap.get('Book'))">
                 <VDropdown
                 placement="right" 
                 :triggers="['click']"
                 :popperTriggers="['']"
-                :delay="{ show: 0, hide: 0 }"
+                :delay="{ show: 0, hide: 0 }" 
+                theme = "filter-dropdown"
                 >
-                    <p>{{ categoryMap.get('Book')[item] }}</p>
+                    <p>{{ categoryMap.get('Book')[category] }}</p>
                     <template #popper >
-                        <div v-for="value in filterObject.get('Book')[item]">
-                            <p>{{ value }}</p>
+                        <div class="catalogue-filter-category-title-box">
+                            <h3>Catalogue Values</h3>
+                            <h2>Book | {{ categoryMap.get('Book')[category] }}</h2>
+                            <p>Select a value to filter the library</p>
+                        </div>
+                        <div class="catalogue-filter-category-container">
+                            <button 
+                            v-for="filterValue in filterObject.get('Book')[category]"
+                            @click="viewStore.filterActiveToggle(filterValue, category, 'Book')" 
+                            class="catalogue-filter-category-box"
+                            :class="{ filterActive : filterObject.get('Book')[category][filterValue.name].active }">
+                                <p class="catalogue-filter-category" >{{ filterValue.name }}</p>
+                            </button>
                         </div>
                     </template>
                 </VDropdown>
@@ -66,17 +103,29 @@
             </svg>
         </div>
         <div class="catalogue-container" :class="{ hidden : !visible.Mark }">    
-            <div class="catalogue" v-for="item in Object.keys(filterMap.get('Mark'))">
+            <div class="catalogue" v-for="category in Object.keys(filterMap.get('Mark'))">
                 <VDropdown
                 placement="right" 
                 :triggers="['click']"
                 :popperTriggers="['']"
-                :delay="{ show: 0, hide: 0 }"
+                :delay="{ show: 0, hide: 0 }" 
+                theme = "filter-dropdown"
                 >
-                    <p>{{ categoryMap.get('Mark')[item] }}</p>
+                    <p>{{ categoryMap.get('Mark')[category] }}</p>
                     <template #popper >
-                        <div v-for="value in filterObject.get('Mark')[item]">
-                            <p>{{ value }}</p>
+                        <div class="catalogue-filter-category-title-box">
+                            <h3>Catalogue Values</h3>
+                            <h2>Mark | {{ categoryMap.get('Mark')[category] }}</h2>
+                            <p>Select a value to filter the library</p>
+                        </div>
+                        <div class="catalogue-filter-category-container">
+                            <button 
+                            v-for="filterValue in filterObject.get('Mark')[category]"
+                            @click="viewStore.filterActiveToggle(filterValue, category, 'Mark')" 
+                            class="catalogue-filter-category-box"
+                            :class="{ filterActive : filterObject.get('Mark')[category][filterValue.name].active }">
+                                <p class="catalogue-filter-category" >{{ filterValue.name }}</p>
+                            </button>
                         </div>
                     </template>
                 </VDropdown>
@@ -96,56 +145,25 @@ import 'floating-vue/dist/style.css'
 
 // STATE MANAGERS IMPORT //    
 
-//Library State
-const libraryStore = useLibraryStore();
 
 //View State
 const viewStore = useViewStore();
-const { libraryData,
+const { 
         libraryDisplay,
-        dataSize,
-        formattedLibrary, 
-        itemHeight,
-        itemColour, 
-        viewHeightBounds, 
-        viewColourSet } = storeToRefs(viewStore)
-const { parseDatabase,
-        handleViewSelection,
-        getIDP,
-        getIFP,
-        itemTypeCheck } = useViewStore();
-
-    //Utils
-    const { alphabetically,
-            isArray } = useUtils();
+        getActiveFilters,
+        filterObject, } = storeToRefs(viewStore)
+const { 
+        filterActiveToggle,
+ } = useViewStore();
 
 
-//Your Shelf State
-const yourShelfStore = useYourShelfStore();
-const { yourShelf }  = storeToRefs(yourShelfStore)
-const { addToShelf, 
-        removeFromShelf } = useYourShelfStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
 const { categoryMap, 
-        invCategoryMap,
+
         filterMap, 
-        colourMapFiltered,
-        scales,
-        viewRouteQueries,
-        viewEditItemBundle,
-        viewColourItemBundle } = storeToRefs(referenceStore)
-
-
-// nuxtApp.vueApp.use(FloatingVue, {
-//   themes: {
-//     'info-tooltip': {
-//       $extend: 'tooltip',
-//       $resetCss: true,
-//     },
-//   },
-// })
+    } = storeToRefs(referenceStore)
 
 
 const collapsed = ref(false)
@@ -160,6 +178,7 @@ const sidebarWidth = computed(
 )
 
 
+
 const visible = reactive({
         Agent: false,
         Book: false,
@@ -171,53 +190,103 @@ const toggle = (option)=> {
     visible[option] = !visible[option]
 }
 
-function getFilterObject(targetFormat, sourceObject, viewModeType){
-        let filterObject = {};
-        for (let i = 0, formatKeys = Object.keys(targetFormat); i < formatKeys.length; i++) {
-                filterObject[formatKeys[i]] = []
-            }
-        
-        for (let i = 0, sourceKeys = Object.keys(sourceObject); i < sourceKeys.length; i++) {
-            for (let j = 0, targetKeys = Object.keys(filterObject); j < targetKeys.length; j++) {
-                let value = getIFP(sourceObject[i], targetKeys[j], viewModeType)
-                if(isArray(value)) {filterObject[targetKeys[j]].push(...value) }
-                else {filterObject[targetKeys[j]].push(value) }
-            }
-        }
-        for (let i = 0, targetKeys = Object.keys(filterObject); i < targetKeys.length; i++) {
-            filterObject[targetKeys[i]] = new Set(filterObject[targetKeys[i]]);
-            filterObject[targetKeys[i]] = Array.from(filterObject[targetKeys[i]]).sort(alphabetically(true))
-        }
-        return filterObject
-}
 
-
-
-const filterObject = reactive(new Map())
 
 onMounted(()=>{
-    watchEffect(()=>{
-        filterObject.set('Agent', getFilterObject(referenceStore.filterMap.get('Agent'), viewStore.libraryData, 'Agent'))
-        filterObject.set('Book', getFilterObject(referenceStore.filterMap.get('Book'), viewStore.libraryData, 'Book'))
-        filterObject.set('Mark', getFilterObject(referenceStore.filterMap.get('Mark'), viewStore.libraryData, 'Mark'))
-
-        console.log('new filter Object',    filterObject)
-        console.log('filter map Marks',    referenceStore.filterMap.get('Mark'))
-    
-  })
+        // viewStore.filterObject.set('Agent', getFilterObject(referenceStore.filterMap.get('Agent'), viewStore.libraryData, 'Agent'))
+        // viewStore.filterObject.set('Book', getFilterObject(referenceStore.filterMap.get('Book'), viewStore.libraryData, 'Book'))
+        // viewStore.filterObject.set('Mark', getFilterObject(referenceStore.filterMap.get('Mark'), viewStore.libraryData, 'Mark'))
 })
-
-// console.log('filter map format',     Object.entries(referenceStore.filterMap.get('Agent')))
-//     console.log('new filter Object',    agentsFilter)
-
-
-
 
 </script>
 
 
 
 <style lang="scss" scoped>
+
+
+.catalogue-filter-category-title-box h2{
+    margin: 0 0.5rem 0.5rem;
+    color: black;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    // letter-spacing: 0.425rem;
+}
+.catalogue-filter-category-title-box h3{
+    margin: 0.35rem 0.5rem 0.15rem;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.715rem;
+    font-weight: 560;
+    letter-spacing: 0.05rem;
+    line-height: 1.25rem;
+    color: rgb(138, 138, 138);
+}
+.catalogue-filter-category-title-box p{
+    margin: 0.25rem 0.5rem;
+    font-family: "Source Serif 4", serif;
+    font-size: 0.8rem;
+    font-weight: 350;
+    letter-spacing: 0.05rem;
+    color: rgb(22, 22, 22);
+    white-space: wrap;
+}
+.catalogue-filter-category-container{
+    margin: 1rem 0.5rem;
+    display: flex;
+    flex-flow: column wrap;
+    max-height: 70vh;
+    min-width: 0;
+    min-height: 0;
+    max-width: 80vw;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    
+}
+.catalogue-filter-category-box{
+    max-width: fit-content;
+    margin: 0.25rem 0.5rem;
+    // max-width: 10rem;
+    border-radius: 0.3rem;
+    border: 0.1rem solid rgb(240, 240, 240);
+    background: rgb(252, 252, 252);
+    cursor: pointer;
+}
+.catalogue-filter-category{
+    padding: 0.5rem 1rem;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    display: -webkit-box;
+    max-height: 50px;
+    padding: 4px 10px;
+    max-width: 200px;
+//  background-color: aqua;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.catalogue-filter-category-box:hover{
+    background: rgb(240, 240, 240);
+    // background: rgb(212, 212, 212);
+}
+
+// .catalogue-filter-category-box:focus{
+//     background: rgb(252, 252, 252);
+// }
+
+.catalogue-filter-category-box.filterActive{
+    background: rgb(156, 208, 233);
+}
+
+
+p.catalogue-filter-category{
+    text-align: left;
+	line-height: 0.9rem;
+	font-family: 'Raleway', sans-serif;
+	font-size: 0.7rem;
+	font-weight: 500;
+}
 
 
 

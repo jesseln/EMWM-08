@@ -1,6 +1,8 @@
 <template>
-    <div class="library-explorer-container">
+    <div  class="library-explorer-container">
+        <div v-if="dataCheck">
         <FilterSidebar />
+        </div>
 
     <div class="query-box">
         <!-- <h1 class="query-type"> {{ libraryDisplay.pageText.queryType }} </h1> -->

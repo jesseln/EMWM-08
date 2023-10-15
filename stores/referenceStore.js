@@ -196,57 +196,6 @@ export const useReferenceStore = defineStore('reference', ()=>{
           ['Other notes']: [],
   })
 
-  const pathMap = reactive(new Map());
-  pathMap
-.set('Book', {
-        ['BookID']: 'Book',
-        ['Repository']: 'Book', 
-        ['Date of publication']: 'Book', 
-        ['Genre/Identity']: 'Book',
-        ['Title']: 'Book',
-        ['Author']: 'Book',
-        ['Place of publication']: 'Book',
-        ['Size']: 'schemePaired',
-        ['Book Notes']:'Book',
-        ['Print or manuscript']: 'Book',
-        ['STC or Wing']: 'Book',
-        ['Shelfmark']: 'Book',
-        ['Marginal Marks']: 'Book',
-        ['Book image/s']: 'Book',
-        ['Number of marks']: 'Book',
-        ['Number of book images']: 'Book',
-})
-pathMap
-.set('Agent', {
-        ['FemaleAgentID']: 'Agent',
-        ['Female agent name']: 'Agent', 
-        ['Female agent date']: 'Agent', 
-        ['Female agent bio']: 'Agent',
-        ['Number of marks']: 'Agent',
-})
-pathMap
-.set('Mark', {
-        ['MargID']: 'Mark',
-        ['Notes']: 'Mark',
-        ['Ownership type']: 'Mark',
-        ['Distribution']: 'Mark',
-        ['Female agent status']: 'Mark',
-        ['Annotation type']: 'Mark',
-        ['Location sig. ; p. ; pp.']: 'Mark',
-        ['Recording type']: 'Mark',
-        ['Transcription']: 'Mark',
-        ['Mark type (Mark of?)']: 'Mark',
-        ['Images of marginal mark']: 'Mark',
-        ['Class']: 'Mark',
-        ['Position on page']: 'Mark',
-        ['Location other']: 'Mark',
-        ['Added text type']: 'Mark',
-        ['Drawing type']: 'Mark',
-        ['Graffiti type']: 'Mark',
-        ['Agent role']: 'Mark',
-        ['Other notes']: 'Mark',
-})
-
 
     // FILTERED MAP ADJUSTMENTS //
     // TO be deleted - Believe ViewDesigner is the only component relying on this.
@@ -636,7 +585,6 @@ pathMap
                 invCategoryMap, 
                 viewMap, 
                 filterMap,
-                pathMap,
                 colourMapFiltered, 
                 scales, 
                 viewRouteQueries,

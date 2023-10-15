@@ -175,38 +175,38 @@ const itemHandlers = {
   mouseout: handleMouseOut
 }
 
-const bookSlides = ref(
-    { 
-        image: "",
-        title: "my title",
-        content: "my content",
-    }
-)
+// const bookSlides = ref(
+//     { 
+//         image: "",
+//         title: "my title",
+//         content: "my content",
+//     }
+// )
 
-async function bookImages(item){
-    const { data, error } = await supabase
-    .storage
-    // .listBuckets()
-    .from('book-images')
-    // .list('10')
-    .list(`${item.BookID}`, {
-        limit: 100,
-        offset: 0,
-        sortBy: { column: 'name', order: 'asc' },
-    })
-    if(error) {
-            console.log(error)
-    }
+// async function bookImages(item){
+//     const { data, error } = await supabase
+//     .storage
+//     // .listBuckets()
+//     .from('book-images')
+//     // .list('10')
+//     .list(`${item.BookID}`, {
+//         limit: 100,
+//         offset: 0,
+//         sortBy: { column: 'name', order: 'asc' },
+//     })
+//     if(error) {
+//             console.log(error)
+//     }
 
-    if(data){
-        bookSlides.value.image = data
-        return data
-    }
-}
+//     if(data){
+//         bookSlides.value.image = data
+//         return data
+//     }
+// }
 
-onMounted(()=>{
-    bookImages(item)
-})
+// onMounted(()=>{
+//     bookImages(item)
+// })
 
 function handleMouseOver(d) {
     d3.select(d.currentTarget)

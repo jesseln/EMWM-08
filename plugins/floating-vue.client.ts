@@ -17,7 +17,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     VDropdown.options.themes['filter-dropdown'] = {
         ...VDropdown.options.themes.menu,
         '$resetCss': true,
-        placement: 'left',
+        placement: 'right',
     }
     VDropdown.options.themes['item-dropdown'] = {
         ...VDropdown.options.themes.menu,

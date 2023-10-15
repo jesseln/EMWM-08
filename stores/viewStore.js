@@ -110,6 +110,10 @@ export const useViewStore = defineStore('view', ()=>{
 
         ordinalColourMap.value = getOrdinalColourMap();
 
+        filterObject.set('Agent', getFilterObject(filterMap.get('Agent'), libraryData.value, 'Agent'))
+        filterObject.set('Book', getFilterObject(filterMap.get('Book'), libraryData.value, 'Book'))
+        filterObject.set('Mark', getFilterObject(filterMap.get('Mark'), libraryData.value, 'Mark'))
+
         }
     })
     
@@ -400,6 +404,57 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
 
+    // FILTER HANDLING //
+    const activeFilters = ref([])
+    const filterObject = reactive(new Map())
+
+
+    function getFilterObject(targetFormat, sourceObject, viewModeType){
+        let filterObject = {};
+        for (let i = 0, formatKeys = Object.keys(targetFormat); i < formatKeys.length; i++) {
+                filterObject[formatKeys[i]] = []
+            }
+        
+        for (let i = 0, sourceKeys = Object.keys(sourceObject); i < sourceKeys.length; i++) {
+            for (let j = 0, targetKeys = Object.keys(filterObject); j < targetKeys.length; j++) {
+                let value = getIFP(sourceObject[i], targetKeys[j], viewModeType)
+                if(isArray(value)) {filterObject[targetKeys[j]].push(...value) }
+                else {filterObject[targetKeys[j]].push(value) }
+            }
+        }
+        for (let i = 0, targetKeys = Object.keys(filterObject); i < targetKeys.length; i++) {
+            filterObject[targetKeys[i]] = new Set(filterObject[targetKeys[i]]);
+            filterObject[targetKeys[i]] = Array.from(filterObject[targetKeys[i]]).sort(alphabetically(true))
+            filterObject[targetKeys[i]] = filterObject[targetKeys[i]].reduce((object, value) => ({ ...object, [value] : {name : value, active: false}}),{})
+        }
+        return filterObject
+    }
+
+
+    function filterActiveToggle(filterValue, category, itemType){
+        filterObject.get(itemType)[category][filterValue.name].active = 
+        !filterObject.get(itemType)[category][filterValue.name].active
+
+        filterUpdate(filterValue, category, itemType)
+    }
+
+
+
+    function filterUpdate(filterValue, category, itemType){
+        if(filterObject.get(itemType)[category][filterValue.name].active){
+            activeFilters.value.push({'name': filterValue.name, 'category': category, 'itemType': itemType})
+        }
+        else{
+            activeFilters.value = activeFilters.value.filter((value)=> value.name !== filterValue.name )
+        }
+    }
+
+    const getActiveFilters = computed(()=>{
+        return activeFilters.value
+    })
+
+
+
 
       return {  libraryData,
                 dataSize,
@@ -417,6 +472,11 @@ export const useViewStore = defineStore('view', ()=>{
                 viewHeightBounds,
                 domainColourIndex,
                 viewColourBounds,
+                activeFilters,
+                filterObject,
+                getActiveFilters,
+                getFilterObject,
+                filterActiveToggle,
                 parseDatabase,
                 handleViewSelection,
                 getIDP,
