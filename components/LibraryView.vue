@@ -1,5 +1,5 @@
 <template>
-    <div class="shelf" v-for="shelf in formattedLibrary" :key="shelf">
+    <div class="shelf" v-for="shelf in filterLibrary" :key="shelf">
         <div class="shelf-title-box">
             <h2 class="shelf-title">{{shelf[0]}}</h2>
         </div>
@@ -31,6 +31,7 @@
     const { libraryData,
             libraryDisplay,
             formattedLibrary, 
+            filterLibrary,
             itemHeight,
             itemColour, 
             viewHeightBounds, 

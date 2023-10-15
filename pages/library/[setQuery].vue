@@ -1,8 +1,8 @@
 <template>
     <div  class="library-explorer-container">
-        <div v-if="dataCheck">
+
         <FilterSidebar />
-        </div>
+
 
     <div class="query-box">
         <!-- <h1 class="query-type"> {{ libraryDisplay.pageText.queryType }} </h1> -->
@@ -19,12 +19,42 @@
             <h1 class="library-type-title">{{ libraryDisplay.pageText.libraryTypeTitle }}</h1>
             <p class="library-type-subtitle">{{ libraryDisplay.pageText.libraryTypeSubtitle }}</p>
         </div>
+        <div v-if="getActiveFilters.length" class="filters-bar">
+                <h4 class="library-nav-view-filters">Active Filters</h4>
+                <div class="catalogue-filter-category-container-active-inview">
+                    <button 
+                    v-for="filterValue in getActiveFilters"
+                    @click="filterActiveToggle(filterValue, filterValue.category, filterValue.itemType)" 
+                    class="catalogue-filter-category-active"
+                    :class="{ filterActive : filterObject.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
+                    <div class="catalogue-filter-category-wrapper">
+                        <div class="catalogue-filter-category-titles-wrapper">
+                            <h2 class="catalogue-filter-item" >
+                                {{ filterValue.itemType }}
+                            </h2>
+                            <h3 class="catalogue-filter-category" >
+                                 {{categoryMap.get(filterValue.itemType)[filterValue.category]}}
+                            </h3>
+                        </div>
+                        <div class="catalogue-filter-category-value-container">
+                            <p class="catalogue-filter-category-value" >  {{filterValue.name}} </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M6 0C2.65714 0 0 2.65714 0 6C0 9.34286 2.65714 12 6 12C9.34286 12 12 9.34286 12 6C12 2.65714 9.34286 0 6 0ZM6 11.1429C3.17143 11.1429 0.857143 8.82857 0.857143 6C0.857143 3.17143 3.17143 0.857143 6 0.857143C8.82857 0.857143 11.1429 3.17143 11.1429 6C11.1429 8.82857 8.82857 11.1429 6 11.1429Z" fill="white"/>
+                                <path d="M8.31429 8.94434L6 6.63005L3.68571 8.94434L3 8.25862L5.31429 5.94434L3 3.63005L3.68571 2.94434L6 5.25862L8.31429 2.94434L9 3.63005L6.68571 5.94434L9 8.25862L8.31429 8.94434Z" fill="white"/>
+                            </svg>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
         <div v-if="dataCheck">
         <LibraryView />
     </div>
-    
+
     <div class="nav-bottom-div">
+        <div v-if="dataCheck">
         <LibraryBottomNav />
+        </div>
     </div>
     <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
         🖊️
@@ -51,33 +81,38 @@ const libraryStore = useLibraryStore();
 const viewStore = useViewStore();
 const { libraryData,
         libraryDisplay,
-        dataSize,
         formattedLibrary, 
         itemHeight,
         itemColour, 
-        viewHeightBounds, 
+        colourSet,
+        colourScale,
+        dataSize,
+        getActiveFilters,
+        filterObject,
+        colourScaleConverter,
+        ordinalColourMap,
+        domainIndex,
+        viewHeightBounds,
+        domainColourIndex,
+        viewColourBounds,
         viewColourSet } = storeToRefs(viewStore)
-const { parseDatabase,
+        const { parseDatabase,
         handleViewSelection,
         getIDP,
-        itemTypeCheck } = useViewStore();
-
-
-//Your Shelf State
-const yourShelfStore = useYourShelfStore();
-const { yourShelf }  = storeToRefs(yourShelfStore)
-const { addToShelf, 
-        removeFromShelf } = useYourShelfStore();
+        filterActiveToggle,
+        handleColour } = useViewStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
 const { categoryMap, 
+        viewMap,
         invCategoryMap, 
         colourMapFiltered,
-        scales,
-        viewRouteQueries,
-        viewEditItemBundle,
-        viewColourItemBundle } = storeToRefs(referenceStore)
+        scales } = storeToRefs(referenceStore)
+
+        //Utility Functions
+const { handleObjectProperty,
+        contrastHandler } = useUtils();
 
 
     const setQueryView = referenceStore.viewRouteQueries[route.params.setQuery]
@@ -106,36 +141,7 @@ const { categoryMap,
     //     throw createError({ statusCode: 404, statusMessage: "View not Found"})
     // }
 
-    //Function format written to use local vairables and return to reactive value
-    // function iconDimensions(){
-    //     const scaleWidth = 1.5;
-    //     const scaleHeight = 1.5;
-    //     const fill = '#333';
-    //     return {
-    //         agentIcon:{
-    //             iconHeight: 0.9  * scaleHeight,
-    //             iconWidth: 0.7 * scaleWidth,
-    //             iconFill: fill,
-    //         },
-    //         bookIcon:{
-    //             iconHeight: 1 * scaleHeight,
-    //             iconWidth: 0.7 * scaleWidth,
-    //             iconFill: fill,
-    //         },
-    //         markIcon:{
-    //             iconHeight: 0.9 * scaleHeight,
-    //             iconWidth: 0.75 * scaleWidth,
-    //             iconFill: fill,
-    //         },
-    //     }
-    // }
-
-    // const icons = ref()
-
-    // watchEffect(()=>{
-    //     icons.value = iconDimensions()
-    // })
-
+ 
 
 
     const showAnnotations = ref(false)
@@ -163,6 +169,7 @@ const { categoryMap,
 </script>
 
 <style lang="scss" scoped>
+
     .nav-div{
         z-index: 5;
         position: sticky;
@@ -185,7 +192,4 @@ const { categoryMap,
 
     }
 
-    // .nav-div:hover{
-    //     opacity: 100%;
-    // }
 </style>

@@ -77,14 +77,15 @@ export const useViewStore = defineStore('view', ()=>{
     const itemHeight = ref();
     const itemColour = ref();
     const colourSet = ref();
-    const ordinalColourMap = ref();
+    const ordinalColourMap = ref([]);
     const colourScale = ref();
     const colourScaleConverter = ref();
     const domainIndex = ref();
     const viewHeightBounds = ref();
     const domainColourIndex = ref();
     const viewColourBounds = ref();
-    
+    const filterLibrary = ref();
+
 
     watch([libraryData, libraryDisplay],() => {
         if(libraryData.value.length !== undefined){
@@ -110,13 +111,15 @@ export const useViewStore = defineStore('view', ()=>{
 
         ordinalColourMap.value = getOrdinalColourMap();
 
+        }
+    })
+
+    watch([libraryData],() => {
         filterObject.set('Agent', getFilterObject(filterMap.get('Agent'), libraryData.value, 'Agent'))
         filterObject.set('Book', getFilterObject(filterMap.get('Book'), libraryData.value, 'Book'))
         filterObject.set('Mark', getFilterObject(filterMap.get('Mark'), libraryData.value, 'Mark'))
-
-        }
     })
-    
+
 
 
     //Get item height bounds
@@ -282,9 +285,6 @@ export const useViewStore = defineStore('view', ()=>{
             // formattedLibrary.value =  formatLibrary(libraryData.value, libraryDisplay);
     }
 
-    const dataSize = computed(() =>{
-        return  libraryData.value.length?   libraryData.value.length: 0
-    })
 
 
     //Update View Object from user input
@@ -339,10 +339,9 @@ export const useViewStore = defineStore('view', ()=>{
     //Dynamic Path
     //Returns the desintation value by selecting the correct path using the itemType (via the ID name) and the viewModeType
     //getIFP - getItemFilterPath - Condensed for frequent use.
-    function getIFP(item, viewSelection, viewModeType) {
+    function getIFP(item, viewSelection, viewModeType, viewMethod) {
         let value;
         let itemType = itemTypeCheck(item)
-        const viewMethod = 'filter';
         if(!item) return null;
         
         if(itemType === 'Agent'){
@@ -407,7 +406,7 @@ export const useViewStore = defineStore('view', ()=>{
     // FILTER HANDLING //
     const activeFilters = ref([])
     const filterObject = reactive(new Map())
-
+    const dataSize = ref(0);
 
     function getFilterObject(targetFormat, sourceObject, viewModeType){
         let filterObject = {};
@@ -417,14 +416,14 @@ export const useViewStore = defineStore('view', ()=>{
         
         for (let i = 0, sourceKeys = Object.keys(sourceObject); i < sourceKeys.length; i++) {
             for (let j = 0, targetKeys = Object.keys(filterObject); j < targetKeys.length; j++) {
-                let value = getIFP(sourceObject[i], targetKeys[j], viewModeType)
+                let value = getIFP(sourceObject[i], targetKeys[j], viewModeType, 'display name')
                 if(isArray(value)) {filterObject[targetKeys[j]].push(...value) }
                 else {filterObject[targetKeys[j]].push(value) }
             }
         }
         for (let i = 0, targetKeys = Object.keys(filterObject); i < targetKeys.length; i++) {
             filterObject[targetKeys[i]] = new Set(filterObject[targetKeys[i]]);
-            filterObject[targetKeys[i]] = Array.from(filterObject[targetKeys[i]]).sort(alphabetically(true))
+            filterObject[targetKeys[i]] = Array.from(filterObject[targetKeys[i]]).sort((a,b)=>alphabetically(true)(handleFilterValue(a), handleFilterValue(b)))
             filterObject[targetKeys[i]] = filterObject[targetKeys[i]].reduce((object, value) => ({ ...object, [value] : {name : value, active: false}}),{})
         }
         return filterObject
@@ -437,8 +436,6 @@ export const useViewStore = defineStore('view', ()=>{
 
         filterUpdate(filterValue, category, itemType)
     }
-
-
 
     function filterUpdate(filterValue, category, itemType){
         if(filterObject.get(itemType)[category][filterValue.name].active){
@@ -453,13 +450,56 @@ export const useViewStore = defineStore('view', ()=>{
         return activeFilters.value
     })
 
+    function getFilterLibrary(){
+        return formattedLibrary.value
+            .reduce((library, shelf) => {
+                let shelfContent = shelf[1]
+                .reduce((shelf, bookend) => {
+                    let bookendContent = bookend[1]
+                    .filter((item) => {
+                        return itemFilterCheck(item)
+                    })
+                    if(bookendContent.length > 0){
+                        shelf.push([bookend[0], bookendContent])
+                    }
+                    return shelf
+                }, [])
+                if(shelfContent.length > 0){
+                    library.push([shelf[0], shelfContent])
+                }
+                return library
+            }, [])
+        }
 
+    function itemFilterCheck(item){
+        return activeFilters.value.every((filterValue)=>{
+            const itemValue = getIFP(item, filterValue.category, filterValue.itemType, 'display name')
+            if(isArray(itemValue)) { 
+                return itemValue.includes(filterValue.name) }
+            else {
+                return filterValue.name === itemValue }
+        })
+    }
+
+
+    watch([filterLibrary],() => {
+        // dataSize.value =  filterLibrary.value.length?   filterLibrary.value[0][1][0][1].length : 0
+    })
+
+    // watch([formattedLibrary, libraryDisplay],() => {
+    //     filterLibrary.value = getFilterLibrary()
+    // })
+
+    watchEffect(() => {
+        filterLibrary.value = getFilterLibrary()
+    })
 
 
       return {  libraryData,
                 dataSize,
                 libraryDisplay,
-                formattedLibrary, 
+                formattedLibrary,
+                filterLibrary, 
                 heightCategory,
                 itemHeight,
                 itemColour,
@@ -475,6 +515,7 @@ export const useViewStore = defineStore('view', ()=>{
                 activeFilters,
                 filterObject,
                 getActiveFilters,
+                filterLibrary,
                 getFilterObject,
                 filterActiveToggle,
                 parseDatabase,

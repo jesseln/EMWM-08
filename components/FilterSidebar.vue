@@ -12,21 +12,41 @@
 
     </div>
 
-    <div v-if="getActiveFilters.length">
-        <h4 class="catalogue-title">Active Filters</h4>
-        <div class="catalogue-filter-category-container">
-        <button 
-        v-for="filterValue in getActiveFilters"
-            @click="filterActiveToggle(filterValue, filterValue.category, filterValue.itemType)" 
-            class="catalogue-filter-category-box"
-            :class="{ filterActive : filterObject.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
-                <p class="catalogue-filter-category" > {{ filterValue.itemType }} | {{categoryMap.get(filterValue.itemType)[filterValue.category]}} | {{filterValue.name}}</p>
-        </button>
+    <div v-if="getActiveFilters.length" class="filters-sidebar">
+                <h4 class="library-nav-view-filters">Active Filters</h4>
+                <div class="catalogue-filter-category-container-active">
+                    <button 
+                    v-for="filterValue in getActiveFilters"
+                    @click="filterActiveToggle(filterValue, filterValue.category, filterValue.itemType)" 
+                    class="catalogue-filter-category-active"
+                    :class="{ filterActive : filterObject.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
+                    <div class="catalogue-filter-category-wrapper">
+                        <div class="catalogue-filter-category-titles-wrapper">
+                            <h2 class="catalogue-filter-item" >
+                                {{ filterValue.itemType }}
+                            </h2>
+                            <h3 class="catalogue-filter-category" >
+                                 {{categoryMap.get(filterValue.itemType)[filterValue.category]}}
+                            </h3>
+                        </div>
+                        <div class="catalogue-filter-category-value-container">
+                            <p class="catalogue-filter-category-value" >  {{filterValue.name}} </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M6 0C2.65714 0 0 2.65714 0 6C0 9.34286 2.65714 12 6 12C9.34286 12 12 9.34286 12 6C12 2.65714 9.34286 0 6 0ZM6 11.1429C3.17143 11.1429 0.857143 8.82857 0.857143 6C0.857143 3.17143 3.17143 0.857143 6 0.857143C8.82857 0.857143 11.1429 3.17143 11.1429 6C11.1429 8.82857 8.82857 11.1429 6 11.1429Z" fill="white"/>
+                                <path d="M8.31429 8.94434L6 6.63005L3.68571 8.94434L3 8.25862L5.31429 5.94434L3 3.63005L3.68571 2.94434L6 5.25862L8.31429 2.94434L9 3.63005L6.68571 5.94434L9 8.25862L8.31429 8.94434Z" fill="white"/>
+                            </svg>
+                        </div>
+                    </div>
+                </button>
+            </div>
         </div>
-    </div>
     <div class="library-catalogue">
-        <div class="catalogue-title-box"  @click="toggle('Agent')">
-            <h4 class="catalogue-title">Agents</h4>
+        <div 
+        class="catalogue-title-box"  
+        :class="{ filterActive : getActiveFilters.some((filter) => filter.itemType === 'Agent')}"
+        @click="toggle('Agent')">
+            <h4 class="catalogue-title">
+                Agents</h4>
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none" class="svg">
                 <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
             </svg>
@@ -41,7 +61,11 @@
                 :delay="{ show: 0, hide: 0 }" 
                 theme = "filter-dropdown"
                 >
-                    <p>{{ categoryMap.get('Agent')[category] }}</p>
+                    <p 
+                    :class="{ filterActive : getActiveFilters.some((filter) => filter.category === category)}"
+                    >
+                        {{ categoryMap.get('Agent')[category] }}
+                    </p>
                     <template #popper >
                         <div class="catalogue-filter-category-title-box">
                             <h3>Catalogue Values</h3>
@@ -54,14 +78,17 @@
                             @click="viewStore.filterActiveToggle(filterValue, category, 'Agent')" 
                             class="catalogue-filter-category-box"
                             :class="{ filterActive : filterObject.get('Agent')[category][filterValue.name].active }">
-                                <p class="catalogue-filter-category" >{{ filterValue.name }}</p>
+                                <p class="catalogue-filter-category-list-value" >{{ filterValue.name }}</p>
                             </button>
                         </div>
                     </template>
                 </VDropdown>
             </div>
         </div>
-        <div class="catalogue-title-box" @click="toggle('Book')">
+        <div 
+        class="catalogue-title-box" 
+        :class="{ filterActive : getActiveFilters.some((filter) => filter.itemType === 'Book')}"
+        @click="toggle('Book')">
             <h4 class="catalogue-title">Books</h4>
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none" class="svg">
                 <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
@@ -76,7 +103,11 @@
                 :delay="{ show: 0, hide: 0 }" 
                 theme = "filter-dropdown"
                 >
-                    <p>{{ categoryMap.get('Book')[category] }}</p>
+                    <p
+                    :class="{ filterActive : getActiveFilters.some((filter) => filter.category === category)}"
+                    >
+                        {{ categoryMap.get('Book')[category] }}
+                    </p>
                     <template #popper >
                         <div class="catalogue-filter-category-title-box">
                             <h3>Catalogue Values</h3>
@@ -89,14 +120,17 @@
                             @click="viewStore.filterActiveToggle(filterValue, category, 'Book')" 
                             class="catalogue-filter-category-box"
                             :class="{ filterActive : filterObject.get('Book')[category][filterValue.name].active }">
-                                <p class="catalogue-filter-category" >{{ filterValue.name }}</p>
+                                <p class="catalogue-filter-category-list-value" >{{ filterValue.name }}</p>
                             </button>
                         </div>
                     </template>
                 </VDropdown>
             </div>
         </div>
-        <div class="catalogue-title-box" @click="toggle('Mark')">
+        <div 
+        class="catalogue-title-box" 
+        :class="{ filterActive : getActiveFilters.some((filter) => filter.itemType === 'Mark')}"
+        @click="toggle('Mark')">
             <h4 class="catalogue-title">Marks</h4>
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none" class="svg">
                 <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
@@ -111,7 +145,11 @@
                 :delay="{ show: 0, hide: 0 }" 
                 theme = "filter-dropdown"
                 >
-                    <p>{{ categoryMap.get('Mark')[category] }}</p>
+                    <p
+                    :class="{ filterActive : getActiveFilters.some((filter) => filter.category === category)}"
+                    >
+                        {{ categoryMap.get('Mark')[category] }}
+                    </p>
                     <template #popper >
                         <div class="catalogue-filter-category-title-box">
                             <h3>Catalogue Values</h3>
@@ -124,7 +162,7 @@
                             @click="viewStore.filterActiveToggle(filterValue, category, 'Mark')" 
                             class="catalogue-filter-category-box"
                             :class="{ filterActive : filterObject.get('Mark')[category][filterValue.name].active }">
-                                <p class="catalogue-filter-category" >{{ filterValue.name }}</p>
+                                <p class="catalogue-filter-category-list-value" >{{ filterValue.name }}</p>
                             </button>
                         </div>
                     </template>
@@ -150,6 +188,9 @@ import 'floating-vue/dist/style.css'
 const viewStore = useViewStore();
 const { 
         libraryDisplay,
+        formattedLibrary,
+        filterLibrary,
+        activeFilters,
         getActiveFilters,
         filterObject, } = storeToRefs(viewStore)
 const { 
@@ -193,10 +234,17 @@ const toggle = (option)=> {
 
 
 onMounted(()=>{
+    watchEffect(()=>{
+        console.log('filterlibrary',filterLibrary.value)
+        console.log('formatlibrary',formattedLibrary.value)
+        console.log('activr FIlters',activeFilters.value)
+        console.log('catgegorey change colour',getActiveFilters.value.some((filter) => filter.category === 'Female agent date'))
+    })
         // viewStore.filterObject.set('Agent', getFilterObject(referenceStore.filterMap.get('Agent'), viewStore.libraryData, 'Agent'))
         // viewStore.filterObject.set('Book', getFilterObject(referenceStore.filterMap.get('Book'), viewStore.libraryData, 'Book'))
         // viewStore.filterObject.set('Mark', getFilterObject(referenceStore.filterMap.get('Mark'), viewStore.libraryData, 'Mark'))
 })
+
 
 </script>
 
@@ -205,13 +253,28 @@ onMounted(()=>{
 <style lang="scss" scoped>
 
 
+.library-nav-view-filters{
+    margin: 0 0.5rem;
+    font-family: 'Raleway', sans-serif;
+	font-size: 0.7rem;
+	font-weight: 450;
+    letter-spacing: 0.05rem;
+    line-height: 1.25rem;
+	color: black;
+}
+.filters-sidebar{
+    margin: 0 0;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+}
+
 .catalogue-filter-category-title-box h2{
     margin: 0 0.5rem 0.5rem;
     color: black;
     font-family: "Source Sans 3", sans-serif;
     font-size: 1.15rem;
     font-weight: 400;
-    // letter-spacing: 0.425rem;
 }
 .catalogue-filter-category-title-box h3{
     margin: 0.35rem 0.5rem 0.15rem;
@@ -232,7 +295,7 @@ onMounted(()=>{
     white-space: wrap;
 }
 .catalogue-filter-category-container{
-    margin: 1rem 0.5rem;
+    margin: 0.25rem 0.5rem;
     display: flex;
     flex-flow: column wrap;
     max-height: 70vh;
@@ -244,16 +307,36 @@ onMounted(()=>{
     justify-content: center;
     
 }
+.catalogue-filter-category-container-active{
+    margin: 0.25rem 0;
+    display: flex;
+    flex-flow: column wrap;
+    max-height: 70vh;
+    min-width: 0;
+    min-height: 0;
+    max-width: 80vw;
+    overflow-y: auto;
+    align-items: flex-start;
+    justify-content: center;
+    
+}
 .catalogue-filter-category-box{
     max-width: fit-content;
     margin: 0.25rem 0.5rem;
-    // max-width: 10rem;
     border-radius: 0.3rem;
     border: 0.1rem solid rgb(240, 240, 240);
     background: rgb(252, 252, 252);
     cursor: pointer;
 }
-.catalogue-filter-category{
+.catalogue-filter-category-active{
+    max-width: fit-content;
+    margin: 0.25rem 0.5rem;
+    border-radius: 0.3rem;
+    border: 0.1rem solid rgb(240, 240, 240);
+    background: rgb(252, 252, 252);
+    cursor: pointer;
+}
+.catalogue-filter-category-list-value{
     padding: 0.5rem 1rem;
     text-overflow: ellipsis;
     overflow:hidden;
@@ -261,26 +344,69 @@ onMounted(()=>{
     max-height: 50px;
     padding: 4px 10px;
     max-width: 200px;
-//  background-color: aqua;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
-
+.catalogue-filter-category-value-container{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem 0 0;
+    width: 100%;
+}
 .catalogue-filter-category-box:hover{
     background: rgb(240, 240, 240);
-    // background: rgb(212, 212, 212);
 }
-
-// .catalogue-filter-category-box:focus{
-//     background: rgb(252, 252, 252);
-// }
-
 .catalogue-filter-category-box.filterActive{
-    background: rgb(156, 208, 233);
+    background: rgb(125, 84, 238);
+    color: white;
+}
+.catalogue-filter-category-box:hover{
+    background:rgb(152, 121, 238);
+    color: white;
+}
+.catalogue-filter-category-box:active{
+    background: rgb(230, 230, 230);
+    color: white;
+}
+
+p.filterActive{
+    color:rgb(125, 84, 238);
+    font-weight: 600;
+}
+
+.catalogue-title-box.filterActive{
+    background: rgb(247, 247, 247);
+    color:rgb(125, 84, 238);
+    font-weight: 600;
+}
+
+.catalogue-title-box.filterActive .catalogue-title{
+    font-weight: 600;
+}
+
+.catalogue-filter-category-active.filterActive .catalogue-filter-category-value-container:hover{
+    background: rgb(152, 121, 238);
+    color: white;
+}
+
+.catalogue-filter-category-active.filterActive .catalogue-filter-category-value-container:active{
+    background: rgb(230, 230, 230);
+    color: white;
+}
+
+.catalogue-filter-category-active.filterActive .catalogue-filter-category-value-container{
+    background: rgb(125, 84, 238);
+    color: white;
+    border-radius: 0.3rem;
 }
 
 
-p.catalogue-filter-category{
+
+
+p.catalogue-filter-category-list-value{
     text-align: left;
 	line-height: 0.9rem;
 	font-family: 'Raleway', sans-serif;
@@ -369,8 +495,8 @@ p.catalogue-filter-category{
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    margin: 0.25rem 0;
-    padding: 0 0.5rem;
+    margin: 0 0;
+    padding: 0.25rem 0.5rem;
     border-bottom: 0.1rem solid #ccc;
     cursor: pointer;
     color: #111827;
@@ -434,6 +560,17 @@ p.catalogue-filter-category{
   cursor: pointer;
   color: rgb(63, 63, 63);
   transition: 0.3s ease-in-out;
+}
+
+.library-nav-view{
+    // position: relative;
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+	font-size: 0.7rem;
+	font-weight: 450;
+    letter-spacing: 0.05rem;
+    line-height: 1.25rem;
+	color: black;
 }
 
 .rotate-180 {

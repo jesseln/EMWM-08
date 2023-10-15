@@ -190,6 +190,9 @@
                 </div>
             </div>
         </div>
+        
+
+    
     </div>
 </div>
 </template>
@@ -206,6 +209,8 @@ const { libraryData,
         itemColour, 
         colourSet,
         colourScale,
+        getActiveFilters,
+        filterObject,
         colourScaleConverter,
         ordinalColourMap,
         domainIndex,
@@ -216,6 +221,7 @@ const { libraryData,
         const { parseDatabase,
         handleViewSelection,
         getIDP,
+        filterActiveToggle,
         handleColour } = useViewStore();
 
 //Reference Constants
@@ -305,9 +311,9 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     onClickOutside(height, (event) => visible.height? visible.height = !visible.height : null)
     onClickOutside(colour, (event) => visible.colour? visible.colour = !visible.colour : null)
 
-    watchEffect(()=>{
-        console.log('ordinal olour map',viewStore.ordinalColourMap)
-    })
+    // watchEffect(()=>{
+    //     console.log('ordinal olour map',viewStore.ordinalColourMap)
+    // })
 
 		
 </script>

@@ -46,12 +46,15 @@ export const useUtils = () => {
           if(viewMode === 'colour') {
               return handleColourValue(obj);
             }else if(viewMode === 'height'){
-              return handleValue(obj);
+              return handleHeightValue(obj);
             }else if(viewMode === 'filter'){
               return handleFilterValue(obj);
-          }else{
-              return handleValue(obj);
-          }
+            }else if(viewMode === 'display name'){
+                if(!obj || obj.length === 0) {return false}
+                else { return obj; }
+            }else{
+                return handleValue(obj);
+            }
     }
 
     //Checks for valid property and returns handled value
@@ -66,11 +69,26 @@ export const useUtils = () => {
     }
 
     //Returns handled values based on type
-    function handleValue(value: any){
+    function handleHeightValue(value: any){
         if(!value || value.length === 0) return false
 
         if(isNumber(value)){
             return handleNumeric(value)
+            
+        }else if(isString(value)){
+            return value
+
+        }else if(isArray(value)){
+            return handleArray(value)
+
+        }
+    }
+    //Returns handled values based on type
+    function handleValue(value: any){
+        if(!value || value.length === 0) return false
+
+        if(isNumber(value)){
+            return value
             
         }else if(isString(value)){
             return value
@@ -110,20 +128,20 @@ export const useUtils = () => {
         }
     }
 
-        //Returns values for special case of Colour viewMode
-        function handleFilterValue(value: any){
-            if(!value || value.length === 0) return false
-    
-            if(isNumber(value)){
-                return handleNumeric(value)
-                
-            }else if(isString(value)){
-                return value
-    
-            }else if(isArray(value)){
-                return value
-            }
+    //Returns values for special case of Colour viewMode
+    function handleFilterValue(value: any){
+        if(!value || value.length === 0) return false
+
+        if(isNumber(value)){
+            return handleNumeric(value)
+            
+        }else if(isString(value)){
+            return value
+
+        }else if(isArray(value)){
+            return value
         }
+    }
 
     const contrastHandler = function (inputColour: string) {
         if(!inputColour) return '#303030'
