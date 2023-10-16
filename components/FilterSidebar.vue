@@ -1,7 +1,8 @@
 <template>
-<div class="sidebar scrollable" :style="{ width: sidebarWidth }">
+<div class="sidebar scrollable">
     <div class="sidebar-title-box">
-        <h1 class="query-type-sideBar"> {{libraryDisplay.pageText.queryType}} </h1>
+        <h1 class="query-type-sideBar"> {{libraryDisplay.pageText.queryType}}  </h1>
+        <h3>Total Items: {{ dataSize }}</h3>
     </div>
     <!-- <div class="shelf-separator-container"><div class="shelf-separator"></div></div> -->
 <div class="sidebar-content">
@@ -192,7 +193,8 @@ const {
         filterLibrary,
         activeFilters,
         getActiveFilters,
-        filterObject, } = storeToRefs(viewStore)
+        filterObject,
+        dataSize, } = storeToRefs(viewStore)
 const { 
         filterActiveToggle,
  } = useViewStore();
@@ -210,7 +212,7 @@ const { categoryMap,
 const collapsed = ref(false)
 const toggleIconSF = ref(0.8)
 const iconScaleFactor = ref(0.5)
-const SIDEBAR_WIDTH = 10
+// const SIDEBAR_WIDTH = 12
 const SIDEBAR_WIDTH_COLLAPSED = 2.5
 const toggleSidebar = () => (collapsed.value = !collapsed.value)
 
@@ -252,7 +254,9 @@ onMounted(()=>{
 
 <style lang="scss" scoped>
 
-
+.sidebar{
+    width: clamp(12vw, 13rem, 20vw);
+}
 .library-nav-view-filters{
     margin: 0 0.5rem;
     font-family: 'Raleway', sans-serif;
@@ -400,7 +404,7 @@ p.filterActive{
 .catalogue-filter-category-active.filterActive .catalogue-filter-category-value-container{
     background: rgb(125, 84, 238);
     color: white;
-    border-radius: 0.3rem;
+    border-radius: 0.8rem;
 }
 
 
@@ -418,12 +422,12 @@ p.catalogue-filter-category-list-value{
 
   .sidebar {
 	display: grid;
-	grid-template-rows: 2.25rem auto auto;
+	grid-template-rows: 4.75rem auto auto;
 	border-radius: 0 0.1rem 0.1rem 0;
 	color: black;
 	float: left;
 	position: sticky;
-	z-index: 6;
+	z-index: 11;
     height: 90vh;
 	top: 0vh;
 	left: 0;
@@ -453,10 +457,24 @@ p.catalogue-filter-category-list-value{
   .sidebar-title-box{
     grid-row: 1/2;
     border-bottom: 2px solid #ebebeb;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 0 1rem 0 0;
+    align-content: flex-start;
   }
 
+  .sidebar-title-box h3{
+	font-family: 'Source Sans 3', sans-serif;
+	font-size: 0.9rem;
+	font-weight:350;
+    letter-spacing: 0.1rem;
+    margin: 0 0.4rem ;
+  }
+
+
   .library-catalogue-title-box{
+    margin: 0.4rem 0.4rem ;
     grid-row: 2/3;
     padding: 0.5rem 0 0.5rem 0;
     border-bottom: 2px solid #ebebeb;

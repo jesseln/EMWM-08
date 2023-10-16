@@ -483,7 +483,7 @@ export const useViewStore = defineStore('view', ()=>{
 
 
     watch([filterLibrary],() => {
-        // dataSize.value =  filterLibrary.value.length?   filterLibrary.value[0][1][0][1].length : 0
+        dataSize.value =  filterLibrary.value.length?   filterLibrary.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
     })
 
     // watch([formattedLibrary, libraryDisplay],() => {

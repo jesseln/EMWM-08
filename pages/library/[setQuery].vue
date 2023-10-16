@@ -4,21 +4,20 @@
         <FilterSidebar />
 
 
-    <div class="query-box">
-        <!-- <h1 class="query-type"> {{ libraryDisplay.pageText.queryType }} </h1> -->
+    <!-- <div class="query-box">
         <h2 class="query-breadcrumb"> {{ libraryDisplay.pageText.queryBreadcrumb }}</h2>
         <h2 class="query-breadcrumb">Total Items: {{ dataSize }}</h2>
-    </div>
+    </div> -->
     <div class="shelf-separator-container"><div class="shelf-separator"></div></div>
-    <div class="nav-div">
-        <LibraryNav />
-    </div>
         <div class="icon-container">
         </div>
         <div class="library-type-title-box">
             <h1 class="library-type-title">{{ libraryDisplay.pageText.libraryTypeTitle }}</h1>
             <p class="library-type-subtitle">{{ libraryDisplay.pageText.libraryTypeSubtitle }}</p>
         </div>
+        <div class="nav-div">
+        <LibraryNav />
+    </div>
         <div v-if="getActiveFilters.length" class="filters-bar">
                 <h4 class="library-nav-view-filters">Active Filters</h4>
                 <div class="catalogue-filter-category-container-active-inview">
@@ -171,10 +170,10 @@ const { handleObjectProperty,
 <style lang="scss" scoped>
 
     .nav-div{
-        z-index: 5;
+        z-index: 10;
         position: sticky;
         top: 0;
-        background-color: rgba(255,255,255,0.94);
+        background-color: rgba(255,255,255,0.98);
         // width: 100%;
         // height: 100%;
         // opacity: 100%;
@@ -185,7 +184,7 @@ const { handleObjectProperty,
         z-index: 5;
         position: sticky;
         bottom: -1px;
-        background-color: rgba(255,255,255,0.94);
+        background-color: rgba(255,255,255,0.98);
         // width: 100%;
         // height: 100%;
         // opacity: 100%;

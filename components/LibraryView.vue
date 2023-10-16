@@ -1,4 +1,5 @@
 <template>
+    <div class="library-wrapper">
     <div class="shelf" v-for="shelf in filterLibrary" :key="shelf">
         <div class="shelf-title-box">
             <h2 class="shelf-title">{{shelf[0]}}</h2>
@@ -20,6 +21,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script setup>

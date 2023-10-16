@@ -23,7 +23,8 @@
                         </svg>
                     </div>
                     <div class="categories" :class="{ hidden : !visible.section }">
-                        <ul class="scrollable">
+                        <ul class="scrollable" >
+                    
                             <li :class="{ current : `NotSelected:${item.category}` === value.section }" v-for="item in sectionCategories.NotSelected" 
                                 @click="handleViewSelection('shelf', item.category, 'NotSelected')">
                                 Not Selected
@@ -40,6 +41,7 @@
                             @click="handleViewSelection('shelf', item.category, 'Mark')">
                                 Mark | {{ markCategories[item.category] }} - {{ sectionCategories.Mark[item.category]['sortMethod']==='A'? 'A to Z': 'Low to High' }}
                             </li>
+                        
                         </ul>
                     </div>
                 </div>
@@ -319,7 +321,8 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 </script>
 
 <style lang="scss" scoped>
-
+.categories{
+}
 .library-nav-container{
     margin: 0 var(--sideMargins) 0;
     display: grid;
@@ -333,7 +336,6 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     grid-row: 1/2;
     display: flex;
     flex-flow: row wrap;
-    position: relative;
     // gap: 2rem;
     justify-content: center;
 }
@@ -365,7 +367,6 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 }
 
 .library-nav-colour-item{
-    // position: relative;
     display: flex;
     flex-direction: column;
     // align-content: center;
@@ -424,8 +425,7 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     justify-content: flex-start;
     align-items: center;
     max-height: 2rem ;
-    margin: 0 0 0.2rem 1.5rem;
-    // position: relative;
+    margin: 0.3rem 0 0.2rem 1.5rem;
 }
 
 
@@ -446,7 +446,6 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 }
 
 .library-nav-view{
-    // position: relative;
     margin: 0;
     font-family: 'Raleway', sans-serif;
 	font-size: 0.7rem;
@@ -475,11 +474,8 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     // display: flex;
     //     flex-direction: row;
     //     flex-wrap: nowrap;
-    position: relative;
     margin: 0;
     padding: 0;
-    z-index: 5;
-
 	}
 
     
@@ -492,7 +488,7 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
         background: #ffffff;
         padding: 0 0.5rem 0 0;
         position: relative;
-        z-index: 5;
+        border-radius: 2rem;
 
 
         cursor: pointer;
@@ -523,7 +519,8 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
     }
 
     ul {
-        width: 100%;
+        border-radius: 0.8rem;
+        width: calc(100% + 2px);
         list-style-type: none;
         padding: 0;
         margin: 0;
@@ -535,14 +532,16 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
         color: black;
         border: 1px solid gainsboro;
         position: absolute;
-        left: 0;
-        // top: 0;
+        left: -1px;
+        top: -1px;
+        z-index: 11;
         background: #fff;
         // display: block;
-        max-height: 60vh;
+        max-height: 50vh;
         // overflow: auto;
     }
     li {
+        z-index: 11;
         padding: 0.55rem 0.4rem;
         color: #666;
         border-bottom: 1px solid rgb(241, 241, 241);
@@ -563,10 +562,12 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
         visibility: hidden;
     }
     .visible {
+        z-index: 11;
         visibility: visible;
     }
 
     .label {
+        z-index: 5;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;

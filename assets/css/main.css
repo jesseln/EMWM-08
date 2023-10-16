@@ -187,11 +187,11 @@ body {
 
 
 .library-wrapper {
-	display: grid;
+	/* display: grid; */
 
 	/* margin: 0, 5px; */
 	/* padding: 1rem var(--sideMargins) 0 var(--sideMargins); */
-	gap: 3rem;
+	/* gap: 3rem; */
 	margin: 2rem 0;
 }
 
@@ -251,9 +251,9 @@ body {
     justify-content: center;
 }
 .shelf-separator{
-	border-top: 1px solid rgb(231, 231, 231);
+	/* border-top: 1px solid rgb(231, 231, 231);
 	border-bottom: 1px solid rgb(231, 231, 231);
-	background-color: rgb(182, 182, 182);
+	background-color: rgb(182, 182, 182); */
 	/* box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px; */
 	/* clip-path: inset(-10px -100px -100px 0px); */
 	height: 0.125rem;
@@ -791,23 +791,30 @@ body {
   }
 
   .scrollable::-webkit-scrollbar {
-    width: 0.8rem;               /* width of the entire scrollbar */
+    width: 0.8rem;         
+    overflow-y: hidden;       /* width of the entire scrollbar */
   }
   
   .scrollable::-webkit-scrollbar-track {
-    background: rgb(247, 247, 247);        /* color of the tracking area */
+    background: rgb(247, 247, 247);  
+    overflow: hidden;  
+    border-radius: 0 1rem 1rem 0;
+    height: 90%;
+         /* color of the tracking area */
   }
   
   .scrollable::-webkit-scrollbar-thumb {
     background-color: rgb(192, 192, 192);    /* color of the scroll thumb */
     border-radius: 25px;       /* roundness of the scroll thumb */
     border: 0.1rem solid rgb(247, 247, 247);  /* creates padding around scroll thumb */
+    overflow: hidden; 
   }
 
   .scrollable{
     overflow-y: auto;
     cursor: default;
   }
+  
 
   /* .scrollable:hover{
     background-color: rgb(97, 97, 97); 
@@ -1078,7 +1085,7 @@ body {
 
 
 .filters-bar{
-    margin: 0 var(--libraryMargins) 1rem;
+    margin: 1rem var(--libraryMargins) 1rem;
     display: flex;
     flex-flow: column wrap;
     align-items: flex-start;
@@ -1153,6 +1160,7 @@ body {
     align-items: flex-start;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 5px 0px;
     padding: 0.25rem 0.5rem 0.5rem;
+    border-radius: 0.3rem;
 }
 .catalogue-filter-category-box{
     border-radius: 0.3rem;
@@ -1180,6 +1188,7 @@ body {
 	font-family: 'Raleway', sans-serif;
 	font-size: 0.75rem;
 	font-weight: 500;
+    text-align: left;
 }
 
 .catalogue-filter-category-value-container{
@@ -1222,7 +1231,7 @@ body {
 .catalogue-filter-category-active.filterActive .catalogue-filter-category-value-container{
     background: rgb(125, 84, 238);
     color: white;
-    border-radius: 0.3rem;
+    border-radius: 0.8rem;
 }
 
 
