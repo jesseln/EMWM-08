@@ -30,6 +30,9 @@
                 <div class="shelf-button-wrapper">
                     <button class="shelf-button" @click="itemBundle.yourShelfFunction(item)">{{itemBundle.yourShelfText}}</button>
                 </div>
+                <div class="shelf-button-wrapper">
+                    <button class="shelf-button" @click="$emit('viewDetails', item)"> View Details </button>
+                </div>
                 <ul>
                     <li>
                         <!-- <vueper-slides :dragging-distance="70" prevent-y-scroll lazy lazy-load-on-drag>
@@ -37,6 +40,7 @@
                                 v-for="i in 5"
                                 :key="i"
                                 image="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/book-images/10/BookID_10_(1_of_6).jpg"
+                                image="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/book-images/1754/BookID_1754_(1_of_4).jpeg"
                                 title="slide.title"
                                 content="slide.content" />
                         </vueper-slides> -->
@@ -71,44 +75,6 @@
                         <p>{{ getIDP(item, itemBundle.collectionProp2) }}</p>
                     </li>
                 </ul>
-                <!-- <div class="item-view">
-                <div class="item-view-header-container">
-                    <h2 class="item-view-header">View Features</h2>
-                </div>
-                <ul>
-
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp1}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp1] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp1])[libraryDisplay.view[itemBundle.viewProp1]] }}</h4>    
-                        <h3>{{ getIDP(item, itemBundle.viewProp1) }}</h3>
-                    </li>
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp2}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp2] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp2])[libraryDisplay.view[itemBundle.viewProp2]] }}</h4>    
-                        <h3>{{ getIDP(item, itemBundle.viewProp2) }}</h3>
-                    </li>
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp3}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp3] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp3])[libraryDisplay.view[itemBundle.viewProp3]] }}</h4>    
-                        <h3>{{ getIDP(item, itemBundle.viewProp3) }}</h3>
-                    </li>
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp4}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp4] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp4])[libraryDisplay.view[itemBundle.viewProp4]] }}</h4>       
-                        <h3>{{ getIDP(item, itemBundle.viewProp4) }}</h3>
-                    </li>
-                </ul>
-
-                
-            </div> -->
             </div>
         </div>
         </template>
@@ -132,6 +98,7 @@ import { storeToRefs } from "pinia";
 const supabase = useSupabaseClient()
 //Props
 const {item, itemBundle} = defineProps(['item', 'itemBundle']);
+const {viewDetails} = defineEmits(['viewDetails']);
 // STATE MANAGERS IMPORT //    
 //View State
 const viewStore = useViewStore();

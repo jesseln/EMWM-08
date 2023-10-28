@@ -1256,3 +1256,33 @@ body {
     visibility: visible;
     border-color: #ffffff;
   }
+
+  .vueperslide__image {
+    /* transform: scale(1);
+    max-width: 15rem; */
+  }
+  
+  .vueperslide__title {
+    /* font-size: 7em;
+    opacity: 0.7; */
+  }
+  .vueperslides__arrow svg{stroke: rgb(252, 252, 252)}
+  /* .vueperslides__progress{
+    background: rgba(0, 0, 0, 0.25);
+    color: #ff5252;
+  } */
+  .vueperslides__fractions {
+    position: absolute;
+    top: .8em;
+    left: .5em;
+    z-index: 2;
+    /* padding: .1rem 0.5rem; */
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 2em;
+    background: rgba(255,255,255,.2);
+    color: #fff;
+    font-family: 'Source Sans 3', sans-serif;
+	font-size: 0.8rem;
+	font-weight: 400;
+    max-height: 1.5rem;
+}

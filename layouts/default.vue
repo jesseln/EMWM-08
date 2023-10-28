@@ -67,8 +67,6 @@
   const hideModalClicked = ()=> {
     navDropdownContent.value.style.transitionDelay = '.1s'
     navDropdownContent.value.style.visibility = 'hidden'
-
-
 }
 
 
