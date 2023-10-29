@@ -36,64 +36,6 @@
                 <div class="shelf-button-wrapper">
                     <button class="shelf-button" @click="itemBundle.yourCollectionFunction(item)">{{itemBundle.yourCollectionText}}</button>
                 </div>
-                <!-- <ul>
-                    <li>
-                        <h4>{{ categoryMap.get(itemBundle.itemType)[itemBundle.ownProp1]}}</h4>
-                        <p>{{ handleObjectProperty(item, itemBundle.ownProp1) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(itemBundle.itemType)[itemBundle.ownProp2]}}</h4>
-                        <p>{{ handleObjectProperty(item, itemBundle.ownProp2) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(itemBundle.itemType)[itemBundle.ownProp3]}}</h4>
-                        <p>{{ handleObjectProperty(item, itemBundle.ownProp3) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(libraryDisplay.viewType[itemBundle.collectionProp1])[libraryDisplay.view[itemBundle.collectionProp1]]}}</h4>
-                        <p>{{ getIDP(item, itemBundle.collectionProp1) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(libraryDisplay.viewType[itemBundle.collectionProp2])[libraryDisplay.view[itemBundle.collectionProp2]]}}</h4>
-                        <p>{{ getIDP(item, itemBundle.collectionProp2) }}</p>
-                    </li>
-                </ul> -->
-                <!-- <div class="item-view">
-                <div class="item-view-header-container">
-                    <h2 class="item-view-header">View Features</h2>
-                </div>
-                <ul>
-
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp1}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp1] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp1])[libraryDisplay.view[itemBundle.viewProp1]] }}</h4>    
-                        <h3>{{ getIDP(item, itemBundle.viewProp1) }}</h3>
-                    </li>
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp2}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp2] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp2])[libraryDisplay.view[itemBundle.viewProp2]] }}</h4>    
-                        <h3>{{ getIDP(item, itemBundle.viewProp2) }}</h3>
-                    </li>
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp3}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp3] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp3])[libraryDisplay.view[itemBundle.viewProp3]] }}</h4>    
-                        <h3>{{ getIDP(item, itemBundle.viewProp3) }}</h3>
-                    </li>
-                    <li>
-                        <p class="item-view-subheader-type">{{itemBundle.viewProp4}}</p>
-                        <h4>{{libraryDisplay.viewType[itemBundle.viewProp4] }}
-                            |
-                            {{ categoryMap.get(libraryDisplay.viewType[itemBundle.viewProp4])[libraryDisplay.view[itemBundle.viewProp4]] }}</h4>       
-                        <h3>{{ getIDP(item, itemBundle.viewProp4) }}</h3>
-                    </li>
-                </ul>
-            </div> -->
             </div>
         </div>
         </template>

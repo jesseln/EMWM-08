@@ -1,31 +1,26 @@
 <template>
     <div  class="library-explorer-container">
 
-        <FilterSidebar />
+        <YourCollectionFilterSidebar />
 
-
-    <!-- <div class="query-box">
-        <h2 class="query-breadcrumb"> {{ libraryDisplay.pageText.queryBreadcrumb }}</h2>
-        <h2 class="query-breadcrumb">Total Items: {{ dataSize }}</h2>
-    </div> -->
     <div class="shelf-separator-container"><div class="shelf-separator"></div></div>
         <div class="icon-container">
         </div>
         <div class="library-type-title-box">
-            <h1 class="library-type-title">{{ libraryDisplay.pageText.libraryTypeTitle }}</h1>
-            <p class="library-type-subtitle">{{ libraryDisplay.pageText.libraryTypeSubtitle }}</p>
+            <h1 class="library-type-title">{{ libraryDisplayYC.pageText.libraryTypeTitle }}</h1>
+            <p class="library-type-subtitle">{{ libraryDisplayYC.pageText.libraryTypeSubtitle }}</p>
         </div>
         <div class="nav-div">
-            <LibraryNav />
+            <YourCollectionNav />
         </div>
-        <div v-if="getActiveFilters.length" class="filters-bar">
+        <div v-if="getActiveFiltersYC.length" class="filters-bar">
                 <h4 class="library-nav-view-filters">Active Filters</h4>
                 <div class="catalogue-filter-category-container-active-inview">
                     <button 
-                    v-for="filterValue in getActiveFilters"
-                    @click="filterActiveToggle(filterValue, filterValue.category, filterValue.itemType)" 
+                    v-for="filterValue in getActiveFiltersYC"
+                    @click="filterActiveToggleYC(filterValue, filterValue.category, filterValue.itemType)" 
                     class="catalogue-filter-category-active"
-                    :class="{ filterActive : filterObject.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
+                    :class="{ filterActive : filterObjectYC.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
                     <div class="catalogue-filter-category-wrapper">
                         <div class="catalogue-filter-category-titles-wrapper">
                             <h2 class="catalogue-filter-item" >
@@ -47,12 +42,12 @@
             </div>
         </div>
         <div v-if="dataCheck">
-            <LibraryView />
+            <YourCollectionView />
         </div>
 
     <div class="nav-bottom-div">
         <div v-if="dataCheck">
-        <LibraryBottomNav />
+        <YourCollectionBottomNav />
         </div>
     </div>
     <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
@@ -75,31 +70,42 @@ const route = useRoute()
 
 //Library State
 const libraryStore = useLibraryStore();
+const viewStore = useViewStore();
 
 //View State
-const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        itemHeight,
-        itemColour, 
-        colourSet,
-        colourScale,
-        dataSize,
-        getActiveFilters,
-        filterObject,
-        colourScaleConverter,
-        ordinalColourMap,
-        domainIndex,
-        viewHeightBounds,
-        domainColourIndex,
-        viewColourBounds,
-        viewColourSet } = storeToRefs(viewStore)
-        const { parseDatabase,
-        handleViewSelection,
-        getIDP,
-        filterActiveToggle,
-        handleColour } = useViewStore();
+const yourCollectionStore = useYourCollectionStore();
+const { yourCollection, 
+        itemLibraryYC, 
+        dataSizeYC,
+        libraryDisplayYC,
+        formattedLibraryYC,
+        formattedItemLibraryYC,
+        filterLibraryYC, 
+        heightCategoryYC,
+        itemHeightYC,
+        itemColourYC,
+        colourScaleYC,
+        colourScaleConverterYC,
+        colourSetYC, 
+        ordinalColourMapYC,
+        viewColourSetYC,
+        domainIndexYC,
+        viewHeightBoundsYC,
+        domainColourIndexYC,
+        viewColourBoundsYC,
+        activeFiltersYC,
+        filterObjectYC,
+        getActiveFiltersYC } = storeToRefs(yourCollectionStore)
+const { getItemLibraryYC,
+        getFilterObjectYC,
+        filterActiveToggleYC,
+        parseDatabaseYC,
+        handleViewSelectionYC,
+        getIDP_YC,
+        getIFP_YC,
+        itemTypeCheckYC,
+        addToCollection, 
+        removeFromCollection } = useYourCollectionStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
@@ -114,34 +120,21 @@ const { handleObjectProperty,
         contrastHandler } = useUtils();
 
 
-    const setQueryView = referenceStore.viewRouteQueries[route.params.setQuery]
-    console.log("setQueryView", setQueryView)
-    console.log("viewStore", viewStore.libraryDisplay)
-    console.log("query check", setQueryView.view.itemType)
-    Object.assign(viewStore.libraryDisplay.view, setQueryView.view)
-    Object.assign(viewStore.libraryDisplay.viewType, setQueryView.viewType)
-    Object.assign(viewStore.libraryDisplay.pageText, setQueryView.pageText)
+    // const setQueryView = referenceStore.viewRouteQueries[route.params.setQuery]
+    // console.log("setQueryView", setQueryView)
+    // console.log("yourCollectionStore", yourCollectionStore.libraryDisplayYC)
+    // console.log("query check", setQueryView.view.itemType)
+    // Object.assign(yourCollectionStore.libraryDisplayYC.view, setQueryView.view)
+    // Object.assign(yourCollectionStore.libraryDisplayYC.viewType, setQueryView.viewType)
+    // Object.assign(yourCollectionStore.libraryDisplayYC.pageText, setQueryView.pageText)
 
-//    console.log('library display', viewStore.libraryDisplay)
-//    console.log('computed ', formattedLibrary)
-//    console.log('computed length', formattedLibrary.length !== undefined)
+//    console.log('library display', yourCollectionStore.libraryDisplayYC)
+//    console.log('computed ', formattedLibraryYC)
+//    console.log('computed length', formattedLibraryYC.length !== undefined)
    
    const dataCheck = computed (() => {
-        return formattedLibrary.value.length !== undefined
+        return formattedLibraryYC.value.length !== undefined
     })
-
-    watchEffect(()=>{
-        parseDatabase(libraryStore[viewStore.libraryDisplay.view.itemType])
-        // console.log('watchEffect',formattedLibrary)
-    })
-
-    // Error Page
-    // if(route.params.setQuery !== 'myQuery'){
-    //     throw createError({ statusCode: 404, statusMessage: "View not Found"})
-    // }
-
- 
-
 
     const showAnnotations = ref(false)
 
@@ -163,6 +156,13 @@ const { handleObjectProperty,
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
+
+    console.log('filter Object YC', yourCollectionStore.filterObjectYC)
+    
+    console.log('formatted Library YC', yourCollectionStore.formattedLibraryYC)
+    console.log('filter Library YC', yourCollectionStore.filterLibraryYC)
+    console.log('your Collection', yourCollectionStore.yourCollection)
+    console.log('library data', viewStore.libraryData)
 
 
 </script>

@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { storeToRefs } from "pinia";
 
-export const useViewStore = defineStore('view', ()=>{
+export const useYourCollectionStore = defineStore('yourCollection', ()=>{
     const referenceStore = useReferenceStore();
     const { viewMap, filterMap, colourMapFiltered, scales } =  storeToRefs(referenceStore);
     const { alphabetically,
@@ -17,17 +17,19 @@ export const useViewStore = defineStore('view', ()=>{
             containsNumber,
             processDomain } = useUtils();
 
-    // LIBRARY STATE OBJECT//
-    const libraryData = ref({})
-
-    const heightCategory = {
+    const heightCategoryYC = {
         logarithmic: ['Number of marks', 'Number of book images', 'Size'],
         year: ['Date of publication', 'Female agent date']
 
     }
 
+    // LIBRARY STATE OBJECT//
+    const allCollections = reactive({})
+
+    const yourCollection = ref([]) 
+
     // LIBRARY VIEW OBJECT//
-    const libraryDisplay = reactive({
+    const libraryDisplayYC = reactive({
         //sub items in view and viewType are called the 'viewMode'.
         view: {
             itemType: "Book",
@@ -67,106 +69,107 @@ export const useViewStore = defineStore('view', ()=>{
             markCollectionProp2: 'Book',
         },
         pageText: {
-            queryType: 'Agents ',
-            queryBreadcrumb: '/ How many agents are in the collection ?',
-            libraryTypeTitle: 'The Agents',
-            libraryTypeSubtitle: 'of the libraries',
+            queryType: 'Your Collection ',
+            queryBreadcrumb: '/ Items can be added to your collection by selecting them in the library, and clicking Add to Collection',
+            libraryTypeTitle: 'Your Collection',
+            libraryTypeSubtitle: 'from the libraries',
         }
     })
-
+    const collectionName = 'Mancy'
     // LIBRARY DATA //
-    const itemLibrary = ref([]);
-    const formattedItemLibrary = ref([]);
-    const formattedLibrary = ref([]);
-    const itemHeight = ref();
-    const itemColour = ref();
-    const colourSet = ref();
-    const ordinalColourMap = ref([]);
-    const colourScale = ref();
-    const colourScaleConverter = ref();
-    const domainIndex = ref();
-    const viewHeightBounds = ref();
-    const domainColourIndex = ref();
-    const viewColourBounds = ref();
-    const filterLibrary = ref();
+    const itemLibraryYC = ref([]);
+    const formattedItemLibraryYC = ref([]);
+    const formattedLibraryYC = ref([]);
+    const itemHeightYC = ref();
+    const itemColourYC = ref();
+    const colourSetYC = ref();
+    const ordinalColourMapYC = ref([]);
+    const colourScaleYC = ref();
+    const colourScaleConverterYC = ref();
+    const domainIndexYC = ref();
+    const viewHeightBoundsYC = ref();
+    const domainColourIndexYC = ref();
+    const viewColourBoundsYC = ref();
+    const filterLibraryYC = ref();
 
+    watch([yourCollection, libraryDisplayYC],() => {
+        if(yourCollection.value.length !== undefined){
+        formattedLibraryYC.value =  formatLibrary(yourCollection.value); //Reactive when not testing
 
-    watch([libraryData, libraryDisplay],() => {
-        if(libraryData.value.length !== undefined){
-        formattedLibrary.value =  formatLibrary(libraryData.value); //Reactive when not testing
+        domainIndexYC.value = getDomainIndex('height');
+        viewHeightBoundsYC.value = getIndexItems('height');
 
-        domainIndex.value = getDomainIndex('height');
-        viewHeightBounds.value = getIndexItems('height');
-
-        domainColourIndex.value = getDomainIndex('colour');
-        viewColourBounds.value = getIndexItems('colour');
+        domainColourIndexYC.value = getDomainIndex('colour');
+        viewColourBoundsYC.value = getIndexItems('colour');
 
         //Item Height - Returns d3 Scale Function
-        itemHeight.value = formatHeight();
+        itemHeightYC.value = formatHeight();
         //Item Colour - Returns d3 Scale Function
-        itemColour.value = formatColour();
+        itemColourYC.value = formatColour();
         //Colour Categories
-        colourSet.value = getColourSet.value //Included here to prevent computed from firing before library.data is returned
+        colourSetYC.value = getColourSet.value //Included here to prevent computed from firing before library.data is returned
 
-        colourScale.value = colourBandscale();
+        colourScaleYC.value = colourBandscale();
 
-        colourScaleConverter.value =  colourFunction();
+        colourScaleConverterYC.value =  colourFunction();
 
-        ordinalColourMap.value = getOrdinalColourMap();
+        ordinalColourMapYC.value = getOrdinalColourMap();
+
+        }
+    },{deep: true})
+
+    watch([itemLibraryYC],() => {
+        if(itemLibraryYC.value.length !== undefined){
+            formattedItemLibraryYC.value = formatItemLibrary();
         }
     })
 
-    watch([itemLibrary],() => {
-        if(itemLibrary.value.length !== undefined){
-            formattedItemLibrary.value = formatItemLibrary();
-        }
-    })
-
-    watch([libraryData],() => {
-        filterObject.set('Agent', getFilterObject(referenceStore.filterMap.get('Agent'), libraryData.value, 'Agent'))
-        filterObject.set('Book', getFilterObject(referenceStore.filterMap.get('Book'), libraryData.value, 'Book'))
-        filterObject.set('Mark', getFilterObject(referenceStore.filterMap.get('Mark'), libraryData.value, 'Mark'))
-    })
+    watch(() => yourCollection.value, () => {
+        filterObjectYC.set('Agent', getFilterObjectYC(referenceStore.filterMap.get('Agent'), yourCollection.value, 'Agent'))
+        filterObjectYC.set('Book', getFilterObjectYC(referenceStore.filterMap.get('Book'), yourCollection.value, 'Book'))
+        filterObjectYC.set('Mark', getFilterObjectYC(referenceStore.filterMap.get('Mark'), yourCollection.value, 'Mark'))
+        console.log('filterObjectYC watch', filterObjectYC)
+    },{deep: true})
 
     //Get item height bounds
     function getDomainIndex(viewMode) {
-        return {min: d3.minIndex(libraryData.value, d => getIDP(d, viewMode)), 
-                max: d3.maxIndex(libraryData.value, d => getIDP(d, viewMode))}
+        return {min: d3.minIndex(yourCollection.value, d => getIDP_YC(d, viewMode)), 
+                max: d3.maxIndex(yourCollection.value, d => getIDP_YC(d, viewMode))}
     }
 
     function getIndexItems(viewMode) {
         if(viewMode === 'height'){
-            return [libraryData.value[domainIndex.value.min],
-                    libraryData.value[domainIndex.value.max]]
+            return [yourCollection.value[domainIndexYC.value.min],
+                    yourCollection.value[domainIndexYC.value.max]]
         }
         if(viewMode === 'colour'){
-            return [libraryData.value[domainColourIndex.value.min],
-                    libraryData.value[domainColourIndex.value.max]]
+            return [yourCollection.value[domainColourIndexYC.value.min],
+                    yourCollection.value[domainColourIndexYC.value.max]]
         }
     }
 
     //Get unique values in colour set
     const getColourSet = computed (() => {
-        return processColourSet(libraryData.value)
+        return processColourSet(yourCollection.value)
     })
 
     //Currently applies to Arrays only
-    const viewColourSet = computed (() => {
-        return processColourItems(libraryData.value, getColourSet.value)
+    const viewColourSetYC = computed (() => {
+        return processColourItems(yourCollection.value, getColourSet.value)
     })
 
     // INTERNAL FUNCTIONS //
     // ITEM LIBRARY //
     function formatItemLibrary(){
         let libraryFormat;
-        libraryFormat = d3.flatGroup(d3.sort(itemLibrary.value,(a, b) => alphabetically(true)(itemTypeCheck(a), itemTypeCheck(b))), d => itemTypeCheck(d)); 
+        libraryFormat = d3.flatGroup(d3.sort(itemLibraryYC.value,(a, b) => alphabetically(true)(itemTypeCheckYC(a), itemTypeCheckYC(b))), d => itemTypeCheckYC(d)); 
         return [['Item Collection' ,libraryFormat]]
     }
 
     // FORMAT LIBRARY //
     //Set Shelves
     function formatShelf(data, viewMode){
-        return d3.flatGroup(d3.sort(data,(a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d => getIDP(d, viewMode)); 
+        return d3.flatGroup(d3.sort(data,(a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d => getIDP_YC(d, viewMode)); 
     }
     function formatNullShelf(data, viewMode){
         return d3.flatGroup(d3.sort(data,(a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d => 'All Items'); 
@@ -174,7 +177,7 @@ export const useViewStore = defineStore('view', ()=>{
     //Set Bookends
     function formatBookend(data, viewMode){
         return data
-        .map(d => [d[0],d3.flatGroup(d3.sort(d[1], (a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d=> getIDP(d, viewMode))]);  
+        .map(d => [d[0],d3.flatGroup(d3.sort(d[1], (a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d=> getIDP_YC(d, viewMode))]);  
     }
     function formatNullBookend(data, viewMode){
         return data
@@ -183,11 +186,11 @@ export const useViewStore = defineStore('view', ()=>{
     //Combine Shelves & Bookend
     function formatLibrary(data) {
         //Shelves - Sort & Group Items by Shelf Category
-        const shelfFormatData = libraryDisplay.view.shelf !== "Not Selected"
+        const shelfFormatData = libraryDisplayYC.view.shelf !== "Not Selected"
         ? formatShelf(data, 'shelf') 
         : formatNullShelf(data, 'id'); //Default
         //Bookends - Further Sort & Group Items by Bookend Category
-        const shelfBookendFormatData = libraryDisplay.view.bookend !== "Not Selected"
+        const shelfBookendFormatData = libraryDisplayYC.view.bookend !== "Not Selected"
         ? formatBookend(shelfFormatData, 'bookend') 
         : formatNullBookend(shelfFormatData, 'id'); //Default
         return shelfBookendFormatData
@@ -195,13 +198,13 @@ export const useViewStore = defineStore('view', ()=>{
 
     // HANDLE HEIGHT //
     function formatHeight() {
-        const viewSelection = libraryDisplay.view.height
+        const viewSelection = libraryDisplayYC.view.height
         if(viewSelection !== "Not Selected") {
             //Returns a function which takes the log scale of the input then invokes the d3 scale function (IIFE)
-            if(heightCategory.logarithmic.includes(viewSelection)){
+            if(heightCategoryYC.logarithmic.includes(viewSelection)){
                 return (value)=>{ 
                     return (d3.scaleLinear()
-                                .domain(chooseHeightDomain(libraryData.value).map(d => Math.log(d))) 
+                                .domain(chooseHeightDomain(yourCollection.value).map(d => Math.log(d))) 
                                 .unknown(referenceStore.scales.maxItemHeight) //Set all non-numeric values to max height
                                 .range([referenceStore.scales.minItemHeight, referenceStore.scales.maxItemHeight])
                                 .clamp(true)
@@ -209,7 +212,7 @@ export const useViewStore = defineStore('view', ()=>{
                 }
             }else{
                 return d3.scaleLinear()
-                            .domain(chooseHeightDomain(libraryData.value)) 
+                            .domain(chooseHeightDomain(yourCollection.value)) 
                             .unknown(referenceStore.scales.maxItemHeight) //Set all non-numeric values to max height
                             .range([referenceStore.scales.minItemHeight, referenceStore.scales.maxItemHeight])
                             .clamp(true);     
@@ -220,18 +223,18 @@ export const useViewStore = defineStore('view', ()=>{
     }
     
     function chooseHeightDomain(data){   
-            const viewSelection = libraryDisplay.view.height
-            if(heightCategory.year.includes(viewSelection)) {
+            const viewSelection = libraryDisplayYC.view.height
+            if(heightCategoryYC.year.includes(viewSelection)) {
                 return [1450, 1750] //was - clamp(1450, longestNumber, 1750)
             }else{
-                return [getIDP(data[domainIndex.value.min], 'height'), getIDP(data[domainIndex.value.max], 'height')]
+                return [getIDP_YC(data[domainIndexYC.value.min], 'height'), getIDP_YC(data[domainIndexYC.value.max], 'height')]
             }
     }
 
     function colourFunction() {
         const viewMode = 'colour'
-        const viewSelection = libraryDisplay.view[viewMode]
-        const viewModeType = libraryDisplay.viewType[viewMode]
+        const viewSelection = libraryDisplayYC.view[viewMode]
+        const viewModeType = libraryDisplayYC.viewType[viewMode]
         const colourFunction = referenceStore.viewMap.get(viewModeType)[viewSelection].func
         const colourScheme = referenceStore.viewMap.get(viewModeType)[viewSelection].scheme
         return d3[colourFunction](d3[colourScheme]) //Applies colour functions and schemes from Object. Domain defaults to [0,1]
@@ -239,9 +242,9 @@ export const useViewStore = defineStore('view', ()=>{
    
     // HANDLE COLOUR //
     function formatColour(){
-        if(libraryDisplay.view.colour !== "Not Selected"){
+        if(libraryDisplayYC.view.colour !== "Not Selected"){
             return (
-                    (colourByValue) => colourScaleConverter.value(colourScale.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
+                    (colourByValue) => colourScaleConverterYC.value(colourScaleYC.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
                 )   
         }else{
             return (_)=> {return '#fff281'}
@@ -250,7 +253,7 @@ export const useViewStore = defineStore('view', ()=>{
 
     function getOrdinalColourMap(){
         const ordinalMap = Array.from(getColourSet.value).map((category)=>{
-            return {'colour': itemColour.value(category), 'category': category}
+            return {'colour': itemColourYC.value(category), 'category': category}
         })
         return  d3.flatGroup(ordinalMap, d => d.colour)
     }
@@ -261,13 +264,13 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
     function processColourSet(data){
-       return new Set(data.flatMap(d=> getIDP(d, 'colour')).sort((a,b)=>alphabetically(true)(handleFilterValue(a), handleFilterValue(b))))
+       return new Set(data.flatMap(d=> getIDP_YC(d, 'colour')).sort((a,b)=>alphabetically(true)(handleFilterValue(a), handleFilterValue(b))))
     }
 
-    function processColourItems(data, colourSet){
-        let tempColourSet = colourSet;
+    function processColourItems(data, colourSetYC){
+        let tempColourSet = colourSetYC;
         let uniqueColours = data.filter((d) => {
-            const value = getIDP(d, 'colour')
+            const value = getIDP_YC(d, 'colour')
             if(tempColourSet.has(value)){
                 return tempColourSet.delete(value) //Returns true if deletion successful
             }else{
@@ -279,45 +282,43 @@ export const useViewStore = defineStore('view', ()=>{
 
     // EXTERNAL FUNCTIONS //
     //Parse Data Object from Supabase
-    async function parseDatabase(tableData) {
-            libraryData.value = await JSON.parse(JSON.stringify(tableData))
-            // unformattedData.value =  await JSON.parse(JSON.stringify(libraryData.value))
-            // formattedLibrary.value =  formatLibrary(libraryData.value, libraryDisplay);
+    async function parseDatabaseYC(tableData) {
+            yourCollection.value = await JSON.parse(JSON.stringify(tableData))
     }
 
     //Update View Object from user input
-    function handleViewSelection(viewMode, viewSelection, itemType){
-        console.log('handleViewSelection', viewMode, viewSelection, itemType)
+    function handleViewSelectionYC(viewMode, viewSelection, itemType){
+        console.log('handleViewSelectionYC', viewMode, viewSelection, itemType)
 
         if(itemType === 'NotSelected') {
-            libraryDisplay.view[viewMode] = 'Not Selected'
-            libraryDisplay.viewType[viewMode] = 'NotSelected'
+            libraryDisplayYC.view[viewMode] = 'Not Selected'
+            libraryDisplayYC.viewType[viewMode] = 'NotSelected'
         }else{
             if(viewMode === 'shelf'){
-                libraryDisplay.view.shelfOrderMethod =  referenceStore.viewMap.get(itemType)[viewSelection].sortMethod
+                libraryDisplayYC.view.shelfOrderMethod =  referenceStore.viewMap.get(itemType)[viewSelection].sortMethod
             }
             if(viewMode === 'bookend'){
-                libraryDisplay.view.bookendOrderMethod =  referenceStore.viewMap.get(itemType)[viewSelection].sortMethod
+                libraryDisplayYC.view.bookendOrderMethod =  referenceStore.viewMap.get(itemType)[viewSelection].sortMethod
             }
-            libraryDisplay.view[viewMode] = viewSelection; //Future addition - updateView below (in database)
-            libraryDisplay.viewType[viewMode] = itemType; //Future addition - updateViewType below (in database)
+            libraryDisplayYC.view[viewMode] = viewSelection; //Future addition - updateView below (in database)
+            libraryDisplayYC.viewType[viewMode] = itemType; //Future addition - updateViewType below (in database)
         }
     }
 
     //Dynamic Path
     //Returns the desintation value by selecting the correct path using the itemType (via the ID name) to the itemType of the viewMode (via viewType LookUp)
-    //getIDP - getItemDisplayPath - Condensed for frequent use.
-    function getIDP(item, viewMode) {
+    //getIDP_YC - getItemDisplayPath - Condensed for frequent use.
+    function getIDP_YC(item, viewMode) {
         if(viewMode === 'Not Selected') return 'Not Selected'
-        const viewSelection = libraryDisplay.view[viewMode]
-        const viewModeType = libraryDisplay.viewType[viewMode]
+        const viewSelection = libraryDisplayYC.view[viewMode]
+        const viewModeType = libraryDisplayYC.viewType[viewMode]
         return itemPath(viewModeType, item, viewMode, viewSelection)
     }
 
     //Dynamic Path
     //Returns the desintation value by selecting the correct path using the itemType (via the ID name) and the viewModeType
-    //getIFP - getItemFilterPath - Condensed for frequent use.
-    function getIFP(item, viewSelection, viewModeType, viewMethod) {
+    //getIFP_YC - getItemFilterPath - Condensed for frequent use.
+    function getIFP_YC(item, viewSelection, viewModeType, viewMethod) {
         return itemPath(viewModeType, item, viewMethod, viewSelection)
     }
     
@@ -327,14 +328,14 @@ export const useViewStore = defineStore('view', ()=>{
     function getISP(item, viewMode) {
         let viewMethod = 'filter'
         if(viewMode === 'Not Selected') return 'Not Selected'
-        const viewSelection = libraryDisplay.view[viewMode]
-        const viewModeType = libraryDisplay.viewType[viewMode]
+        const viewSelection = libraryDisplayYC.view[viewMode]
+        const viewModeType = libraryDisplayYC.viewType[viewMode]
         return itemPath(viewModeType, item, viewMethod, viewSelection)
     }
 
     function itemPath(viewModeType, item, viewMode, viewSelection){
         if(!item) return null;
-        const itemType = itemTypeCheck(item)
+        const itemType = itemTypeCheckYC(item)
         let value;
         if(itemType === 'Agent'){
             //Agent Item paths
@@ -355,9 +356,9 @@ export const useViewStore = defineStore('view', ()=>{
             return value ? value : "no data"
     }
 
-    function getItemLibrary(item){
+    function getItemLibraryYC(item){
         if(!item) return null;
-        const itemType = itemTypeCheck(item)
+        const itemType = itemTypeCheckYC(item)
         let library;
         if(itemType === 'Agent'){
             //Agent Item paths
@@ -367,10 +368,10 @@ export const useViewStore = defineStore('view', ()=>{
             library = [item, getUnique(item['Marks'], 'MargID'), getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID')].flat()
         }else if(itemType === 'Mark'){
             //Mark Item paths
-            library = [item, item['Agents'], item['Books']]
+            library = [item, getUnique(item['Agents'], 'FemaleAgentID'), getUnique(item['BookID'], 'BookID')].flat()
         }
 
-        library ? itemLibrary.value = library : "no data"
+        library ? itemLibraryYC.value = library : "no data"
     }
 
     function getUnique(arrayOfObjects, checkProperty){
@@ -382,60 +383,60 @@ export const useViewStore = defineStore('view', ()=>{
         )
     }
 
-    function itemTypeCheck(item){
+    function itemTypeCheckYC(item){
         return  item['FemaleAgentID'] ? 'Agent' :
                 item['BookID'] ? 'Book' :
                 item['MargID'] ? 'Mark' : ''
     }
 
     // FILTER HANDLING //
-    const activeFilters = ref([])
-    const filterObject = reactive(new Map())
-    const dataSize = ref(0);
+    const activeFiltersYC = ref([])
+    const filterObjectYC = reactive(new Map())
+    const dataSizeYC = ref(0);
 
-    function getFilterObject(targetFormat, sourceObject, viewModeType){
-        let filterObject = {};
+    function getFilterObjectYC(targetFormat, sourceObject, viewModeType){
+        let filterObjectYC = {};
         for (let i = 0, formatKeys = Object.keys(targetFormat); i < formatKeys.length; i++) {
-                filterObject[formatKeys[i]] = []
+                filterObjectYC[formatKeys[i]] = []
             }
         
         for (let i = 0, sourceKeys = Object.keys(sourceObject); i < sourceKeys.length; i++) {
-            for (let j = 0, targetKeys = Object.keys(filterObject); j < targetKeys.length; j++) {
-                let value = getIFP(sourceObject[i], targetKeys[j], viewModeType, 'display name')
-                if(isArray(value)) {filterObject[targetKeys[j]].push(...value) }
-                else {filterObject[targetKeys[j]].push(value) }
+            for (let j = 0, targetKeys = Object.keys(filterObjectYC); j < targetKeys.length; j++) {
+                let value = getIFP_YC(sourceObject[i], targetKeys[j], viewModeType, 'display name')
+                if(isArray(value)) {filterObjectYC[targetKeys[j]].push(...value) }
+                else {filterObjectYC[targetKeys[j]].push(value) }
             }
         }
-        for (let i = 0, targetKeys = Object.keys(filterObject); i < targetKeys.length; i++) {
-            filterObject[targetKeys[i]] = new Set(filterObject[targetKeys[i]]);
-            filterObject[targetKeys[i]] = Array.from(filterObject[targetKeys[i]]).sort((a,b)=>alphabetically(true)(handleFilterValue(a), handleFilterValue(b)))
-            filterObject[targetKeys[i]] = filterObject[targetKeys[i]].reduce((object, value) => ({ ...object, [value] : {name : value, active: false}}),{})
+        for (let i = 0, targetKeys = Object.keys(filterObjectYC); i < targetKeys.length; i++) {
+            filterObjectYC[targetKeys[i]] = new Set(filterObjectYC[targetKeys[i]]);
+            filterObjectYC[targetKeys[i]] = Array.from(filterObjectYC[targetKeys[i]]).sort((a,b)=>alphabetically(true)(handleFilterValue(a), handleFilterValue(b)))
+            filterObjectYC[targetKeys[i]] = filterObjectYC[targetKeys[i]].reduce((object, value) => ({ ...object, [value] : {name : value, active: false}}),{})
         }
-        return filterObject
+        return filterObjectYC
     }
 
-    function filterActiveToggle(filterValue, category, itemType){
-        filterObject.get(itemType)[category][filterValue.name].active = 
-        !filterObject.get(itemType)[category][filterValue.name].active
+    function filterActiveToggleYC(filterValue, category, itemType){
+        filterObjectYC.get(itemType)[category][filterValue.name].active = 
+        !filterObjectYC.get(itemType)[category][filterValue.name].active
 
         filterUpdate(filterValue, category, itemType)
     }
 
     function filterUpdate(filterValue, category, itemType){
-        if(filterObject.get(itemType)[category][filterValue.name].active){
-            activeFilters.value.push({'name': filterValue.name, 'category': category, 'itemType': itemType})
+        if(filterObjectYC.get(itemType)[category][filterValue.name].active){
+            activeFiltersYC.value.push({'name': filterValue.name, 'category': category, 'itemType': itemType})
         }
         else{
-            activeFilters.value = activeFilters.value.filter((value)=> value.name !== filterValue.name )
+            activeFiltersYC.value = activeFiltersYC.value.filter((value)=> value.name !== filterValue.name )
         }
     } 
 
-    const getActiveFilters = computed(()=>{
-        return activeFilters.value
+    const getActiveFiltersYC = computed(()=>{
+        return activeFiltersYC.value
     })
 
     function getFilterLibrary(){
-        return formattedLibrary.value
+        return formattedLibraryYC.value
             .reduce((library, shelf) => {
                 let shelfContent = shelf[1]
                 .reduce((shelf, bookend) => {
@@ -456,8 +457,8 @@ export const useViewStore = defineStore('view', ()=>{
         }
 
     function itemFilterCheck(item){
-        return activeFilters.value.every((filterValue)=>{
-            const itemValue = getIFP(item, filterValue.category, filterValue.itemType, 'display name')
+        return activeFiltersYC.value.every((filterValue)=>{
+            const itemValue = getIFP_YC(item, filterValue.category, filterValue.itemType, 'display name')
             if(isArray(itemValue)) { 
                 return itemValue.includes(filterValue.name) }
             else {
@@ -466,50 +467,79 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
 
-    watch([filterLibrary],() => {
-        dataSize.value =  filterLibrary.value.length?   filterLibrary.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
+    watch([filterLibraryYC],() => {
+        dataSizeYC.value =  filterLibraryYC.value.length?   filterLibraryYC.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
     })
 
-    // watch([formattedLibrary, libraryDisplay],() => {
-    //     filterLibrary.value = getFilterLibrary()
+    // watch([formattedLibraryYC, libraryDisplayYC],() => {
+    //     filterLibraryYC.value = getFilterLibrary()
     // })
 
     watchEffect(() => {
-        filterLibrary.value = getFilterLibrary()
+        filterLibraryYC.value = getFilterLibrary()
+        allCollections[collectionName] = {['items']: filterLibraryYC.value, ['display']: libraryDisplayYC, ['filters']: filterObjectYC, ['activeFilters']: activeFiltersYC.value, ['dataSize']: dataSizeYC.value,}
     })
 
 
-      return {  libraryData,
-                itemLibrary, 
-                dataSize,
-                libraryDisplay,
-                formattedLibrary,
-                formattedItemLibrary,
-                filterLibrary, 
-                heightCategory,
-                itemHeight,
-                itemColour,
-                colourScale,
-                colourScaleConverter,
-                colourSet, 
-                ordinalColourMap,
-                viewColourSet,
-                domainIndex,
-                viewHeightBounds,
-                domainColourIndex,
-                viewColourBounds,
-                activeFilters,
-                filterObject,
-                getActiveFilters,
-                filterLibrary,
-                getItemLibrary,
-                getFilterObject,
-                filterActiveToggle,
-                parseDatabase,
-                handleViewSelection,
-                getIDP,
-                getIFP,
-                itemTypeCheck  }
+    async function addToCollection(item) {
+        let id; 
+        if(item['FemaleAgentID']) id = 'FemaleAgentID'
+        if(item['BookID']) id = 'BookID'
+        if(item['MargID']) id = 'MargID'
+
+        const exists = yourCollection.value.find(i => i[id] === item[id]) 
+
+        if(exists) {
+            alert('Item already on shelf') //Placeholder for modal option
+        }
+        if(!exists) {
+            yourCollection.value.push({...item}) 
+        }
+      }
+
+      async function removeFromCollection(item) {
+        let id; 
+        if(item['FemaleAgentID']) id = 'FemaleAgentID'
+        if(item['BookID']) id = 'BookID'
+        if(item['MargID']) id = 'MargID'
+
+        yourCollection.value = yourCollection.value.filter(d => d[id] !== item[id])
+      }
+
+      return {  allCollections,
+                yourCollection, 
+                itemLibraryYC, 
+                dataSizeYC,
+                libraryDisplayYC,
+                formattedLibraryYC,
+                formattedItemLibraryYC,
+                filterLibraryYC, 
+                heightCategoryYC,
+                itemHeightYC,
+                itemColourYC,
+                colourScaleYC,
+                colourScaleConverterYC,
+                colourSetYC, 
+                ordinalColourMapYC,
+                viewColourSetYC,
+                domainIndexYC,
+                viewHeightBoundsYC,
+                domainColourIndexYC,
+                viewColourBoundsYC,
+                activeFiltersYC,
+                filterObjectYC,
+                getActiveFiltersYC,
+                getItemLibraryYC,
+                getFilterObjectYC,
+                filterActiveToggleYC,
+                parseDatabaseYC,
+                handleViewSelectionYC,
+                getIDP_YC,
+                getIFP_YC,
+                itemTypeCheckYC,
+                addToCollection, 
+                removeFromCollection
+            }
   })
 
-
+  

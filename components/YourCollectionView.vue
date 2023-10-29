@@ -1,53 +1,39 @@
 <template>
-    <div class="library-wrapper">
-    <div class="shelf" v-for="shelf in filterLibrary" :key="shelf">
+    <div class="shelf yourCollection" >
+        <div class="shelf" v-for="shelf in allCollections[collectionName]['items']" :key="shelf">
         <div class="shelf-title-box">
             <h2 class="shelf-title">{{shelf[0]}}</h2>
         </div>
         <div class="shelf-inner">
             <div class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
                 <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
-                    <h3 class="section-category">{{ categoryMap.get(libraryDisplay.viewType.bookend)[libraryDisplay.view.bookend] }}</h3>
+                    <h3 class="section-category">{{ categoryMap.get(allCollections[collectionName]['display'].viewType.bookend)[allCollections[collectionName]['display'].view.bookend] }}</h3>
                     <h3 class="section-value">{{ bookend[0] }}</h3>
                     <div class="section-shelf-box">
                     <!-- Shelf Box DO NOT DELETE -->
                     </div>
                 </div>
                     <div class="section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <AgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
-                        <BookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
-                        <MarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
+                        <YourCollectionAgentItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Agent'" :item="item" :itemBundle="yourCollectionItemBundle.Agent"/>
+                        <YourCollectionBookItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Book'" :item="item" :itemBundle="yourCollectionItemBundle.Book"/>
+                        <YourCollectionMarkItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Mark'" :item="item" :itemBundle="yourCollectionItemBundle.Mark"/>
                     </div>
             </div>
         </div>
     </div>
-    <div class="modal-background"  ref="modalBackground">
+
+        <div class="modal-background"  ref="modalBackground">
         <div class="item-modal-content" ref="itemModalContent" >
             <ItemModal :key="_item" v-if="_item" @close="hideModal" :_item="_item" />
         </div>
     </div>
-</div>
+    </div>
 </template>
 
 <script setup>
     import { storeToRefs } from "pinia";
    
     // STATE MANAGERS IMPORT //    
-    //View State
-    const viewStore = useViewStore();
-    const { libraryData,
-            libraryDisplay,
-            formattedLibrary, 
-            filterLibrary,
-            itemHeight,
-            itemColour, 
-            viewHeightBounds, 
-            viewColourSet } = storeToRefs(viewStore)
-    const { parseDatabase,
-            handleViewSelection,
-            getIDP,
-            itemTypeCheck } = useViewStore();
-        
 const yourCollectionStore = useYourCollectionStore();
 const { allCollections,
         yourCollection, 
@@ -82,17 +68,19 @@ const { getItemLibraryYC,
         itemTypeCheckYC,
         addToCollection, 
         removeFromCollection } = useYourCollectionStore();
-        
+
     //Reference Constants
     const referenceStore = useReferenceStore();
     const { categoryMap, 
             invCategoryMap, 
             scales,
-            libraryItemBundle } = storeToRefs(referenceStore)
+            yourCollectionItemBundle } = storeToRefs(referenceStore)
 
-  const itemModalContent = ref(null)
+            const itemModalContent = ref(null)
   const modalBackground = ref(null)
   const _item = ref(null)
+
+  const collectionName = ref('Mancy')
          
   function showModal(item){
     //Component Prop
@@ -158,15 +146,4 @@ const { getItemLibraryYC,
     border-radius: 0.3rem;
     margin: 0 0 2rem;
   }
-  
-  /* .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  } */
-
-//   .item-modal a:hover {background-color: #ddd;}
-
-
 </style>

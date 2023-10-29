@@ -2,11 +2,11 @@ import { storeToRefs } from "pinia";
 
 export const useReferenceStore = defineStore('reference', ()=>{
     const { invertObject } = useUtils();
-    //Your Shelf State
-    const yourShelfStore = useYourShelfStore();
-    const { yourShelf }  = storeToRefs(yourShelfStore)
-    const { addToShelf, 
-            removeFromShelf } = useYourShelfStore();
+    //Your Collection State
+    const yourCollectionStore = useYourCollectionStore();
+    const { yourCollection }  = storeToRefs(yourCollectionStore)
+    const { addToCollection, 
+            removeFromCollection } = useYourCollectionStore();
 
     ///////////////////////
     // LABEL CONVERSIONS //
@@ -18,7 +18,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
     })
     categoryMap
     .set('Book', {
-            ['BookID']: 'ID',
+            ['BookID']: 'Book ID',
             ['Repository']: 'Repository', 
             ['Date of publication']: 'Year Published', 
             ['Genre/Identity']: 'Book Genre',
@@ -37,7 +37,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
     })
     categoryMap
     .set('Agent', {
-            ['FemaleAgentID']: 'ID',
+            ['FemaleAgentID']: 'Agent ID',
             ['Female agent name']: 'Agent name', 
             ['Female agent date']: 'Agent date', 
             ['Female agent bio']: 'Agent bio',
@@ -45,7 +45,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
     })
     categoryMap
     .set('Mark', {
-            ['MargID']: 'ID',
+            ['MargID']: 'Mark ID',
             ['Notes']: 'Notes',
             ['Ownership type']: 'Ownership type',
             ['Distribution']: 'Distribution of marks',
@@ -507,8 +507,8 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 viewProp3: 'shelf',
                 viewProp4: 'bookend',
                 itemType: 'Agent',
-                yourShelfFunction(item) { return addToShelf(item)}, //Method property shorthand
-                yourShelfText: 'Add to Collection',
+                yourCollectionFunction(item) { return addToCollection(item)}, //Method property shorthand
+                yourCollectionText: 'Add to Collection',
             },
             Book: {
                 labelViewMode: 'bookLabel',
@@ -524,8 +524,8 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 viewProp3: 'shelf',
                 viewProp4: 'bookend',
                 itemType: 'Book',
-                yourShelfFunction(item) { return addToShelf(item)}, //Method property shorthand
-                yourShelfText: 'Add to Collection',
+                yourCollectionFunction(item) { return addToCollection(item)}, //Method property shorthand
+                yourCollectionText: 'Add to Collection',
             },
             Mark: {
                 labelViewMode: 'markLabel',
@@ -541,8 +541,8 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 viewProp3: 'shelf',
                 viewProp4: 'bookend',
                 itemType: 'Mark',
-                yourShelfFunction(item) { return addToShelf(item)}, //Method property shorthand
-                yourShelfText: 'Add to Collection',
+                yourCollectionFunction(item) { return addToCollection(item)}, //Method property shorthand
+                yourCollectionText: 'Add to Collection',
             }
         }
     })
@@ -551,7 +551,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
     let colourBundle = JSON.parse(JSON.stringify(libraryItemBundle.value))
     Object.keys(colourBundle).forEach((key) =>{
         colourBundle[key].labelViewMode = 'colour';
-        colourBundle[key].yourShelfFunction = addToShelf; //Re-assignment required after object is stringified.
+        colourBundle[key].yourCollectionFunction = addToCollection; //Re-assignment required after object is stringified.
     })
 
     //Bundle Object passed to Components
@@ -567,18 +567,18 @@ export const useReferenceStore = defineStore('reference', ()=>{
     
     let shelfBundle = JSON.parse(JSON.stringify(libraryItemBundle.value))
     Object.keys(shelfBundle).forEach((key) =>{
-        shelfBundle[key].yourShelfFunction = removeFromShelf; //Method assignment expression
-        shelfBundle[key].yourShelfText = 'Remove from Collection';
+        shelfBundle[key].yourCollectionFunction = removeFromCollection; //Method assignment expression
+        shelfBundle[key].yourCollectionText = 'Remove from Collection';
     })
     
     //Bundle Object passed to Components
-    const yourShelfItemBundle = computed (() => {
+    const yourCollectionItemBundle = computed (() => {
         return shelfBundle;
     })
 
 
 
-    console.log(yourShelfItemBundle)
+    console.log(yourCollectionItemBundle)
     // console.log(categoryMap)
     // console.log(colourMap)
       return {  categoryMap, 
@@ -589,7 +589,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 scales, 
                 viewRouteQueries,
                 libraryItemBundle, 
-                yourShelfItemBundle,
+                yourCollectionItemBundle,
                 viewEditItemBundle,
                 viewColourItemBundle}
   })

@@ -28,53 +28,11 @@
             </div>
             <div class="item-menu">
                 <div class="shelf-button-wrapper">
-                    <button class="catalogue-filter-category-box details-button" @click="$emit('viewDetails', item)"> View Details </button>
+                    <button class="shelf-button" @click="$emit('viewDetails', item)"> View Details </button>
                 </div>
                 <div class="shelf-button-wrapper">
                     <button class="shelf-button" @click="itemBundle.yourCollectionFunction(item)">{{itemBundle.yourCollectionText}}</button>
                 </div>
-                <ul>
-                    <li>
-                        <!-- <vueper-slides :dragging-distance="70" prevent-y-scroll lazy lazy-load-on-drag>
-                            <vueper-slide
-                                v-for="i in 5"
-                                :key="i"
-                                image="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/book-images/10/BookID_10_(1_of_6).jpg"
-                                image="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/book-images/1754/BookID_1754_(1_of_4).jpeg"
-                                title="slide.title"
-                                content="slide.content" />
-                        </vueper-slides> -->
-                        <!-- <div v-if="booksTest">
-                            <div v-for="book in booksTest">
-                                <NuxtImg   
-                                loading="lazy"
-                                height="50"
-                                quality="50"
-                                :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/book-images/${item.BookID}/${book.name}`" />
-                            </div>
-                        </div> -->
-                    </li>
-                    <!-- <li>
-                        <h4>{{ categoryMap.get(itemBundle.itemType)[itemBundle.ownProp1]}}</h4>
-                        <p>{{ handleObjectProperty(item, itemBundle.ownProp1) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(itemBundle.itemType)[itemBundle.ownProp2]}}</h4>
-                        <p>{{ handleObjectProperty(item, itemBundle.ownProp2) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(itemBundle.itemType)[itemBundle.ownProp3]}}</h4>
-                        <p>{{ handleObjectProperty(item, itemBundle.ownProp3) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(libraryDisplay.viewType[itemBundle.collectionProp1])[libraryDisplay.view[itemBundle.collectionProp1]]}}</h4>
-                        <p>{{ getIDP(item, itemBundle.collectionProp1) }}</p>
-                    </li>
-                    <li>
-                        <h4>{{categoryMap.get(libraryDisplay.viewType[itemBundle.collectionProp2])[libraryDisplay.view[itemBundle.collectionProp2]]}}</h4>
-                        <p>{{ getIDP(item, itemBundle.collectionProp2) }}</p>
-                    </li> -->
-                </ul>
             </div>
         </div>
         </template>
@@ -99,7 +57,6 @@ const supabase = useSupabaseClient()
 //Props
 const {item, itemBundle} = defineProps(['item', 'itemBundle']);
 const {viewDetails} = defineEmits(['viewDetails']);
-
 // STATE MANAGERS IMPORT //    
 //View State
 const viewStore = useViewStore();
@@ -114,6 +71,7 @@ const { parseDatabase,
         handleViewSelection,
         getIDP,
         itemTypeCheck } = useViewStore();
+    
 
 //Reference Constants
 const referenceStore = useReferenceStore();

@@ -10,30 +10,25 @@
     </NuxtLink>
     </header>
       <div class="main-navbar">
+        <NuxtLink to="/" activeClass="nav-active">
+            <div class="dropdown">
+                <h2 class="main-navbar-link dropbtn" >Home</h2>
+            </div>   
+          </NuxtLink>
             <div class="dropdown" ref="navDropdown" @mouseover="showModal" @mouseleave="hideModal">
-            <h2 class="main-navbar-link dropbtn">Explore the Libraries</h2>
+            <h2 class="main-navbar-link dropbtn">Explore the Collection</h2>
                 <div class="dropdown-content" ref="navDropdownContent" >
                     <LibraryModal @modalClicked="hideModalClicked" />
                 </div>
             </div>
-          <NuxtLink to="/your-collection" activeClass="nav-active">
+          <NuxtLink to="/yourcollection/collection01" activeClass="nav-active">
             <div class="dropdown">
                 <h2 class="main-navbar-link dropbtn" >View Your Collection</h2>
-            </div>   
-          </NuxtLink>
-          <NuxtLink to="/shared-annotations" activeClass="nav-active">
-            <div class="dropdown">
-                <h2 class="main-navbar-link dropbtn" >Find Annotations</h2>
             </div>   
           </NuxtLink>
           <NuxtLink to="/about" activeClass="nav-active">
             <div class="dropdown">
                 <h2 class="main-navbar-link dropbtn" >Read About the Collection</h2>
-            </div>   
-          </NuxtLink>
-          <NuxtLink to="/site-guide" activeClass="nav-active">
-            <div class="dropdown">
-                <h2 class="main-navbar-link dropbtn" >Site Guide</h2>
             </div>   
           </NuxtLink>
       </div>
