@@ -11,6 +11,56 @@ export const useReferenceStore = defineStore('reference', ()=>{
     ///////////////////////
     // LABEL CONVERSIONS //
     ///////////////////////
+    const itemModalMap = reactive(new Map());
+    itemModalMap
+    .set('NotSelected', {
+        ['Not Selected']: 'Not Selected',
+    })
+    itemModalMap
+    .set('Book', {
+            ['BookID']: 'Book ID',
+            ['Repository']: 'Repository', 
+            ['Date of publication']: 'Year Published', 
+            ['Genre/Identity']: 'Book Genre',
+            ['Title']: 'Book Title',
+            ['Author']: 'Author',
+            ['Place of publication']: 'Place of publication',
+            ['Size']: 'Book Size',
+            ['Book Notes']:'Book Notes',
+            ['Print or manuscript']: 'Format',
+            ['STC or Wing']: 'STC or Wing',
+            ['Shelfmark']: 'Shelfmark',
+            ['Number of marks']: 'Number of marks in book',
+            ['Number of book images']: 'Number of book images',
+    })
+    itemModalMap
+    .set('Agent', {
+            ['FemaleAgentID']: 'Agent ID',
+            ['Female agent name']: 'Agent name', 
+            ['Female agent date']: 'Agent date', 
+            ['Female agent bio']: 'Agent bio',
+            ['Number of marks']: 'Number of marks by agent',
+    })
+    itemModalMap
+    .set('Mark', {
+            ['MargID']: 'Mark ID',
+            ['Ownership type']: 'Ownership type',
+            ['Distribution']: 'Distribution of marks',
+            ['Female agent status']: 'Confidence in female authorship',
+            ['Annotation type']: 'Annotation type',
+            ['Location sig. ; p. ; pp.']: 'Location',
+            ['Recording type']: 'Recording type',
+            ['Transcription']: 'Transcription',
+            ['Mark type (Mark of?)']: 'Type of mark',
+            ['Class']: 'Class',
+            ['Position on page']: 'Position on page',
+            ['Location other']: 'Location detail',
+            ['Added text type']: 'Type of added text',
+            ['Drawing type']: 'Type of drawing',
+            ['Graffiti type']: 'Type of Graffiti',
+            ['Agent role']: 'Agent role',
+    })
+
     const categoryMap = reactive(new Map());
     categoryMap
     .set('NotSelected', {
@@ -495,9 +545,9 @@ export const useReferenceStore = defineStore('reference', ()=>{
         return {
             Agent: {
                 labelViewMode: 'agentLabel',
-                menuHeader: 'Agent',
+                menuHeader: 'Agent No.',
                 menuSubheader: 'Female agent name',
-                ownProp1: 'Female agent date',
+                ownProp1: 'FemaleAgentID',
                 ownProp2: 'Female agent bio',
                 ownProp3: 'Number of marks',
                 collectionProp1: 'agentCollectionProp1',
@@ -512,9 +562,9 @@ export const useReferenceStore = defineStore('reference', ()=>{
             },
             Book: {
                 labelViewMode: 'bookLabel',
-                menuHeader: 'Book',
+                menuHeader: 'Book No.',
                 menuSubheader: 'Shelfmark',
-                ownProp1: 'Title',
+                ownProp1: 'BookID',
                 ownProp2: 'Author',
                 ownProp3: 'Date of publication',
                 collectionProp1: 'bookCollectionProp1',
@@ -529,9 +579,9 @@ export const useReferenceStore = defineStore('reference', ()=>{
             },
             Mark: {
                 labelViewMode: 'markLabel',
-                menuHeader: 'Mark',
+                menuHeader: 'Mark No.',
                 menuSubheader: 'Transcription',
-                ownProp1: 'Mark type (Mark of?)',
+                ownProp1: 'MargID',
                 ownProp2: 'Distribution',
                 ownProp3: 'Female agent status',
                 collectionProp1: 'markCollectionProp1',
@@ -591,7 +641,8 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 libraryItemBundle, 
                 yourCollectionItemBundle,
                 viewEditItemBundle,
-                viewColourItemBundle}
+                viewColourItemBundle,
+                itemModalMap}
   })
 
 

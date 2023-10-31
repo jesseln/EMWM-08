@@ -23,7 +23,7 @@
             </div>
           <NuxtLink to="/yourcollection/collection01" activeClass="nav-active">
             <div class="dropdown">
-                <h2 class="main-navbar-link dropbtn" >View Your Collection</h2>
+                <h2 class="main-navbar-link dropbtn" >View Your Collections</h2>
             </div>   
           </NuxtLink>
           <NuxtLink to="/about" activeClass="nav-active">

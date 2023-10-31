@@ -7,6 +7,7 @@ export const useViewStore = defineStore('view', ()=>{
     const { alphabetically,
             handleNumeric,
             handleObjectPath,
+            handleObjectProperty,
             handleFilterValue,
             handleValue,
             handleArray,
@@ -40,8 +41,8 @@ export const useViewStore = defineStore('view', ()=>{
             colour: 'Genre/Identity',
             label: 'Title',
             agentLabel: 'Female agent name',
-            bookLabel: 'Title',
-            markLabel: 'Transcription',
+            bookLabel: 'BookID',
+            markLabel: 'MargID',
             agentCollectionProp1: 'Mark type (Mark of?)',
             agentCollectionProp2: 'Genre/Identity',
             bookCollectionProp1: 'Female agent name',
@@ -373,6 +374,36 @@ export const useViewStore = defineStore('view', ()=>{
         library ? itemLibrary.value = library : "no data"
     }
 
+    function getItemLibraryCount(item){
+        if(!item) return null;
+        const itemType = itemTypeCheck(item)
+        let library;
+        if(itemType === 'Agent'){
+            //Agent Item paths
+            library = [ 
+                        1, 
+                        getUnique(item['Marks'].map(d => d['Books']), 'BookID').length, 
+                        item['Marks'].length 
+                    ].flat()
+        }else if(itemType === 'Book'){
+            //Book Item paths                 
+            library = [ 
+                        getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID').length, 
+                        1, 
+                        item['Marks'].length
+                    ].flat()
+        }else if(itemType === 'Mark'){
+            //Mark Item paths
+            library = [
+                        1, 
+                        1,
+                        1
+                    ]
+        }
+
+        return library ? library : ["no data", "no data", "no data"]
+    }
+
     function getUnique(arrayOfObjects, checkProperty){
         
         return arrayOfObjects.filter((value, index, self) =>
@@ -509,7 +540,8 @@ export const useViewStore = defineStore('view', ()=>{
                 handleViewSelection,
                 getIDP,
                 getIFP,
-                itemTypeCheck  }
+                itemTypeCheck,
+                getItemLibraryCount  }
   })
 
 

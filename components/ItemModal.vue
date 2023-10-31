@@ -1,25 +1,29 @@
 <template>
     <div class="item-modal-container">
         <div class="item-modal-header">
-            <h2>{{onMounteditem[onMountedID]}}</h2>
-            <h3 v-if="imageFound" > </h3>
-            <div class="shelf-button-wrapper">
-                <button class="shelf-button" @click="$emit('close')"> Close </button>
+            <div class="item-modal-header-LHS">
+                <p>Library Item Selected: </p>
+                <h3>{{ onMountedType }} {{onMounteditem[onMountedID]}}</h3>
+            </div>
+            <div class="item-modal-header-RHS">
+                <p v-if="imageFound" > Total Images: {{ imageSlides.image.length }}</p>
+               
+                <button class="shelf-button" @click="$emit('close')"> 
+                    <Icon name="ic:baseline-cancel" size="1.5rem" class="prevent-close-on-click no-pointers" />
+                </button>
             </div>
         </div>
         <div v-if="imageFound" class="item-modal-images">
             <div class="item-modal-image-slider">
 
                 <vueper-slides :dragging-distance="70"
-                fractions progress
                 class="no-shadow" 
                 slide-image-inside
                 :visible-slides="imageSlides.image.length <= 4? imageSlides.image.length: 4"
                 slide-multiple
-                :slide-ratio="1 / 4"
+                :slide-ratio="1 / 6"
                 :gap="1"
                 :arrows-outside="false"
-                :bullets="false"
                 prevent-y-scroll 
                 lazy 
                 lazy-load-on-drag>
@@ -29,21 +33,36 @@
                         :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imageFolder}/${item[itemID]}/${itemImage.name}`"
                         />
                 </vueper-slides>
-          
             </div>
         </div>
         <div class="item-modal-details">
+            <div class="item-modal-details-title">
+                <p >{{ itemType }} No.</p>
+                <h3 >{{ item[itemID] }}</h3>
+            </div>
+            <div class="item-modal-details-category-wrapper">
+                <div v-for="category in itemModalMap.get(itemType)">
+                    <div class="item-modal-details-category">
+                        <h3>{{handleObjectPath(item, '', invCategoryMap.get(itemType)[category])}}</h3>
+                        <p>{{category}}</p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="item-modal-associated">
             <div class="item-modal-shelf scrollable" v-for="shelf in formattedItemLibrary" :key="shelf">
-        <div class="shelf-title-box">
-            <h2 class="shelf-title">{{shelf[0]}}</h2>
-        </div>
+
         <div class="shelf-inner">
+            <div class="shelf-title-box item-modal-title-box">
+            <h2 class="shelf-title">Item Connections in Library</h2>
+            <div class="section-shelf-box">
+                    <!-- Shelf Box DO NOT DELETE -->
+                    </div>
+        </div>
             <div class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
                 <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
-                    <h3 class="section-category">{{ categoryMap.get(libraryDisplay.viewType.bookend)[libraryDisplay.view.bookend] }}</h3>
-                    <h3 class="section-value">{{ bookend[0] }}</h3>
+                    <h3 class="section-category item-modal-category">{{ bookend[1].length }}</h3>
+                    <h3 class="section-value">{{ bookend[0] }}s</h3>
                     <div class="section-shelf-box">
                     <!-- Shelf Box DO NOT DELETE -->
                     </div>
@@ -57,6 +76,66 @@
         </div>
     </div>
         </div>
+        <div class="item-modal-add-to-colleciton">
+            <div>
+                <h3 >Your Collections:</h3>
+            </div>
+            <div class="aselect" >
+                <div ref="section" class="selector" @click="toggle('section', $event)">
+                    <div class="label">
+                        <p v-if="Object.keys(collectionNames).length > 0">
+                            {{ activeCollection }}
+                        </p>
+                        <p v-else="">
+                            Select a collection
+                        </p>
+                    </div>
+                    <div class="arrow" :class="{ expanded : visible }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none">
+                            <path d="M1 1.00002L5.72428 4.90478L10.1111 1.00002" stroke="grey" stroke-width="1.3" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="categories" :class="{ hidden : !visible.section }">
+                        <ul class="scrollable form-style-1" >
+                            <li v-if="!createNewSelected" class="create-collection">
+                                <button  @click="createNewButton" class="details-button shelf-button prevent-close-on-click">
+                                    Create A New Collection
+                                </button>
+                            </li>
+                            <li v-if="createNewSelected" ref="newNameRef">
+                                <input @keyup.enter="formSubmit" class="prevent-close-on-click item-modal-input" v-model="message" type="text" placeholder="collection name" autofocus/>
+                                <button  @click="formSubmit" class="icon-button prevent-close-on-click">
+                                    Create Collection
+                                   
+                                </button>
+                            </li>
+                            <li @click="selectCollection(name)" v-for="name in Object.keys(collectionNames)" :key="name">
+                                <div v-if="!collectionNames[name].edit"  class="collection-item">
+                                    {{name}}
+                                    <div class="icon-buttons-wrapper">
+                                        <button  @click="nameEdit(name)"  class="icon-button prevent-close-on-click" >
+                                            <Icon name="ic:baseline-edit" size="1rem" class="prevent-close-on-click no-pointers" />
+                                        </button>
+                                        <button  @click="nameDelete(name)"  class="icon-button prevent-close-on-click" >
+                                            <Icon name="ic:baseline-delete" size="1rem" class="prevent-close-on-click no-pointers" />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div v-if="collectionNames[name].edit" class="prevent-close-on-click" :ref="editFunctionRef(name)" >
+                                    <input @keyup.enter="editSubmit(name)" class="prevent-close-on-click item-modal-input" v-model="editMessage" type="text" autofocus/>
+                                    <button  @click="editSubmit(name)" class="icon-button prevent-close-on-click">
+                                        Accept Changes
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="shelf-button-wrapper item-modal-button">
+                    <button class="shelf-button" @click="addToCollection(item)"> Add Item Connections </button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -66,6 +145,8 @@ import { storeToRefs } from "pinia";
 import 'vueperslides/dist/vueperslides.css'
 const {_item} = defineProps(['_item']);
 const supabase = useSupabaseClient()
+
+
 
 
 
@@ -86,17 +167,59 @@ const { parseDatabase,
         getIDP,
         itemTypeCheck,
         getItemLibrary } = useViewStore();
-    
+
+//View State
+const yourCollectionStore = useYourCollectionStore();
+const { yourCollection, 
+        itemLibraryYC, 
+        dataSizeYC,
+        libraryDisplayYC,
+        formattedLibraryYC,
+        formattedItemLibraryYC,
+        filterLibraryYC, 
+        heightCategoryYC,
+        itemHeightYC,
+        itemColourYC,
+        colourScaleYC,
+        colourScaleConverterYC,
+        colourSetYC, 
+        ordinalColourMapYC,
+        viewColourSetYC,
+        domainIndexYC,
+        viewHeightBoundsYC,
+        domainColourIndexYC,
+        viewColourBoundsYC,
+        activeFiltersYC,
+        filterObjectYC,
+        getActiveFiltersYC } = storeToRefs(yourCollectionStore)
+const { getItemLibraryYC,
+        getFilterObjectYC,
+        filterActiveToggleYC,
+        parseDatabaseYC,
+        handleViewSelectionYC,
+        getIDP_YC,
+        getIFP_YC,
+        itemTypeCheckYC,
+        addToCollection, 
+        removeFromCollection } = useYourCollectionStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
 const { categoryMap, 
         invCategoryMap, 
         scales,
-        libraryItemBundle } = storeToRefs(referenceStore)
+        libraryItemBundle,
+        viewMap,
+        colourMapFiltered,
+        itemModalMap } = storeToRefs(referenceStore)
+
+const { handleObjectProperty,
+        handleObjectPath } = useUtils();
 
 const onMounteditem = ref(_item) 
-const onMountedID = ref()       
+const onMountedID = ref(); 
+const onMountedName = ref();
+const onMountedType = ref();
 const item = ref(_item)
 const itemID = ref();
 const imageRequestID = ref();
@@ -125,9 +248,12 @@ function getItemID(soureItem){
     if(itemType === 'Mark') return 'MargID'
 }
 
+
 onMountedID.value = getItemID(_item)
+onMountedType.value = itemTypeCheck(_item)
 
 function updateItemRefs(){
+    imageFound.value = false
     if(itemType.value === 'Agent'){
         itemID.value = 'FemaleAgentID'
     } 
@@ -180,36 +306,281 @@ onMounted(()=>{
 })
 
 
+const value = computed (()=> {
+        return { 
+            section: `${viewStore.libraryDisplay.viewType['shelf']}:${[viewStore.libraryDisplay.view['shelf']]}`,
+    }
+    })
 
+    const visible = reactive({
+        section: false,
+    })
+
+    const section = ref(false)
+
+   const toggle = (option, e)=> {
+    console.log(e==='input')
+        if(!e.target.matches('.prevent-close-on-click')) {
+            visible[option] = !visible[option]
+        }
+    }
+    
+    //Create New Option
+const createNewSelected = ref(false)
+const editSelected = ref(false)
+const message = ref()
+const editMessage = ref()
+const editRef = ref()
+const editName = ref()
+const collectionNames = reactive({})
+const activeCollection = ref()
+
+const editFunctionRef = (name) => {
+  editName.value = name
+}
+
+
+const newNameRef = ref()
+
+function createNewButton(){
+    createNewSelected.value = true
+    Object.keys(collectionNames).forEach((name)=> collectionNames[name].edit = false)
+}
+
+function selectCollection(name){
+    activeCollection.value = name
+}
+
+function nameEdit(name){
+    createNewSelected.value = false
+    message.value = ''
+    Object.keys(collectionNames).forEach((resetName)=> collectionNames[resetName].edit = false)
+    collectionNames[name].edit = true
+    editMessage.value = name
+}
+
+function nameDelete(name){
+    delete collectionNames[name]
+}
+
+function editSubmit(name){
+    if(editMessage.value.length > 0){
+        if(!(Object.keys(collectionNames).includes(editMessage.value))){ 
+            const keepID = collectionNames[name].id
+            delete collectionNames[name]
+            collectionNames[editMessage.value] = {['display']: 11, ['id']: keepID, ['edit']: false}
+            editMessage.value = ''
+        }else if(editMessage.value === name){
+            collectionNames[name].edit = false
+            editMessage.value = ''        
+        }else{
+            alert("That name already exists in your collection list")
+        }
+    }else{
+        editMessage.value = ''
+    }
+}
+
+function formSubmit(){
+    if(message.value.length > 0){
+        if(!(Object.keys(collectionNames).includes(message.value))){ 
+            collectionNames[message.value] = {['display']: 11, ['id']: Object.keys(collectionNames).length, ['edit']: false}
+            // console.log(collectionNames)
+            activeCollection.value = message.value
+            // visible['section'] = !visible['section']
+            createNewSelected.value = false
+            message.value = ''
+        }else{
+            alert("That name already exists in your collection list")
+        }
+
+    }else{
+        visible['section'] = !visible['section']
+        createNewSelected.value = false
+        message.value = ''
+    }
+}
+
+const open = (option)=> {
+    visible[option] = true
+}
+
+onClickOutside(section, (event) => {
+    console.log('onoutside',editName.value )
+    if(collectionNames[editName.value]){
+        collectionNames[editName.value].edit = false
+    }
+    createNewSelected.value = false
+    message.value = ''
+    visible.section? visible.section = !visible.section : null
+})
 
 </script>
 
 <style lang="scss" scoped>
+.item-modal-details-title{
+    display: flex;
+    flex-flow: column wrap;
+    border-right: 1px solid #ccc;
+    min-width: 6rem;
+    padding: 0 0.5rem 0 0;
+    justify-content: center;
+    align-content: flex-start;
+    align-items: flex-start;
+}
+.item-modal-details-title p{
+
+	font-family: 'Raleway', sans-serif;
+	font-size: 1rem;
+	font-weight: 550;
+	color: rgb(30, 30, 30);
+	width: 100%;
+
+}
+.item-modal-details-title h3{
+
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.8rem;
+	font-weight: 550;
+	color: rgb(30, 30, 30);
+	width: 100%;
+
+}
+.item-modal-details-category-wrapper{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-end;
+}
+.item-modal-details-category{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin: 0 1.5rem 2.25rem;
+}
+.item-modal-details-category h3{
+	font-family: 'Raleway', sans-serif;
+	font-size: 0.9rem;
+	font-weight: 550;
+	color: rgb(30, 30, 30);
+	width: 100%;
+	text-align: center;
+    max-width: 16rem;
+    text-overflow: ellipsis;
+    overflow:hidden;
+    display: -webkit-box;
+    max-height: 100px;
+
+    max-width: 200px;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+
+.item-modal-details-category p{
+	margin: 0.2rem 0 0rem;
+	font-family: 'Raleway', sans-serif;
+	font-size: 0.6rem;
+	font-weight: 450;
+	color: rgb(97,97,97);
+	width: 100%;
+	text-align: center;
+}
+.no-pointers{
+    pointer-events: none;
+}
+
+.item-modal-header{
+    grid-row: 1/2;
+    margin: 0 1rem;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+}
+.item-modal-header h3{
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.1rem;
+	font-weight: 550;
+	color: rgb(30, 30, 30);
+}
+.item-modal-header p{
+    margin: 0 1rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.05rem;
+    line-height: 1.1rem;
+    color: black;
+}
+
+
+.item-modal-header-RHS{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2rem;
+}
+.item-modal-header-LHS{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.item-modal-title-box{
+    margin: 2px 0 2px 0;
+    max-width: 9rem;   
+}
+.item-modal-category{
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.35rem;
+	font-weight: 350;
+	color: black;
+	min-width: 5rem;
+}
+.prevent-close-on-click{
+
+}
+
+.form-style-1 input[type=text]{
+    border-radius: .5rem;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	border:1px solid #BEBEBE;
+	padding: 7px;
+	margin:0px;
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+	outline: none;	
+}
+.form-style-1 input[type=text]:focus{
+	-moz-box-shadow: 0 0 8px #ad88e9;
+	-webkit-box-shadow: 0 0 8px #ad88e9;
+	box-shadow: 0 0 8px #ad88e9;
+	border: 1px solid #ad88e9;
+}
 .item-modal-shelf{
-    margin: 1rem 2rem;
+    margin: 0.25rem 2rem;
     max-height: 15rem;
 }
 .item-modal-container{
+    position: relative;
     padding: 10px 0;
     display: grid;
-	grid-template-rows: 1fr 10rem 4fr 4fr;
+    width: 100%;
+	grid-template-rows: 3rem 16rem 16rem 12rem 3rem;
     justify-content: space-between;
     align-content: flex-end;
     align-items: flex-start;
     color: black;
-    min-width: 75vw;
-    max-width: 75vw;
-    min-height: 84vh;
-    max-height: 84vh;
     // text-align: left;
-    min-width: 0;
-    min-height: 0;
 }
 
-.item-modal-header{
-    grid-row: 1 / 2;
-    min-width: 75vw;
-}
+
 
 .item-modal-images{
     display: block;
@@ -225,12 +596,173 @@ onMounted(()=>{
 }
 .item-modal-details{
     grid-row: 3 / 4;
-    min-width: 75vw;
+    margin: 1.5rem 1rem 0.5rem;
+    display: flex;
+    flex-flow: row nowrap;
 }
 .item-modal-associated{
     grid-row: 4 / 5;
     min-width: 75vw;
     align-self: end;
 }
+.item-modal-add-to-colleciton{
+    grid-row: 5/6;
+    min-width: 75vw;
+    align-self: end;
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-modal-add-to-colleciton h3{
+	margin: 0 1.25rem;
+	color: black;
+	font-family: Raleway, sans-serif;
+	font-size: 0.95rem;
+	font-weight:550;
+}
+
+input.item-modal-input{
+    min-width: 16rem;
+}
+
+li.create-collection{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+li.create-collection button{
+    width: 100%;
+}
+
+.aselect {
+    // display: flex;
+    //     flex-direction: row;
+    //     flex-wrap: nowrap;
+    margin: 0 0.8rem 0 0;
+    padding: 0;
+	}
+
+    
+    .selector {
+        // display: flex;
+        // flex-direction: row;
+        // flex-wrap: nowrap;
+        // width: 100%;
+        border: 1px solid gainsboro;
+        background: #ffffff;
+        padding: 0 0.5rem 0 0;
+        position: relative;
+        border-radius: 2rem;
+
+
+        cursor: pointer;
+
+    }
+
+    
+    .arrow {
+            position: absolute;
+            right: 10px;
+            top: 0;
+            // width: 0;
+            // height: 0;
+            // border-left: 5px solid transparent;
+            // border-right: 5px solid transparent;
+            // border-bottom: 8px solid #adadad;
+            // transform: rotate(90deg);
+            // transition-duration: 0.3s;
+            // transition-timing-function: cubic-bezier(.59,1.39,.37,1.01);
+        }
+
+        .expanded {
+            transform: rotateZ(0deg) translateY(2px);
+        }
+
+    .selector:hover {
+        background:#f5f5f5;
+    }
+
+    ul {
+        border-radius: 0.8rem;
+        width: calc(100% + 2px);
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        font-family: 'Raleway', sans-serif;
+        font-size: 0.775rem;
+        font-weight: 550;
+        letter-spacing: 0.05rem;
+        line-height: 1.1rem;
+        color: black;
+        border: 1px solid gainsboro;
+        position: absolute;
+        left: -1px;
+        bottom: -1px;
+        z-index: 11;
+        background: #fff;
+        // display: block;
+        max-height: 50vh;
+        // overflow: auto;
+    }
+
+    .collection-item{
+        display: flex;
+        flex-flow: row wrap;
+        padding: 0.3rem 0.1rem 0.3rem 1.1rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+    li {
+        z-index: 11;
+        padding: 0.3rem 0.3rem;
+        color: #292929;
+        border-bottom: 1px solid rgb(241, 241, 241);
+        cursor: pointer;
+        &:hover {
+            // color: white;
+            background:#f5f5f5;
+            // colour was #f7e8f777;
+        }
+    }
+    .current {
+        font-size: 0.725rem;
+        font-weight: 500;
+        color:  black;
+        background: #f5f5f5;
+    }
+    .hidden {
+        visibility: hidden;
+    }
+    .visible {
+        z-index: 11;
+        visibility: visible;
+    }
+
+    .label {
+        z-index: 5;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 24rem;
+        white-space: nowrap;
+        width: 100%;
+        padding: 0.2rem 1.25rem 0.15rem 1rem;
+        // margin: 0.5rem 0 0 0;
+        font-family: 'Raleway', sans-serif;
+        font-size: 0.725rem;
+        font-weight: 500;
+        letter-spacing: 0.05rem;
+        line-height: 1.25rem;
+        color: black;
+        // color: #888;
+			}
 
 </style>

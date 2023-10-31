@@ -30,9 +30,6 @@
                 <div class="shelf-button-wrapper">
                     <button class="shelf-button" @click="$emit('viewDetails', item)"> View Details </button>
                 </div>
-                <div class="shelf-button-wrapper">
-                    <button class="shelf-button" @click="itemBundle.yourCollectionFunction(item)">{{itemBundle.yourCollectionText}}</button>
-                </div>
             </div>
         </div>
         </template>

@@ -71,11 +71,14 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         pageText: {
             queryType: 'Your Collection ',
             queryBreadcrumb: '/ Items can be added to your collection by selecting them in the library, and clicking Add to Collection',
-            libraryTypeTitle: 'Your Collection',
+            libraryTypeTitle: 'View Your Collections',
             libraryTypeSubtitle: 'from the libraries',
         }
     })
     const collectionName = 'Mancy'
+
+    const collectionSet = reactive({})
+
     // LIBRARY DATA //
     const itemLibraryYC = ref([]);
     const formattedItemLibraryYC = ref([]);
@@ -94,26 +97,26 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
 
     watch([yourCollection, libraryDisplayYC],() => {
         if(yourCollection.value.length !== undefined){
-        formattedLibraryYC.value =  formatLibrary(yourCollection.value); //Reactive when not testing
+            formattedLibraryYC.value =  formatLibrary(yourCollection.value); //Reactive when not testing
 
-        domainIndexYC.value = getDomainIndex('height');
-        viewHeightBoundsYC.value = getIndexItems('height');
+            domainIndexYC.value = getDomainIndex('height');
+            viewHeightBoundsYC.value = getIndexItems('height');
 
-        domainColourIndexYC.value = getDomainIndex('colour');
-        viewColourBoundsYC.value = getIndexItems('colour');
+            domainColourIndexYC.value = getDomainIndex('colour');
+            viewColourBoundsYC.value = getIndexItems('colour');
 
-        //Item Height - Returns d3 Scale Function
-        itemHeightYC.value = formatHeight();
-        //Item Colour - Returns d3 Scale Function
-        itemColourYC.value = formatColour();
-        //Colour Categories
-        colourSetYC.value = getColourSet.value //Included here to prevent computed from firing before library.data is returned
+            //Item Height - Returns d3 Scale Function
+            itemHeightYC.value = formatHeight();
+            //Item Colour - Returns d3 Scale Function
+            itemColourYC.value = formatColour();
+            //Colour Categories
+            colourSetYC.value = getColourSet.value //Included here to prevent computed from firing before library.data is returned
 
-        colourScaleYC.value = colourBandscale();
+            colourScaleYC.value = colourBandscale();
 
-        colourScaleConverterYC.value =  colourFunction();
+            colourScaleConverterYC.value =  colourFunction();
 
-        ordinalColourMapYC.value = getOrdinalColourMap();
+            ordinalColourMapYC.value = getOrdinalColourMap();
 
         }
     },{deep: true})

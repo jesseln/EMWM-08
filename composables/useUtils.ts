@@ -32,7 +32,7 @@ export const useUtils = () => {
 
     //Checks all properties on path exist and returns handled value
     function handleObjectPath(item: any, viewMode: string, ...path: any) {
-        if(!item) return false
+        if(!item) return 'false'
         let obj = item;
         for (let i = 0; i < path.length; i++) {
             let prop = path[i];
@@ -85,7 +85,7 @@ export const useUtils = () => {
     }
     //Returns handled values based on type
     function handleValue(value: any){
-        if(!value || value.length === 0) return false
+        if(!value || value.length === 0) return 'No Data'
 
         if(isNumber(value)){
             return value
