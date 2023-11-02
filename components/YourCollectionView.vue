@@ -5,20 +5,27 @@
             <h2 class="shelf-title">{{shelf[0]}}</h2>
         </div>
         <div class="shelf-inner">
-            <div class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
-                <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
-                    <h3 class="section-category">{{ categoryMap.get(allCollections[collectionName]['display'].viewType.bookend)[allCollections[collectionName]['display'].view.bookend] }}</h3>
-                    <h3 class="section-value">{{ bookend[0] }}</h3>
-                    <div class="section-shelf-box">
-                    <!-- Shelf Box DO NOT DELETE -->
+            <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
+                <div class="section-title-box-wrapper">
+                    <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
+                        <h3 class="section-category">{{ categoryMap.get(allCollections[collectionName]['display'].viewType.bookend)[allCollections[collectionName]['display'].view.bookend] }}</h3>
+                        <h3 class="section-value">{{ bookend[0] }}</h3>
+                        <div class="section-shelf-box">
+                        <!-- Shelf Box DO NOT DELETE -->
+                        </div>
                     </div>
-                </div>
-                    <div class="section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
+                    <div class="section-inner" v-for="item in bookend[1].slice(0, 1)" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
                         <YourCollectionAgentItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Agent'" :item="item" :itemBundle="yourCollectionItemBundle.Agent"/>
                         <YourCollectionBookItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Book'" :item="item" :itemBundle="yourCollectionItemBundle.Book"/>
                         <YourCollectionMarkItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Mark'" :item="item" :itemBundle="yourCollectionItemBundle.Mark"/>
                     </div>
-            </div>
+                </div>
+                    <div class="section-inner" v-for="item in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
+                        <YourCollectionAgentItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Agent'" :item="item" :itemBundle="yourCollectionItemBundle.Agent"/>
+                        <YourCollectionBookItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Book'" :item="item" :itemBundle="yourCollectionItemBundle.Book"/>
+                        <YourCollectionMarkItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Mark'" :item="item" :itemBundle="yourCollectionItemBundle.Mark"/>
+                    </div>
+            </template>
         </div>
     </div>
 

@@ -3,7 +3,7 @@
         placement="top" 
         :delay="{ show: 50, hide: 200 }"
     >
-    <div class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}"> 
+    <div v-if="itemSelected" class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}"> 
 
         <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
 
@@ -11,7 +11,20 @@
         width:scales.minItemWidth + 'px'}" :class="{lowlight: isHighlight}">
 
 
-<div class="item-value" :style="{ color:  contrastHandler(itemColour(getIDP(item, 'colour')))}">
+        <div class="item-value" :style="{ color:  contrastHandler(itemColour(getIDP(item, 'colour')))}">
+            <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+        </div>
+        </div>
+    </div>
+    <div v-else class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}"> 
+
+        <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
+
+        <div class="agent-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4 + 'px' , background: itemModalColour,
+        width:scales.minItemWidth + 'px'}" :class="{lowlight: isHighlight}">
+
+
+        <div class="item-value" :style="{ color:  contrastHandler(itemModalColour)}">
             <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
         </div>
         </div>
@@ -49,7 +62,7 @@ import 'floating-vue/dist/style.css'
 import { storeToRefs } from "pinia";
 
 //Props
-const {item, itemBundle} = defineProps(['item', 'itemBundle']);
+const {item, itemBundle, itemSelected, itemModalColour} = defineProps(['item', 'itemBundle', 'itemSelected', 'itemModalColour']);
 const {viewDetails} = defineEmits(['viewDetails']);
 
 // STATE MANAGERS IMPORT //    

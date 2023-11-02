@@ -362,13 +362,25 @@ export const useViewStore = defineStore('view', ()=>{
         let library;
         if(itemType === 'Agent'){
             //Agent Item paths
-            library = [item, getUnique(item['Marks'], 'MargID'), getUnique(item['Marks'].map(d => d['Books']), 'BookID')].flat()
+            library = [
+                item, 
+                getUnique(item['Marks'], 'MargID').sort((a, b) => alphabetically(true)(a['MargID'],b['MargID'])), 
+                getUnique(item['Marks'].map(d => d['Books']).sort((a, b) => alphabetically(true)(a['BookID'],b['BookID'])), 
+                'BookID')
+            ].flat()
         }else if(itemType === 'Book'){
             //Book Item paths                 
-            library = [item, getUnique(item['Marks'], 'MargID'), getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID')].flat()
+            library = [item, 
+                        getUnique(item['Marks'], 'MargID').sort((a, b) => alphabetically(true)(a['MargID'],b['MargID'])), 
+                        getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID').sort((a, b) => alphabetically(true)(a['FemaleAgentID'],b['FemaleAgentID']))
+                    ].flat()
         }else if(itemType === 'Mark'){
             //Mark Item paths
-            library = [item, item['Agents'], item['Books']]
+            library = [
+                    item, 
+                    item['Agents'], 
+                    item['Books']
+                ]
         }
 
         library ? itemLibrary.value = library : "no data"

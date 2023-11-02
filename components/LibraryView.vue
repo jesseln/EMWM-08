@@ -5,20 +5,29 @@
             <h2 class="shelf-title">{{shelf[0]}}</h2>
         </div>
         <div class="shelf-inner">
-            <div class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
-                <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
-                    <h3 class="section-category">{{ categoryMap.get(libraryDisplay.viewType.bookend)[libraryDisplay.view.bookend] }}</h3>
-                    <h3 class="section-value">{{ bookend[0] }}</h3>
-                    <div class="section-shelf-box">
-                    <!-- Shelf Box DO NOT DELETE -->
+            <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
+                    <div class="section-title-box-wrapper">
+                    <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
+                        <h3 class="section-category">{{ categoryMap.get(libraryDisplay.viewType.bookend)[libraryDisplay.view.bookend] }}</h3>
+                        <h3 class="section-value">{{ bookend[0] }}</h3>
+                        <div class="section-shelf-box">
+                        <!-- Shelf Box DO NOT DELETE -->
+                        </div>
                     </div>
-                </div>
-                    <div class="section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
+                        <div class="section-inner" v-for="item in bookend[1].slice(0,1)" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
+                            <AgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
+                            <BookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
+                            <MarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
+    
+                    </div> 
+                
+                    </div>
+                    <div class="section-inner" v-for="item in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
                         <AgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
                         <BookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
                         <MarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
                     </div>
-            </div>
+                </template>
         </div>
     </div>
     <div class="modal-background"  ref="modalBackground">

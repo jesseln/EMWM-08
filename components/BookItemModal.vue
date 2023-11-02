@@ -3,7 +3,7 @@
         placement="top" 
         :delay="{ show: 50, hide: 200 }"
     >
-    <div class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}">    
+    <div v-if="itemSelected" class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}">    
         <div class="book-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
 
         <div class="book-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4 + 'px' , background: itemColour(getIDP(item, 'colour')),
@@ -11,6 +11,18 @@
 
 
         <div class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+            <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+        </div>
+        </div>
+    </div>
+    <div v-else class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}">    
+        <div class="book-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
+
+        <div class="book-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4 + 'px' , background: itemModalColour,
+        width:scales.minItemWidth + 'px'}" :class="{lowlight: isHighlight}">
+
+
+        <div class="item-value" :style="{ color: contrastHandler(itemModalColour)}">
             <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
         </div>
         </div>
@@ -28,7 +40,7 @@
             </div>
             <div class="item-menu">
                 <div class="shelf-button-wrapper">
-                    <button class="shelf-button" @click="$emit('viewDetails', item)"> View Details </button>
+                    <button class="catalogue-filter-category-box details-button" @click="$emit('viewDetails', item)"> View Details </button>
                 </div>
             </div>
         </div>
@@ -52,7 +64,7 @@ import { storeToRefs } from "pinia";
 
 const supabase = useSupabaseClient()
 //Props
-const {item, itemBundle} = defineProps(['item', 'itemBundle']);
+const {item, itemBundle, itemSelected, itemModalColour} = defineProps(['item', 'itemBundle', 'itemSelected', 'itemModalColour']);
 const {viewDetails} = defineEmits(['viewDetails']);
 // STATE MANAGERS IMPORT //    
 //View State

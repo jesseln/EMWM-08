@@ -229,10 +229,11 @@ export const useUtils = () => {
       
           // otherwise, if we're ascending, lowest sorts first
           if (ascending) {
-            if(isString(a) && isString(b)) return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
+            if(isString(a) && isString(b)) return a.toLowerCase().slice(a.search(/[a-zA-Z]/), a.length) < b.toLowerCase().slice(b.search(/[a-zA-Z]/), b.length) ? -1 : 1;
             if(isNumber(a) && isNumber(b)) return handleNumeric(a) < handleNumeric(b) ? -1 : 1;
             if(isNumber(a)) return -1;
             if(isNumber(b)) return 1;
+            if(isArray(a) && isArray(b)) return handleArray(a) < handleArray(b) ? -1 : 1;
           }
       
           // if descending, highest sorts first

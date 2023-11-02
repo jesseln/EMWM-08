@@ -436,6 +436,9 @@ body {
 .section-wrapper:last-child{
 	flex-grow:1000;
 }
+.section-wrapper:nth-child(-n + 3 of .section-inner){
+	flex-wrap: nowrap;
+}
 
 
 .section-item-box{
@@ -455,9 +458,12 @@ body {
 	width: 100%;
 }
 
+
 .section-inner:last-child{
 	flex-grow:1000;
 }
+
+
 
 .section-inner{
 	margin: 10px 0;
@@ -488,6 +494,20 @@ body {
 	grid-row-end: 5;
 }
 
+.section-title-box-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-content: flex-start;
+	align-items: flex-start;
+	padding:0px;
+    flex-grow:1;
+}
+
+.section-title-box-wrapper:last-child{
+	flex-grow:1000;
+}
 .section-title-box {
 	margin: 10px 0;
 	display: flex;
@@ -1014,7 +1034,7 @@ body {
 .details-button{
   background-color: #FFFFFF;
   border: 0;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   box-sizing: border-box;
   color: #111827;
   font-family:'Raleway', sans-serif;
@@ -1035,7 +1055,7 @@ body {
   margin: 0 0 0 .5rem;
   background-color: #FFFFFF;
   border: 0;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   box-sizing: border-box;
   color: #111827;
   font-family:'Raleway', sans-serif;
@@ -1056,7 +1076,7 @@ body {
     max-width: fit-content;
     max-width: -moz-fit-content;
     margin: 0.25rem 0.5rem;
-    border-radius: 0.3rem;
+    border-radius: 0.5rem;
     border: 0.1rem solid rgb(240, 240, 240);
     background: rgb(252, 252, 252);
     cursor: pointer;
@@ -1332,12 +1352,7 @@ body {
     padding: 0.25rem 0.5rem 0.5rem;
     border-radius: 0.3rem;
 }
-.catalogue-filter-category-box{
-    border-radius: 0.3rem;
-    border: 0.1rem solid rgb(240, 240, 240);
-    background: rgb(252, 252, 252);
-    cursor: pointer;
-}
+
 .catalogue-filter-category-active{
     border-radius: 0.3rem;
     border: 0.1rem solid rgb(240, 240, 240);
