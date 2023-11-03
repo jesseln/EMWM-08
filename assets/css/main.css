@@ -29,6 +29,8 @@
     --borderWidth: 3px;
     --borderWidth-S: 1.75px;
 
+    /* Redistributed Clamp functions */
+    --topHeight: clamp(0rem, 6vh, 10rem);
     /* TYPEFACES */
     /* --ff-title-bold: "muli-bold", sans-serif;
     --ff-title-bold-italic: "muli-bold-italic", sans-serif;
@@ -38,6 +40,8 @@
     --ff-body-italic: "lato-italic", sans-serif;
     --ff-body-bold: "lato-bold", sans-serif; */
   }
+
+  
 
 
 

@@ -31,8 +31,11 @@
         </div>
     </div>
     <div class="modal-background"  ref="modalBackground">
-        <div class="item-modal-content" ref="itemModalContent" >
-            <ItemModal :key="_item" v-if="_item" @close="hideModal" :_item="_item" />
+        <div class="item-modal-content-outer" ref="itemModalContentOuter">
+
+            <div class="item-modal-content" ref="itemModalContent" >
+                <ItemModal :key="_item" v-if="_item" @close="hideModal" :_item="_item" />
+            </div>
         </div>
     </div>
 </div>
@@ -100,6 +103,7 @@ const { getItemLibraryYC,
             libraryItemBundle } = storeToRefs(referenceStore)
 
   const itemModalContent = ref(null)
+  const itemModalContentOuter = ref(null)
   const modalBackground = ref(null)
   const _item = ref(null)
          
@@ -111,6 +115,7 @@ const { getItemLibraryYC,
     itemModalContent.value.style.visibility = 'visible'
     modalBackground.value.style.transitionDelay = '.075s'
     modalBackground.value.style.visibility = 'visible'
+    itemModalContentOuter.value.style.visibility = 'visible'
   }
 
   const hideModal = ()=>{
@@ -118,6 +123,7 @@ const { getItemLibraryYC,
     itemModalContent.value.style.visibility = 'hidden'
     modalBackground.value.style.transitionDelay = '.15s'
     modalBackground.value.style.visibility = 'hidden'
+    itemModalContentOuter.value.style.visibility = 'hidden'
   }
 
   onClickOutside(itemModalContent, (event) => {
@@ -126,6 +132,7 @@ const { getItemLibraryYC,
         itemModalContent.value.style.visibility = 'hidden'
         modalBackground.value.style.transitionDelay = '.15s'
         modalBackground.value.style.visibility = 'hidden'
+        itemModalContentOuter.value.style.visibility = 'hidden'
     }  
   })
 
@@ -146,26 +153,36 @@ const { getItemLibraryYC,
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.05);
+    -webkit-backdrop-filter: blur(0.02rem);
     backdrop-filter: blur(0.02rem);
 }
-  .item-modal-content {
-    display: block;
-    visibility: hidden;
+.item-modal-content-outer{
+    display: grid;
+    grid-template-rows: 100vh;
     position: fixed;
-    left: 12vw;
-    top: 3rem;
-    // background-color: #ffffff;
-    min-width: 76vw;
+    top: 0;
     max-width: 76vw;
-    min-height: 85vh;
-    max-height: 85vh;
+    left: 12vw;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+  .item-modal-content {
+    grid-row: 1 / 2;
+    display: flex;
+    flex-flow: column wrap;
+    visibility: hidden;
+    height: fit-content;
+    width: fit-content;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 12px 0px;
     z-index: 200;
     background: #ffffff;
     padding: 7px;
     border: 0.1rem #eeeeee solid;
     border-radius: 0.3rem;
-    margin: 0 0 2rem;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
   }
   
   /* .dropdown-content a {

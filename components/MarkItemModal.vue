@@ -4,12 +4,12 @@
         :delay="{ show: 50, hide: 200 }"
         
     >
-        <div v-if="itemSelected"   class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}">    
+        <div v-if="itemSelected"   class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height'))-20 + 'px', width:scales.minItemWidth + 'px'}">    
             <div class="mark-item-top" :style="{ background: itemColour(getIDP(item, 'colour')), width:scales.minItemWidth - 2 + 'px'}"></div>
             <div class="mark-item-top-background" :style="{ width:scales.minItemWidth + 2 + 'px'}"></div>
-            <div class="mark-item-background" :style="{ maxHeight: scales.maxItemHeight-20  + 'px', height: itemHeight(getIDP(item,'height'))-20 + 'px',width:scales.minItemWidth + 2 + 'px'}"></div>
+            <div class="mark-item-background" :style="{ maxHeight: scales.maxItemHeight-20  + 'px', height: itemHeight(getIDP(item,'height'))-20-20 + 'px',width:scales.minItemWidth + 2 + 'px'}"></div>
 
-            <div class="mark-item" :style="{ maxHeight: scales.maxItemHeight-23 + 'px', height: itemHeight(getIDP(item,'height'))-23 + 'px' , background: itemColour(getIDP(item, 'colour')),
+            <div class="mark-item" :style="{ maxHeight: scales.maxItemHeight-23 + 'px', height: itemHeight(getIDP(item,'height'))-23-20 + 'px' , background: itemColour(getIDP(item, 'colour')),
             width:scales.minItemWidth - 2 + 'px'}" :class="{lowlight: isHighlight}">
 
 
@@ -18,12 +18,12 @@
         </div>
         </div>
     </div>
-        <div v-else class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}">    
+        <div v-else class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height'))-20 + 'px', width:scales.minItemWidth + 'px'}">    
             <div class="mark-item-top" :style="{ background: itemModalColour, width:scales.minItemWidth - 2 + 'px'}"></div>
             <div class="mark-item-top-background" :style="{ width:scales.minItemWidth + 2 + 'px'}"></div>
-            <div class="mark-item-background" :style="{ maxHeight: scales.maxItemHeight-20  + 'px', height: itemHeight(getIDP(item,'height'))-20 + 'px',width:scales.minItemWidth + 2 + 'px'}"></div>
+            <div class="mark-item-background" :style="{ maxHeight: scales.maxItemHeight-20  + 'px', height: itemHeight(getIDP(item,'height'))-20-20 + 'px',width:scales.minItemWidth + 2 + 'px'}"></div>
 
-            <div class="mark-item" :style="{ maxHeight: scales.maxItemHeight-23 + 'px', height: itemHeight(getIDP(item,'height'))-23 + 'px' , background: itemModalColour,
+            <div class="mark-item" :style="{ maxHeight: scales.maxItemHeight-23 + 'px', height: itemHeight(getIDP(item,'height'))-23-20 + 'px' , background: itemModalColour,
             width:scales.minItemWidth - 2 + 'px'}" :class="{lowlight: isHighlight}">
 
 

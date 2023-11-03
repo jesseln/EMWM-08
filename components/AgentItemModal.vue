@@ -5,9 +5,9 @@
     >
     <div v-if="itemSelected" class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}"> 
 
-        <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
+        <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height'))-20 + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
 
-        <div class="agent-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4 + 'px' , background: itemColour(getIDP(item, 'colour')),
+        <div class="agent-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4-20 + 'px' , background: itemColour(getIDP(item, 'colour')),
         width:scales.minItemWidth + 'px'}" :class="{lowlight: isHighlight}">
 
 
@@ -18,9 +18,9 @@
     </div>
     <div v-else class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}"> 
 
-        <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
+        <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height'))-20  + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
 
-        <div class="agent-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4 + 'px' , background: itemModalColour,
+        <div class="agent-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4-20  + 'px' , background: itemModalColour,
         width:scales.minItemWidth + 'px'}" :class="{lowlight: isHighlight}">
 
 

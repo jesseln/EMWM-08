@@ -114,10 +114,8 @@
                 </vueper-slides>
             </div>
         </div>
-        <div v-else>
-             <div  class="no-image-found">
+        <div v-else class="no-image-found">
                  <Icon name="ic:outline-add-photo-alternate" size="5rem" class="prevent-close-on-click no-image" color="grey" />
-             </div>
         </div>
         <div class="item-modal-details">
             <div class="item-modal-details-title">
@@ -145,23 +143,23 @@
         </div>
             <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
                 <div class="section-title-box-wrapper">
-                <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
+                <div class="section-title-box" :style="{ height: scales.maxShelfHeight-20 + 'px'}">
                     <h3 class="section-category item-modal-category">{{ bookend[1].length }}</h3>
                     <h3 class="section-value">{{ bookend[0] }}s</h3>
                     <div class="section-shelf-box">
                     <!-- Shelf Box DO NOT DELETE -->
                     </div>
                 </div>
-                <div class="section-inner" v-for="item2Display in bookend[1].slice(0,1)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#CDBAE9'" :itemSelected="itemTypeCheck(_item) === 'Agent'? true : false "/>
-                        <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#ADE2B6'" :itemSelected="itemTypeCheck(_item) === 'Book'? true : false "/>
-                        <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#FBE27D'" :itemSelected="itemTypeCheck(_item) === 'Mark'? true : false "/>
+                <div class="section-inner " v-for="item2Display in bookend[1].slice(0,1)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
+                        <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Agent'? true : false "/>
+                        <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Book'? true : false "/>
+                        <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Mark'? true : false "/>
                     </div> 
                 </div>
-                    <div class="section-inner" v-for="item2Display in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#CDBAE9'" :itemSelected="false"/>
-                        <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#ADE2B6'" :itemSelected="false"/>
-                        <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#FBE27D'" :itemSelected="false"/>
+                    <div class="section-inner " v-for="item2Display in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
+                        <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="false"/>
+                        <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="false"/>
+                        <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="false"/>
                     </div>
                 </template>
             </div>
@@ -177,8 +175,10 @@ import 'vueperslides/dist/vueperslides.css'
 const {_item} = defineProps(['_item']);
 const supabase = useSupabaseClient()
 
-
-
+//Old Colour Scheme for non selected items
+//Agent #CDBAE9
+//Book #ADE2B6
+//Mark #FBE27D
 
 
 // STATE MANAGERS IMPORT //    
@@ -475,16 +475,16 @@ onClickOutside(section, (event) => {
     transform-origin: bottom left;
 }
 .no-image-found{
-    margin: 0 0.5rem;
+    width: 100%;
     background: #ececec;
     min-height: 32vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }
 .no-image{
+
     box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 12px 0px;
     background: #ffffff;
     border-radius: 0.5rem;
@@ -562,8 +562,10 @@ onClickOutside(section, (event) => {
 
 .item-modal-header{
     // background: #e2e2e2;
-    grid-row: 1/2;
-    margin: 0 1rem;
+    // grid-row: 1/2;
+    margin: 0 0 0.5rem;
+    height: clamp(2rem, 4vh, 4rem);
+    width: 100%;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
@@ -660,12 +662,24 @@ onClickOutside(section, (event) => {
     margin: 0.25rem 2rem;
     max-height: 30vh;
 }
+// .item-modal-container{
+//     position: relative;
+//     padding: 10px 0;
+//     display: grid;
+//     width: 100%;
+// 	grid-template-rows: 6vh 32vh 22vh 22vh;
+
+//     justify-content: space-between;
+//     align-content: flex-end;
+//     align-items: flex-start;
+//     color: black;
+// }
 .item-modal-container{
     position: relative;
-    padding: 10px 0;
-    display: grid;
-    width: 100%;
-	grid-template-rows: 6vh 32vh 22vh 22vh;
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-flow: column nowrap;
+	// grid-template-rows: 6vh 32vh 22vh 22vh;
     justify-content: space-between;
     align-content: flex-end;
     align-items: flex-start;
@@ -676,29 +690,34 @@ onClickOutside(section, (event) => {
 
 
 .item-modal-images{
+    width: 100%;
     display: block;
     position: relative;
-    grid-row: 2 / 3;
+    // grid-row: 2 / 3;
     // left: 3rem;
-    margin: 0 1rem;
     max-width: 75vw;
     max-height: 32vh;
 }
 .item-modal-image-slider{
-    height: 15px;
+    height: fit-content;
+
 }
 .item-modal-details{
-    grid-row: 3 / 4;
+    width: 100%;
+    // grid-row: 3 / 4;
     margin: 1.5rem 1rem 0.5rem;
     display: flex;
     flex-flow: row nowrap;
+    height: clamp(24vh, 30%, 30vh);
 }
 .item-modal-associated{
-    grid-row: 4 / 5;
+    // grid-row: 4 / 5;
+    width: 100%;
     min-width: 75vw;
     align-self: end;
     overflow: hidden;
     padding: 0 0 1rem;
+
     // max-height: 22vh;
 }
 .item-modal-add-to-colleciton{
