@@ -32,7 +32,6 @@
     </div>
     <div class="modal-background"  ref="modalBackground">
         <div class="item-modal-content-outer" ref="itemModalContentOuter">
-
             <div class="item-modal-content" ref="itemModalContent" >
                 <ItemModal :key="_item" v-if="_item" @close="hideModal" :_item="_item" />
             </div>
@@ -115,6 +114,7 @@ const { getItemLibraryYC,
     itemModalContent.value.style.visibility = 'visible'
     modalBackground.value.style.transitionDelay = '.075s'
     modalBackground.value.style.visibility = 'visible'
+    itemModalContentOuter.value.style.transitionDelay = '.075s'
     itemModalContentOuter.value.style.visibility = 'visible'
   }
 
@@ -123,6 +123,7 @@ const { getItemLibraryYC,
     itemModalContent.value.style.visibility = 'hidden'
     modalBackground.value.style.transitionDelay = '.15s'
     modalBackground.value.style.visibility = 'hidden'
+    itemModalContentOuter.value.style.transitionDelay = '.15s'
     itemModalContentOuter.value.style.visibility = 'hidden'
   }
 
@@ -132,6 +133,7 @@ const { getItemLibraryYC,
         itemModalContent.value.style.visibility = 'hidden'
         modalBackground.value.style.transitionDelay = '.15s'
         modalBackground.value.style.visibility = 'hidden'
+        itemModalContentOuter.value.style.transitionDelay = '.15s'
         itemModalContentOuter.value.style.visibility = 'hidden'
     }  
   })

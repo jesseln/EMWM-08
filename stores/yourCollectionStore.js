@@ -386,6 +386,36 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         )
     }
 
+    function getItemLibraryCountYC(item){
+        if(!item) return null;
+        const itemType = itemTypeCheckYC(item)
+        let library;
+        if(itemType === 'Agent'){
+            //Agent Item paths
+            library = [ 
+                        1, 
+                        getUnique(item['Marks'].map(d => d['Books']), 'BookID').length, 
+                        item['Marks'].length 
+                    ].flat()
+        }else if(itemType === 'Book'){
+            //Book Item paths                 
+            library = [ 
+                        getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID').length, 
+                        1, 
+                        item['Marks'].length
+                    ].flat()
+        }else if(itemType === 'Mark'){
+            //Mark Item paths
+            library = [
+                        1, 
+                        1,
+                        1
+                    ]
+        }
+
+        return library ? library : ["no data", "no data", "no data"]
+    }
+
     function itemTypeCheckYC(item){
         return  item['FemaleAgentID'] ? 'Agent' :
                 item['BookID'] ? 'Book' :
@@ -541,7 +571,8 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 getIFP_YC,
                 itemTypeCheckYC,
                 addToCollection, 
-                removeFromCollection
+                removeFromCollection,
+                getItemLibraryCountYC,
             }
   })
 

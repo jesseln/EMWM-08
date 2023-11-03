@@ -817,6 +817,13 @@ body {
 	max-height: 50rem;
 	width: 100%;
  }
+ .item-menu-totals-and-button{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0 0 0.75rem;
+ }
  .item-menu-totals-wrapper{
     display: flex;
     flex-flow: row nowrap;
@@ -827,13 +834,13 @@ body {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    margin: 1.25rem 0.5rem 0.75rem;
+    margin: 1.25rem 0.5rem 0;
     /* border-top: 1px solid #e7e7e7;
     border-bottom: 1px solid #e7e7e7; */
     padding: 0.25rem;
     gap: 0.5rem;
-
  }
+
  .item-menu-totals-badge{
     display: flex;
     flex-flow: column nowrap;
@@ -843,7 +850,7 @@ body {
     margin: 0 0 0 0;
     border: 1px solid #e4e4e4;
     border-radius: 0.3rem;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 3px 0px;
 
  }
  .item-menu-totals-badge p{
