@@ -150,13 +150,13 @@
                     <!-- Shelf Box DO NOT DELETE -->
                     </div>
                 </div>
-                <div class="section-inner " v-for="item2Display in bookend[1].slice(0,1)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
+                <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(0,1)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
                         <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Agent'? true : false "/>
                         <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Book'? true : false "/>
                         <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Mark'? true : false "/>
                     </div> 
                 </div>
-                    <div class="section-inner " v-for="item2Display in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
+                    <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
                         <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="false"/>
                         <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="false"/>
                         <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="false"/>
@@ -455,6 +455,9 @@ onClickOutside(section, (event) => {
 </script>
 
 <style lang="scss" scoped>
+.section-inner-item-modal{
+    // margin: 1vh 0; 
+}
 .item-modal-close-button{
     position: relative;
     padding: 0.1rem;
@@ -520,13 +523,13 @@ onClickOutside(section, (event) => {
 .item-modal-details-category-wrapper{
     display: flex;
     flex-flow: row wrap;
-    align-items: flex-end;
+    align-items: center;
 }
 .item-modal-details-category{
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    margin: 0 1.5rem 2.25rem;
+    margin: 0 1.5rem 2vh;
 }
 .item-modal-details-category h3{
 	font-family: 'Raleway', sans-serif;
@@ -705,10 +708,10 @@ onClickOutside(section, (event) => {
 .item-modal-details{
     width: 100%;
     // grid-row: 3 / 4;
-    margin: 1.5rem 1rem 0.5rem;
+    margin: 1vh 1rem 0.5vh;
     display: flex;
     flex-flow: row nowrap;
-    height: clamp(24vh, 30%, 30vh);
+    height: clamp(7rem, 20vh, 12rem);
 }
 .item-modal-associated{
     // grid-row: 4 / 5;
@@ -717,8 +720,8 @@ onClickOutside(section, (event) => {
     align-self: end;
     overflow: hidden;
     padding: 0 0 1rem;
-
-    // max-height: 22vh;
+    max-height: 18vh;
+    min-height: 10rem;
 }
 .item-modal-add-to-colleciton{
     grid-row: 5/6;
