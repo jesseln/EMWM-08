@@ -1093,6 +1093,7 @@ body {
   user-select: none;
   touch-action: manipulation;
 }
+
 .catalogue-filter-category-box{
     max-width: fit-content;
     max-width: -moz-fit-content;
