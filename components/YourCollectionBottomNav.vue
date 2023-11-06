@@ -67,9 +67,11 @@
 <script setup>
 import { storeToRefs } from "pinia";
 
+
 //View State
 const yourCollectionStore = useYourCollectionStore();
 const { allCollections,
+        collectionName,
         yourCollection, 
         itemLibraryYC, 
         dataSizeYC,
@@ -117,7 +119,6 @@ const { handleObjectProperty,
 
 
 const iconScaleFactor = ref(0.5)
-const collectionName = ref('Mancy')
 </script>
 
 <style lang="scss" scoped>

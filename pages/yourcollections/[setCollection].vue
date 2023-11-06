@@ -7,8 +7,8 @@
         <div class="icon-container">
         </div>
         <div class="library-type-title-box">
-            <h1 class="library-type-title">{{ libraryDisplayYC.pageText.libraryTypeTitle }}</h1>
-            <p class="library-type-subtitle">{{ libraryDisplayYC.pageText.libraryTypeSubtitle }}</p>
+            <h1 class="library-type-title">{{ route.params.setCollection}}</h1>
+            <p class="library-type-subtitle"> {{ libraryDisplayYC.pageText.libraryTypeSubtitle }}</p>
         </div>
         <div class="nav-div">
             <YourCollectionNav />
@@ -18,7 +18,7 @@
                 <div class="catalogue-filter-category-container-active-inview">
                     <button 
                     v-for="filterValue in getActiveFiltersYC"
-                    @click="filterActiveToggleYC(filterValue, filterValue.category, filterValue.itemType)" 
+                    @click="yourCollectionStore.filterActiveToggleYC(filterValue, filterValue.category, filterValue.itemType)" 
                     class="catalogue-filter-category-active"
                     :class="{ filterActive : filterObjectYC.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
                     <div class="catalogue-filter-category-wrapper">
@@ -75,6 +75,8 @@ const viewStore = useViewStore();
 //View State
 const yourCollectionStore = useYourCollectionStore();
 const { yourCollection, 
+        allCollections,
+        collectionName,
         itemLibraryYC, 
         dataSizeYC,
         libraryDisplayYC,
@@ -144,6 +146,8 @@ const { handleObjectProperty,
     const useY = y
     const toTopButton = ref();
     onMounted(() => {
+        collectionName.value = route.params.setCollection
+
         watchEffect(()=>{
             if (useY.value > 550) {
                 toTopButton.value.classList.add("showButton");

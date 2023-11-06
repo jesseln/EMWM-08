@@ -205,6 +205,7 @@ import { storeToRefs } from "pinia";
 //View State
 const yourCollectionStore = useYourCollectionStore();
 const { allCollections,
+        collectionName,
         yourCollection, 
         itemLibraryYC, 
         dataSizeYC,
@@ -250,7 +251,6 @@ const { categoryMap,
 const { handleObjectProperty,
         contrastHandler } = useUtils();
 
-const collectionName = ref('Mancy')
 const iconScaleFactor = ref(0.5)
 const NotSelectedCategories = ref(referenceStore.categoryMap.get("NotSelected"))
 const agentCategories = ref(referenceStore.categoryMap.get("Agent"))

@@ -115,9 +115,9 @@ const { handleObjectProperty,
 
 
     const setQueryView = referenceStore.viewRouteQueries[route.params.setQuery]
-    console.log("setQueryView", setQueryView)
-    console.log("viewStore", viewStore.libraryDisplay)
-    console.log("query check", setQueryView.view.itemType)
+    // console.log("setQueryView", setQueryView)
+    // console.log("viewStore", viewStore.libraryDisplay)
+    // console.log("query check", setQueryView.view.itemType)
     Object.assign(viewStore.libraryDisplay.view, setQueryView.view)
     Object.assign(viewStore.libraryDisplay.viewType, setQueryView.viewType)
     Object.assign(viewStore.libraryDisplay.pageText, setQueryView.pageText)

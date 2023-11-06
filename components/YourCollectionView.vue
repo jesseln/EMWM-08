@@ -1,6 +1,6 @@
 <template>
     <div class="shelf yourCollection" >
-        <div class="shelf" v-for="shelf in allCollections[collectionName]['items']" :key="shelf">
+        <div class="shelf" v-for="shelf in filterLibraryYC" :key="shelf">
         <div class="shelf-title-box">
             <h2 class="shelf-title">{{shelf[0]}}</h2>
         </div>
@@ -44,6 +44,7 @@
     // STATE MANAGERS IMPORT //    
 const yourCollectionStore = useYourCollectionStore();
 const { allCollections,
+        collectionName,
         yourCollection, 
         itemLibraryYC, 
         dataSizeYC,
@@ -84,11 +85,10 @@ const { getItemLibraryYC,
             scales,
             yourCollectionItemBundle } = storeToRefs(referenceStore)
 
-            const itemModalContent = ref(null)
+    const itemModalContent = ref(null)
   const modalBackground = ref(null)
   const _item = ref(null)
 
-  const collectionName = ref('Mancy')
          
   function showModal(item){
     //Component Prop

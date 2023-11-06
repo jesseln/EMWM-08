@@ -15,17 +15,23 @@
                 <h2 class="main-navbar-link dropbtn" >Home</h2>
             </div>   
           </NuxtLink>
-            <div class="dropdown" ref="navDropdown" @mouseover="showModal" @mouseleave="hideModal">
+            <div class="dropdown" ref="dropdownExploreLibraryRef" @mouseover="showModal('ExploreLibrary')" @mouseleave="hideModal('ExploreLibrary')">
             <h2 class="main-navbar-link dropbtn">Explore the Collection</h2>
-                <div class="dropdown-content" ref="navDropdownContent" >
-                    <LibraryModal @modalClicked="hideModalClicked" />
+                <div class="dropdown-content" ref="dropdownExploreLibraryRefContent" >
+                    <DropdownExploreLibrary @modalClicked="hideModalClicked('ExploreLibrary')" />
                 </div>
             </div>
-          <NuxtLink to="/yourcollection/collection01" activeClass="nav-active">
+            <div class="dropdown" ref="dropdownYourCollectionsRef" @mouseover="showModal('YourCollections')" @mouseleave="hideModal('YourCollections')">
+            <h2 class="main-navbar-link dropbtn">View Your Collections</h2>
+                <div class="dropdown-content" ref="dropdownYourCollectionsRefContent" >
+                    <DropdownYourCollections @modalClicked="hideModalClicked('YourCollections')" />
+                </div>
+            </div>
+          <!-- <NuxtLink to="/yourcollection/collection01" activeClass="nav-active">
             <div class="dropdown">
                 <h2 class="main-navbar-link dropbtn" >View Your Collections</h2>
             </div>   
-          </NuxtLink>
+          </NuxtLink> -->
           <NuxtLink to="/about" activeClass="nav-active">
             <div class="dropdown">
                 <h2 class="main-navbar-link dropbtn" >Read About the Collection</h2>
@@ -46,22 +52,43 @@
   libraryStore.getBooks();
   libraryStore.getMarks();
 
-  const navDropdown = ref(null)
-  const navDropdownContent = ref(null)
+  const dropdownExploreLibraryRef = ref(null)
+  const dropdownExploreLibraryRefContent = ref(null)
+  const dropdownYourCollectionsRef = ref(null)
+  const dropdownYourCollectionsRefContent = ref(null)
          
-  const showModal = ()=>{
-    navDropdownContent.value.style.transitionDelay = '.1s'
-    navDropdownContent.value.style.visibility = 'visible'
+  const showModal = (callRef)=>{
+    if(callRef === 'ExploreLibrary'){
+        dropdownExploreLibraryRefContent.value.style.transitionDelay = '.1s'
+        dropdownExploreLibraryRefContent.value.style.visibility = 'visible'
+    }
+    if(callRef === 'YourCollections') {
+        dropdownYourCollectionsRefContent.value.style.transitionDelay = '.1s'
+        dropdownYourCollectionsRefContent.value.style.visibility = 'visible'
+    }
+
   }
 
-  const hideModal = ()=>{
-    navDropdownContent.value.style.transitionDelay = '.3s'
-    navDropdownContent.value.style.visibility = 'hidden'
+  const hideModal = (callRef)=>{
+    if(callRef === 'ExploreLibrary'){
+        dropdownExploreLibraryRefContent.value.style.transitionDelay = '.1s'
+        dropdownExploreLibraryRefContent.value.style.visibility = 'hidden'
+    }
+    if(callRef === 'YourCollections') {
+        dropdownYourCollectionsRefContent.value.style.transitionDelay = '.1s'
+        dropdownYourCollectionsRefContent.value.style.visibility = 'hidden'
+    }
   }
 
-  const hideModalClicked = ()=> {
-    navDropdownContent.value.style.transitionDelay = '.1s'
-    navDropdownContent.value.style.visibility = 'hidden'
+  const hideModalClicked = (callRef)=> {
+    if(callRef === 'ExploreLibrary'){
+        dropdownExploreLibraryRefContent.value.style.transitionDelay = '.1s'
+        dropdownExploreLibraryRefContent.value.style.visibility = 'hidden'
+    }
+    if(callRef === 'YourCollections') {
+        dropdownYourCollectionsRefContent.value.style.transitionDelay = '.1s'
+        dropdownYourCollectionsRefContent.value.style.visibility = 'hidden'
+    }
 }
 
 

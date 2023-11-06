@@ -24,7 +24,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
     }
 
     // LIBRARY STATE OBJECT//
-    const allCollections = reactive({})
+    const allCollections = ref({})
 
     const yourCollection = ref([]) 
 
@@ -75,8 +75,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
             libraryTypeSubtitle: 'from the libraries',
         }
     })
-    const collectionName = 'Mancy'
-
+    const collectionName = ref()
     const collectionSet = reactive({})
 
     // LIBRARY DATA //
@@ -118,6 +117,14 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
 
             ordinalColourMapYC.value = getOrdinalColourMap();
 
+            if(collectionName.value !== undefined){
+                if(collectionName.value in allCollections.value){
+                    allCollections.value[collectionName.value].yourCollection = yourCollection.value
+                    allCollections.value[collectionName.value].display.view = libraryDisplayYC.view
+                    allCollections.value[collectionName.value].display.viewType = libraryDisplayYC.viewType
+                    allCollections.value[collectionName.value].display.pageText = libraryDisplayYC.pageText 
+                }
+            }
         }
     },{deep: true})
 
@@ -131,6 +138,26 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         filterObjectYC.set('Agent', getFilterObjectYC(referenceStore.filterMap.get('Agent'), yourCollection.value, 'Agent'))
         filterObjectYC.set('Book', getFilterObjectYC(referenceStore.filterMap.get('Book'), yourCollection.value, 'Book'))
         filterObjectYC.set('Mark', getFilterObjectYC(referenceStore.filterMap.get('Mark'), yourCollection.value, 'Mark'))
+
+        if(collectionName.value !== undefined){
+            if(collectionName.value in allCollections.value){
+                allCollections.value[collectionName.value].items = filterLibraryYC.value
+                allCollections.value[collectionName.value].filters.set('Agent', filterObjectYC.get('Agent'))
+                allCollections.value[collectionName.value].filters.set('Book', filterObjectYC.get('Book'))
+                allCollections.value[collectionName.value].filters.set('Mark', filterObjectYC.get('Mark'))
+                activeFiltersYC.value.forEach((filterValue)=>{
+                    filterActiveReinstateYC(filterValue, filterValue.category, filterValue.itemType)
+                })
+    }
+
+    function filterUpdate(filterValue, category, itemType){
+        if(filterObjectYC.get(itemType)[category][filterValue.name].active){
+            activeFiltersYC.value.push({'name': filterValue.name, 'category': category, 'itemType': itemType})
+        }
+
+                allCollections.value[collectionName.value].activeFilters = activeFiltersYC.value
+            }
+        }
         console.log('filterObjectYC watch', filterObjectYC)
     },{deep: true})
 
@@ -208,7 +235,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 return (value)=>{ 
                     return (d3.scaleLinear()
                                 .domain(chooseHeightDomain(yourCollection.value).map(d => Math.log(d))) 
-                                .unknown(referenceStore.scales.maxItemHeight) //Set all non-numeric values to max height
+                                .unknown(referenceStore.scales.minItemHeight) //Set all non-numeric values to max height
                                 .range([referenceStore.scales.minItemHeight, referenceStore.scales.maxItemHeight])
                                 .clamp(true)
                             )(Math.log(value)); 
@@ -216,7 +243,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
             }else{
                 return d3.scaleLinear()
                             .domain(chooseHeightDomain(yourCollection.value)) 
-                            .unknown(referenceStore.scales.maxItemHeight) //Set all non-numeric values to max height
+                            .unknown(referenceStore.scales.minItemHeight) //Set all non-numeric values to max height
                             .range([referenceStore.scales.minItemHeight, referenceStore.scales.maxItemHeight])
                             .clamp(true);     
             }
@@ -247,7 +274,15 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
     function formatColour(){
         if(libraryDisplayYC.view.colour !== "Not Selected"){
             return (
-                    (colourByValue) => colourScaleConverterYC.value(colourScaleYC.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
+                    (colourByValue) => {
+                        if(colourByValue !== "no data")
+                        {
+                            return colourScaleConverterYC.value(colourScaleYC.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
+                        }
+                        else{
+                            return '#EEEEEE'
+                        }
+                    }
                 )   
         }else{
             return (_)=> {return '#fff281'}
@@ -455,6 +490,10 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         filterUpdate(filterValue, category, itemType)
     }
 
+    function filterActiveReinstateYC(filterValue, category, itemType){
+        filterObjectYC.get(itemType)[category][filterValue.name].active = true
+    }
+
     function filterUpdate(filterValue, category, itemType){
         if(filterObjectYC.get(itemType)[category][filterValue.name].active){
             activeFiltersYC.value.push({'name': filterValue.name, 'category': category, 'itemType': itemType})
@@ -499,34 +538,115 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         })
     }
 
+    watch([formattedLibraryYC, libraryDisplayYC],() => {
+        console.log('collectionName.value 22',collectionName.value)
+        console.log('filterLibraryYC 22',filterLibraryYC.value)
+        filterLibraryYC.value = getFilterLibrary()
+        if(collectionName.value !== undefined){
+            if(collectionName.value in allCollections.value){
+                allCollections.value[collectionName.value].items = filterLibraryYC.value
+                console.log("new getCollectionData([collectionName.value])", allCollections.value[collectionName.value])
+                console.log("new getCollectionData()", allCollections.value)
+            }
+        }
+    })
+
+        watch([activeFiltersYC],()=>{
+            if(collectionName.value !== undefined){
+                if(collectionName.value in allCollections.value){
+                    allCollections.value[collectionName.value].activeFilters = activeFiltersYC.value
+                }
+            }
+    })
+
+
+    watch([collectionName],() => {
+        console.log('collectionName.value in allCollections.value', Object.keys(allCollections.value))
+        if(collectionName.value !== undefined){
+            if(collectionName.value in allCollections.value){
+                console.log('name changed', collectionName.value )
+                libraryDisplayYC.view = allCollections.value[collectionName.value].display.view 
+                libraryDisplayYC.viewType = allCollections.value[collectionName.value].display.viewType
+                libraryDisplayYC.pageText = allCollections.value[collectionName.value].display.pageText
+                filterLibraryYC.value = allCollections.value[collectionName.value].items
+                filterObjectYC.set('Agent', allCollections.value[collectionName.value].filters.get('Agent'))
+                filterObjectYC.set('Book', allCollections.value[collectionName.value].filters.get('Book'))
+                filterObjectYC.set('Mark', allCollections.value[collectionName.value].filters.get('Mark'))
+                activeFiltersYC.value = allCollections.value[collectionName.value].activeFilters
+                // activeFiltersYC.value.forEach((filterValue)=>{
+                //     filterUpdate(filterValue, filterValue.category, filterValue.itemType)
+                // })
+                yourCollection.value = allCollections.value[collectionName.value].yourCollection
+            }else{
+                yourCollection.value = [];
+            }
+ 
+        }
+    })
+
+
 
     watch([filterLibraryYC],() => {
         dataSizeYC.value =  filterLibraryYC.value.length?   filterLibraryYC.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
-    })
+        if(collectionName.value !== undefined){
+            if(collectionName.value in allCollections.value){
+                allCollections.value[collectionName.value].dataSize = dataSizeYC.value
+            }
+        }
+    },{deep: true})
 
-    // watch([formattedLibraryYC, libraryDisplayYC],() => {
-    //     filterLibraryYC.value = getFilterLibrary()
-    // })
+
 
     watchEffect(() => {
-        filterLibraryYC.value = getFilterLibrary()
-        allCollections[collectionName] = {['items']: filterLibraryYC.value, ['display']: libraryDisplayYC, ['filters']: filterObjectYC, ['activeFilters']: activeFiltersYC.value, ['dataSize']: dataSizeYC.value,}
+        // if(collectionName.value !== undefined){
+        //     allCollections.value[collectionName.value] = getCollectionData()
+        //     allCollections.value[collectionName.value].items = filterLibraryYC.value
+        //     console.log('collectionName.value',collectionName.value)
+        //     console.log('filterLibraryYC',filterLibraryYC.value)
+        // }
     })
+
+    function getCollectionData(){
+        return {
+
+            ['yourCollection']: [], 
+            ['items']: [],
+            ['display']: JSON.parse(JSON.stringify(libraryDisplayYC)), 
+            ['filters']: new Map([['Agent',{}],['Book',{}],['Mark',{}]]),
+            ['activeFilters']: JSON.parse(JSON.stringify(activeFiltersYC.value)), 
+            ['dataSize']: JSON.parse(JSON.stringify(dataSizeYC.value)),
+            ['id']: collectionIndex.next().value,
+            ['edit']: false
+        }
+    }
+
+    function* getCollectionindex() {
+        let current = 0;
+        while (true) {
+          const reset = yield current++;
+          if (reset) {
+            current = 0;
+          }
+        }
+      }
+      const collectionIndex = getCollectionindex()
 
 
     async function addToCollection(item) {
-        let id; 
-        if(item['FemaleAgentID']) id = 'FemaleAgentID'
-        if(item['BookID']) id = 'BookID'
-        if(item['MargID']) id = 'MargID'
+        if(collectionName.value !== undefined){
+            let id; 
+            if(item['FemaleAgentID']) id = 'FemaleAgentID'
+            if(item['BookID']) id = 'BookID'
+            if(item['MargID']) id = 'MargID'
 
-        const exists = yourCollection.value.find(i => i[id] === item[id]) 
+            const exists = yourCollection.value.find(i => i[id] === item[id]) 
 
-        if(exists) {
-            alert('Item already on shelf') //Placeholder for modal option
-        }
-        if(!exists) {
-            yourCollection.value.push({...item}) 
+            if(exists) {
+                alert('Item already on shelf') //Placeholder for modal option
+            }
+            if(!exists) {
+                yourCollection.value.push({...item}) 
+            }
         }
       }
 
@@ -540,6 +660,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
       }
 
       return {  allCollections,
+                collectionName,
                 yourCollection, 
                 itemLibraryYC, 
                 dataSizeYC,
@@ -573,6 +694,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 addToCollection, 
                 removeFromCollection,
                 getItemLibraryCountYC,
+                getCollectionData,
             }
   })
 

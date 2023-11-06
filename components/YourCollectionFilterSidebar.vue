@@ -18,7 +18,7 @@
                 <div class="catalogue-filter-category-container-active">
                     <button 
                     v-for="filterValue in allCollections[collectionName]['activeFilters']"
-                    @click="filterActiveToggleYC(filterValue, filterValue.category, filterValue.itemType)" 
+                    @click="yourCollectionStore.filterActiveToggleYC(filterValue, filterValue.category, filterValue.itemType)" 
                     class="catalogue-filter-category-active"
                     :class="{ filterActive : allCollections[collectionName]['filters'].get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
                     <div class="catalogue-filter-category-wrapper">
@@ -180,6 +180,7 @@
 import { storeToRefs } from "pinia";
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
+
 // import VDropdown from 'floating-vue/dist/components/Dropdown.vue.d.ts'
 
 // STATE MANAGERS IMPORT //    
@@ -187,6 +188,7 @@ import 'floating-vue/dist/style.css'
 
  const yourCollectionStore = useYourCollectionStore();
 const { allCollections,
+        collectionName,
         yourCollection, 
         itemLibraryYC, 
         dataSizeYC,
@@ -238,8 +240,6 @@ const toggleSidebar = () => (collapsed.value = !collapsed.value)
 const sidebarWidth = computed(
   () => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}vw`
 )
-
-const collectionName = ref('Mancy')
 
 const visible = reactive({
         Agent: false,

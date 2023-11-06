@@ -172,6 +172,7 @@ export const useViewStore = defineStore('view', ()=>{
     function formatNullShelf(data, viewMode){
         return d3.flatGroup(d3.sort(data,(a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d => 'All Items'); 
     }
+    
     //Set Bookends
     function formatBookend(data, viewMode){
         return data
@@ -181,6 +182,7 @@ export const useViewStore = defineStore('view', ()=>{
         return data
         .map(d => [d[0],d3.flatGroup(d3.sort(d[1], (a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d=> 'All Items')]);  
     }
+
     //Combine Shelves & Bookend
     function formatLibrary(data) {
         //Shelves - Sort & Group Items by Shelf Category
@@ -203,7 +205,7 @@ export const useViewStore = defineStore('view', ()=>{
                 return (value)=>{ 
                     return (d3.scaleLinear()
                                 .domain(chooseHeightDomain(libraryData.value).map(d => Math.log(d))) 
-                                .unknown(referenceStore.scales.maxItemHeight) //Set all non-numeric values to max height
+                                .unknown(referenceStore.scales.minItemHeight) //Set all non-numeric values to max height
                                 .range([referenceStore.scales.minItemHeight, referenceStore.scales.maxItemHeight])
                                 .clamp(true)
                             )(Math.log(value)); 
@@ -211,7 +213,7 @@ export const useViewStore = defineStore('view', ()=>{
             }else{
                 return d3.scaleLinear()
                             .domain(chooseHeightDomain(libraryData.value)) 
-                            .unknown(referenceStore.scales.maxItemHeight) //Set all non-numeric values to max height
+                            .unknown(referenceStore.scales.minItemHeight) //Set all non-numeric values to max height
                             .range([referenceStore.scales.minItemHeight, referenceStore.scales.maxItemHeight])
                             .clamp(true);     
             }
@@ -242,7 +244,15 @@ export const useViewStore = defineStore('view', ()=>{
     function formatColour(){
         if(libraryDisplay.view.colour !== "Not Selected"){
             return (
-                    (colourByValue) => colourScaleConverter.value(colourScale.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
+                    (colourByValue) => {
+                        if(colourByValue !== "no data")
+                        {
+                            return colourScaleConverter.value(colourScale.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
+                        }
+                        else{
+                            return '#EEEEEE'
+                        }
+                    }
                 )   
         }else{
             return (_)=> {return '#fff281'}

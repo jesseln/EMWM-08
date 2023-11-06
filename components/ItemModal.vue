@@ -28,10 +28,10 @@
             <div class="aselect" >
                 <div ref="section" class="selector" @click="toggle('section', $event)">
                     <div class="label">
-                        <p v-if="Object.keys(collectionNames).length > 0">
-                            {{ activeCollection }}
+                        <p v-if="Object.keys(allCollections).length > 0">
+                            {{ collectionName }}
                         </p>
-                        <p v-else="">
+                        <p v-else >
                             Select a collection
                         </p>
                     </div>
@@ -42,8 +42,8 @@
                     </div>
                     <div class="categories" :class="{ hidden : !visible.section }">
                         <ul class="scrollable form-style-1" >
-                            <li @click="selectCollection(name)" v-for="name in Object.keys(collectionNames)" :key="name">
-                                <div v-if="!collectionNames[name].edit"  class="collection-item">
+                            <li @click="selectCollection(name)" v-for="name in Object.keys(allCollections)" :key="name">
+                                <div v-if="!allCollections[name].edit"  class="collection-item">
                                     {{name}}
                                     <div class="icon-buttons-wrapper">
                                         <button  @click="nameEdit(name)"  class="icon-button prevent-close-on-click" >
@@ -54,7 +54,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div v-if="collectionNames[name].edit" class="prevent-close-on-click" :ref="editFunctionRef(name)" >
+                                <div v-if="allCollections[name].edit" class="prevent-close-on-click" :ref="editFunctionRef(name)" >
                                     <input @keyup.enter="editSubmit(name)" class="prevent-close-on-click item-modal-input" v-model="editMessage" type="text" autofocus/>
                                     <button  @click="editSubmit(name)" class="icon-button prevent-close-on-click">
                                         Accept Changes
@@ -201,7 +201,9 @@ const { parseDatabase,
 
 //View State
 const yourCollectionStore = useYourCollectionStore();
-const { yourCollection, 
+const { allCollections,
+        collectionName,
+        yourCollection, 
         itemLibraryYC, 
         dataSizeYC,
         libraryDisplayYC,
@@ -232,7 +234,8 @@ const { getItemLibraryYC,
         getIFP_YC,
         itemTypeCheckYC,
         addToCollection, 
-        removeFromCollection } = useYourCollectionStore();
+        removeFromCollection,
+        getCollectionData } = useYourCollectionStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
@@ -369,8 +372,7 @@ const message = ref()
 const editMessage = ref()
 const editRef = ref()
 const editName = ref()
-const collectionNames = reactive({})
-const activeCollection = ref()
+// const collectionNames = reactive({})
 
 const editFunctionRef = (name) => {
   editName.value = name
@@ -381,34 +383,42 @@ const newNameRef = ref()
 
 function createNewButton(){
     createNewSelected.value = true
-    Object.keys(collectionNames).forEach((name)=> collectionNames[name].edit = false)
+    if(Object.keys(allCollections.value).length > 0){
+        console.log('create New Check', Object.keys(allCollections.value).length)
+        console.log(' New keys check', Object.keys(allCollections.value))
+        console.log('allCollections Check', allCollections.value)
+        Object.keys(allCollections.value).forEach((name)=> allCollections.value[name].edit = false)
+    }
+    console.log('create New Check 11', Object.keys(allCollections.value).length)
+        console.log(' New keys check 11', Object.keys(allCollections.value))
+        console.log('allCollections.value Check 11', allCollections.value)
 }
 
 function selectCollection(name){
-    activeCollection.value = name
+    collectionName.value = name
 }
 
 function nameEdit(name){
     createNewSelected.value = false
     message.value = ''
-    Object.keys(collectionNames).forEach((resetName)=> collectionNames[resetName].edit = false)
-    collectionNames[name].edit = true
+    Object.keys(allCollections.value).forEach((resetName)=> allCollections.value[resetName].edit = false)
+    allCollections.value[name].edit = true
     editMessage.value = name
 }
 
 function nameDelete(name){
-    delete collectionNames[name]
+    delete allCollections.value[name]
 }
 
 function editSubmit(name){
     if(editMessage.value.length > 0){
-        if(!(Object.keys(collectionNames).includes(editMessage.value))){ 
-            const keepID = collectionNames[name].id
-            delete collectionNames[name]
-            collectionNames[editMessage.value] = {['display']: 11, ['id']: keepID, ['edit']: false}
+        if(!(Object.keys(allCollections.value).includes(editMessage.value))){ 
+            const storeCollection = allCollections.value[name]
+            delete allCollections.value[name]
+            allCollections.value[editMessage.value] = storeCollection
             editMessage.value = ''
         }else if(editMessage.value === name){
-            collectionNames[name].edit = false
+            allCollections.value[name].edit = false
             editMessage.value = ''        
         }else{
             alert("That name already exists in your collection list")
@@ -420,10 +430,11 @@ function editSubmit(name){
 
 function formSubmit(){
     if(message.value.length > 0){
-        if(!(Object.keys(collectionNames).includes(message.value))){ 
-            collectionNames[message.value] = {['display']: 11, ['id']: Object.keys(collectionNames).length, ['edit']: false}
-            // console.log(collectionNames)
-            activeCollection.value = message.value
+        if(!(Object.keys(allCollections.value).includes(message.value))){ 
+            collectionName.value = message.value
+            allCollections.value[collectionName.value] = getCollectionData()
+            // console.log(allCollections.value)
+
             // visible['section'] = !visible['section']
             createNewSelected.value = false
             message.value = ''
@@ -444,8 +455,8 @@ const open = (option)=> {
 
 onClickOutside(section, (event) => {
     console.log('onoutside',editName.value )
-    if(collectionNames[editName.value]){
-        collectionNames[editName.value].edit = false
+    if(allCollections.value[editName.value]){
+        allCollections.value[editName.value].edit = false
     }
     createNewSelected.value = false
     message.value = ''
@@ -662,8 +673,9 @@ onClickOutside(section, (event) => {
 	border: 1px solid #ad88e9;
 }
 .item-modal-shelf{
-    margin: 0.25rem 2rem;
-    max-height: 30vh;
+    margin: 0.25rem 0.5rem;
+    padding: 0 1.5rem;
+    max-height: 17vh;
 }
 // .item-modal-container{
 //     position: relative;
@@ -722,6 +734,7 @@ onClickOutside(section, (event) => {
     padding: 0 0 1rem;
     max-height: 18vh;
     min-height: 10rem;
+    bottom:0;
 }
 .item-modal-add-to-colleciton{
     grid-row: 5/6;

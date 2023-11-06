@@ -236,15 +236,7 @@ const toggle = (option)=> {
 
 
 onMounted(()=>{
-    watchEffect(()=>{
-        console.log('filterlibrary',filterLibrary.value)
-        console.log('formatlibrary',formattedLibrary.value)
-        console.log('activr FIlters',activeFilters.value)
-        console.log('catgegorey change colour',getActiveFilters.value.some((filter) => filter.category === 'Female agent date'))
-    })
-        // viewStore.filterObject.set('Agent', getFilterObject(referenceStore.filterMap.get('Agent'), viewStore.libraryData, 'Agent'))
-        // viewStore.filterObject.set('Book', getFilterObject(referenceStore.filterMap.get('Book'), viewStore.libraryData, 'Book'))
-        // viewStore.filterObject.set('Mark', getFilterObject(referenceStore.filterMap.get('Mark'), viewStore.libraryData, 'Mark'))
+    activeFilters.value = []
 })
 
 
