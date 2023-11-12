@@ -4,7 +4,16 @@
         :delay="{ show: 50, hide: 200 }"
         @show="menuShown"
     >
-    <div class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}"> 
+    <div class="item-wrapper"
+        :class="{ 
+                zoomOut : zoomLevel === '0',
+                zoomMid : zoomLevel === '50',
+                zoomIn : zoomLevel === '100',
+            }"
+         v-on="itemHandlers" 
+         :style="{ maxHeight: scales.maxItemHeight + 'px', 
+         height: itemHeight(getIDP(item,'height')) + 'px', 
+         width:scales.minItemWidth + 'px'}"> 
 
         <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
 
@@ -107,7 +116,9 @@ const { parseDatabase,
     
 //Reference Constants
 const referenceStore = useReferenceStore();
-const { categoryMap, 
+const { 
+        zoomLevel,
+        categoryMap, 
         invCategoryMap, 
         scales } = storeToRefs(referenceStore)
 

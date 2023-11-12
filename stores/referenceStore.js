@@ -8,6 +8,15 @@ export const useReferenceStore = defineStore('reference', ()=>{
     const { addToCollection, 
             removeFromCollection } = useYourCollectionStore();
 
+    const { width, height } = useWindowSize()
+
+    const windowWidth = computed(()=>{
+        return width.value
+    })
+    const windowHeight = computed(()=>{
+        return height.value
+    })
+
     ///////////////////////
     // LABEL CONVERSIONS //
     ///////////////////////
@@ -130,14 +139,26 @@ export const useReferenceStore = defineStore('reference', ()=>{
     ////////////
     // SCALES //
     ////////////
-    const heightScale = 1.5;
-    const widthScale = 2;
+
+    const zoomLevel = ref("0");
+    const zoomFactor = reactive({
+        0: {height: 1.5*0.25, width: 2*0.25},
+        50: {height: 1.5*1, width: 2*1},
+        100: {height: 1.5*2, width: 1.4*5},
+    })
 
     const scales = reactive({
-        maxItemHeight: 100 * heightScale,
-        maxShelfHeight: 110 * heightScale,
-        minItemHeight: 50 * heightScale,
-        minItemWidth: 16 * widthScale     
+        maxItemHeight: 100 * zoomFactor[zoomLevel.value].height,
+        maxShelfHeight: 110 * zoomFactor[zoomLevel.value].height,
+        minItemHeight: 50 * zoomFactor[zoomLevel.value].height,
+        minItemWidth: 16 * zoomFactor[zoomLevel.value].width     
+    })
+
+    watchEffect(()=>{
+        scales.maxItemHeight = 100 * zoomFactor[zoomLevel.value].height;
+        scales.maxShelfHeight = 110 * zoomFactor[zoomLevel.value].height;
+        scales.minItemHeight = 50 * zoomFactor[zoomLevel.value].height;
+        scales.minItemWidth = 16 * zoomFactor[zoomLevel.value].width;
     })
 
     const viewMap = reactive(new Map());
@@ -631,7 +652,11 @@ export const useReferenceStore = defineStore('reference', ()=>{
     console.log(yourCollectionItemBundle)
     // console.log(categoryMap)
     // console.log(colourMap)
-      return {  categoryMap, 
+
+      return {  
+                zoomFactor,
+                zoomLevel,
+                categoryMap, 
                 invCategoryMap, 
                 viewMap, 
                 filterMap,
@@ -642,7 +667,9 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 yourCollectionItemBundle,
                 viewEditItemBundle,
                 viewColourItemBundle,
-                itemModalMap}
+                itemModalMap,
+                windowHeight,
+                windowWidth,}
   })
 
 

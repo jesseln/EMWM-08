@@ -4,20 +4,50 @@
         :delay="{ show: 50, hide: 200 }"
         @show="menuShown"
     >
-        <div class="item-wrapper" v-on="itemHandlers" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px', width:scales.minItemWidth + 'px'}">    
+        <div class="item-wrapper"
+            :class="{ 
+                        zoomOut : zoomLevel === '0',
+                        zoomMid : zoomLevel === '50',
+                        zoomIn : zoomLevel === '100',
+                    }"
+             v-on="itemHandlers" 
+             :style="{ maxHeight: scales.maxItemHeight + 'px', 
+             height: itemHeight(getIDP(item,'height')) + 'px', 
+             width:scales.minItemWidth + 'px'}">    
             <div class="mark-item-top" :style="{ background: itemColour(getIDP(item, 'colour')), width:scales.minItemWidth - 2 + 'px'}"></div>
             <div class="mark-item-top-background" :style="{ width:scales.minItemWidth + 2 + 'px'}"></div>
             <div class="mark-item-background" :style="{ maxHeight: scales.maxItemHeight-20  + 'px', height: itemHeight(getIDP(item,'height'))-20 + 'px',width:scales.minItemWidth + 2 + 'px'}"></div>
-
-            <div class="mark-item" :style="{ maxHeight: scales.maxItemHeight-23 + 'px', height: itemHeight(getIDP(item,'height'))-23 + 'px' , background: itemColour(getIDP(item, 'colour')),
-            width:scales.minItemWidth - 2 + 'px'}" :class="{lowlight: isHighlight}">
-
-
-<div class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-            <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+            <div class="mark-item" 
+                :style="{ maxHeight: scales.maxItemHeight-23 + 'px', 
+                height: itemHeight(getIDP(item,'height'))-23 + 'px' , 
+                background: itemColour(getIDP(item, 'colour')),
+                width:scales.minItemWidth - 2 + 'px'}" 
+                :class="{lowlight: isHighlight}">
+                <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                </div>
+                <div v-if="zoomLevel === '50'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                    <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+                </div>
+                <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                    <div class="item-menu-header-container">
+                        <h2 class="item-menu-header" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">{{ itemBundle.menuHeader }}</h2>
+                        <h2 class="item-menu-subheader-ID" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">{{ handleObjectProperty(item, itemBundle.ownProp1) }}</h2>
+                        <h2 class="item-menu-subheader" 
+                        :class="{ 
+                            zoomOut : zoomLevel === '0',
+                            zoomMid : zoomLevel === '50',
+                            zoomIn : zoomLevel === '100',
+                        }"
+                        :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}"> 
+                            {{ handleObjectProperty(item, itemBundle.menuSubheader) }}
+                        </h2>
+                        <h5 class="item-menu-subheader-type" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                            {{categoryMap.get(itemBundle.itemType)[itemBundle.menuSubheader]}}
+                        </h5>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
     <template #popper >
             <div class="item-menu-container scrollable">
             <div class="item-menu-header-container">
@@ -107,7 +137,8 @@ const { parseDatabase,
     
 //Reference Constants
 const referenceStore = useReferenceStore();
-const { categoryMap, 
+const { zoomLevel,
+        categoryMap, 
         invCategoryMap, 
         scales } = storeToRefs(referenceStore)
 

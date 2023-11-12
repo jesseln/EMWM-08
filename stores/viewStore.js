@@ -436,9 +436,9 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
     function itemTypeCheck(item){
-        return  item['FemaleAgentID'] ? 'Agent' :
-                item['BookID'] ? 'Book' :
-                item['MargID'] ? 'Mark' : ''
+        return  item.hasOwnProperty('FemaleAgentID') ? 'Agent' :
+                item.hasOwnProperty('BookID') ? 'Book' :
+                item.hasOwnProperty('MargID') ? 'Mark' : ''
     }
 
     // FILTER HANDLING //

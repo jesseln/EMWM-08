@@ -4,8 +4,8 @@
     <header class="site-header">
     <NuxtLink to="/">
         <div class="site-header-title-wrapper">
-          <h1 class="site-header-title">The Library of Libraries</h1>
-          <p class="site-header-subtitle">Early Modern Women's Marginalia</p>
+          <h1 class="site-header-title">Early Modern Women's Marginalia</h1>
+          <p class="site-header-subtitle">The Library of Libraries</p>
         </div>
     </NuxtLink>
     </header>

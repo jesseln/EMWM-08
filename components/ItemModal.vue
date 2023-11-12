@@ -83,13 +83,13 @@
         </div>
         </div>
 
-            <div class="item-modal-header-RHS">
-                <p v-if="imageFound" > Total Images: {{ imageSlides.image.length }}</p>
-               
-                <button class="shelf-button item-modal-close-button" @click="$emit('close')"> 
-                    <Icon name="ic:baseline-cancel" size="1.5rem" class="close-button" />
-                </button>
-            </div>
+        <div class="item-modal-header-RHS">
+            <p v-if="imageFound" > Total Images: {{ imageSlides.image.length }}</p>
+            
+            <button class="shelf-button item-modal-close-button" @click="$emit('close')"> 
+                <Icon name="ic:baseline-cancel" size="1.5rem" class="close-button" />
+            </button>
+        </div>
         </div>
         <div v-if="imageFound" class="item-modal-images">
             <div class="item-modal-image-slider">
@@ -105,12 +105,17 @@
                 :arrows-outside="false"
                 prevent-y-scroll 
                 lazy 
-                lazy-load-on-drag>
+                lazy-load-on-drag
+                >
                     <vueper-slide
                         v-for="itemImage in imageSlides.image"
                         :key="itemImage"
                         :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imageFolder}/${item[itemID]}/${itemImage.name}`"
+                        @click="openImageViewer({item: item, itemID: itemID, imageFolder: imageFolder, name: itemImage.name})"
                         />
+                        <template>
+                            <div>click</div>
+                        </template>
                 </vueper-slides>
             </div>
         </div>
@@ -163,7 +168,14 @@
                     </div>
                 </template>
             </div>
-    </div>
+            </div>
+        </div>
+        <div class="image-modal-background"  ref="imageModalBackground" @click="closeImageModal">
+            <div class="image-modal-content-outer" ref="imageModalContentOuter">
+                <div class="image-modal-content" ref="imageModalContent">
+                    <ImageModal :key="_itemImage" v-if="_itemImage" @close="hideModal" :_itemImage="_itemImage" />
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -173,7 +185,9 @@ import { VueperSlides, VueperSlide } from 'vueperslides'
 import { storeToRefs } from "pinia";
 import 'vueperslides/dist/vueperslides.css'
 const {_item} = defineProps(['_item']);
+const {close} = defineEmits(['close']);
 const supabase = useSupabaseClient()
+
 
 //Old Colour Scheme for non selected items
 //Agent #CDBAE9
@@ -253,8 +267,6 @@ const { handleObjectProperty,
         handleObjectPath,
         contrastHandler } = useUtils();
 
-
-
 const onMounteditem = ref(_item) 
 const onMountedID = ref(); 
 const onMountedName = ref();
@@ -312,9 +324,7 @@ async function getImages(item){
     imageFound.value = false
     const { data, error } = await supabase
     .storage
-    // .listBuckets()
     .from(`${imageFolder.value}`)
-    // .list('10')
     .list(`${item[imageRequestID.value]}`, {
         limit: 100,
         offset: 0,
@@ -323,10 +333,7 @@ async function getImages(item){
     if(error) {
             console.log(error)
     }
-
     if(data){
-        
-        // console.log(data)
         imageSlides.value.image = data
         imageFound.value = data.length > 0 ? true : false
         return data
@@ -377,7 +384,6 @@ const editName = ref()
 const editFunctionRef = (name) => {
   editName.value = name
 }
-
 
 const newNameRef = ref()
 
@@ -463,9 +469,93 @@ onClickOutside(section, (event) => {
     visible.section? visible.section = !visible.section : null
 })
 
+const imageModalContent = ref(null)
+  const imageModalContentOuter = ref(null)
+  const imageModalBackground = ref(null)
+  const _itemImage = ref();
+         
+  function openImageViewer(itemImage){
+    //Component Prop
+    _itemImage.value = itemImage;
+    //Styles
+    imageModalContent.value.style.transitionDelay = '.15s'
+    imageModalContent.value.style.visibility = 'visible'
+    imageModalBackground.value.style.transitionDelay = '.075s'
+    imageModalBackground.value.style.visibility = 'visible'
+    imageModalContentOuter.value.style.transitionDelay = '.075s'
+    imageModalContentOuter.value.style.visibility = 'visible'
+  }
+
+  const hideModal = ()=>{
+    imageModalContent.value.style.transitionDelay = '.3s'
+    imageModalContent.value.style.visibility = 'hidden'
+    imageModalBackground.value.style.transitionDelay = '.15s'
+    imageModalBackground.value.style.visibility = 'hidden'
+    imageModalContentOuter.value.style.transitionDelay = '.15s'
+    imageModalContentOuter.value.style.visibility = 'hidden'
+  }
+
+  const closeImageModal = (event) => {
+    console.log('clicked', event.target)
+    if(imageModalContent.value.style.visibility === 'visible' && (event.target.matches('.image-modal-background')) || event.target.matches('.image-modal-content-outer')){
+        imageModalContent.value.style.transitionDelay = '.3s'
+        imageModalContent.value.style.visibility = 'hidden'
+        imageModalBackground.value.style.transitionDelay = '.15s'
+        imageModalBackground.value.style.visibility = 'hidden'
+        imageModalContentOuter.value.style.transitionDelay = '.15s'
+        imageModalContentOuter.value.style.visibility = 'hidden'
+    }  
+  }
+
 </script>
 
 <style lang="scss" scoped>
+
+
+.image-modal-background{
+    display: block;
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2040;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(0.2rem);
+    backdrop-filter: blur(0.2rem);
+}
+.image-modal-content-outer{
+    display: grid;
+    grid-template-rows: 100vh;
+    position: fixed;
+    top: 0vh;
+    min-width: 90vw;
+    min-height: 90vh;
+    left: 5vw;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+  .image-modal-content {
+    grid-row: 1 / 2;
+    display: flex;
+    flex-flow: column wrap;
+    visibility: hidden;
+    height: fit-content;
+    width: fit-content;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 12px 0px;
+    z-index: 200;
+    background: #ffffff;
+    padding: 7px;
+    border: 0.1rem #eeeeee solid;
+    border-radius: 0.3rem;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+  }
+  
+
 .section-inner-item-modal{
     // margin: 1vh 0; 
 }

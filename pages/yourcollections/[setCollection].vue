@@ -50,10 +50,10 @@
         <YourCollectionBottomNav />
         </div>
     </div>
-    <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
+    <!-- <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
         🖊️
     </button>
-        <AnnotationPanel v-if="showAnnotations"/>
+        <AnnotationPanel v-if="showAnnotations"/> -->
     <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button>
 
 

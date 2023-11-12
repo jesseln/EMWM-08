@@ -1,10 +1,18 @@
 <template>
     <div class="library-wrapper">
+        <div class="slider range">
+            <label for="fader"> </label>
+            <input type="range" min="0" max="100" v-model="zoomLevel" id="fader" step="50" list="volsettings">
+            <datalist id="volsettings">
+                <option>0</option><option>50</option><option>100</option>
+            </datalist>
+        </div> 
+   
     <div class="shelf" v-for="shelf in filterLibrary" :key="shelf">
         <div class="shelf-title-box">
             <h2 class="shelf-title">{{shelf[0]}}</h2>
         </div>
-        <div class="shelf-inner">
+        <div class="shelf-inner" >
             <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
                     <div class="section-title-box-wrapper">
                     <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
@@ -14,15 +22,31 @@
                         <!-- Shelf Box DO NOT DELETE -->
                         </div>
                     </div>
-                        <div class="section-inner" v-for="item in bookend[1].slice(0,1)" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
+                        <div class="section-inner" 
+                        :class="{ 
+                            zoomOut : zoomLevel === '0',
+                            zoomMid : zoomLevel === '50',
+                            zoomIn : zoomLevel === '100',
+                        }"
+                        v-for="item in bookend[1].slice(0,1)" 
+                        :key="JSON.stringify(item)" 
+                        :style="{ height: scales.maxShelfHeight + 'px'}">
                             <AgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
                             <BookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
                             <MarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
-    
                     </div> 
                 
                     </div>
-                    <div class="section-inner" v-for="item in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item)" :style="{ height: scales.maxShelfHeight + 'px'}">
+                    <div class="section-inner" 
+                        v-for="item in bookend[1].slice(1, 
+                        bookend[1].length)" 
+                        :class="{ 
+                            zoomOut : zoomLevel === '0',
+                            zoomMid : zoomLevel === '50',
+                            zoomIn : zoomLevel === '100',
+                        }"
+                        :key="JSON.stringify(item)" 
+                        :style="{ height: scales.maxShelfHeight + 'px'}">
                         <AgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
                         <BookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
                         <MarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
@@ -96,7 +120,8 @@ const { getItemLibraryYC,
         
     //Reference Constants
     const referenceStore = useReferenceStore();
-    const { categoryMap, 
+    const { zoomLevel,
+            categoryMap, 
             invCategoryMap, 
             scales,
             libraryItemBundle } = storeToRefs(referenceStore)
@@ -139,12 +164,66 @@ const { getItemLibraryYC,
   })
 
   watchEffect(()=>{
-    console.log('allcollections',allCollections)
+    // console.log('zoomLevel', zoomLevel.value)
+    // console.log('scales', referenceStore.scales)
   })
 
 </script>
 
 <style lang="scss" scoped>
+
+.section-inner.zoomOut{
+	gap: 0px 0.25rem;
+}
+.section-inner.zoomMid{
+	gap: 0px 0.5rem;
+}
+.section-inner.zoomIn{
+	gap: 0px 0.8rem;
+}
+
+
+
+
+.slider {
+    z-index: 200;
+    position: fixed;
+    top: 50%;
+    right: 0;
+    // transform: translate(-50%,-50%);
+    width: 15vh;
+    height: 2.5vw;
+    // padding: 30px;
+    // padding-left: 40px;
+    background: #fcfcfc;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 15px 40px #7E6D5766;
+}
+.slider label {
+    font-size: 24px;
+    font-weight: 400;
+    font-family: Open Sans;
+    padding-left: 10px;
+    color: black;
+}
+.slider input[type="range"] {
+    width: 420px;
+    height: 2px;
+    background: black;
+    border: none;
+    outline: none;
+} 
+.range{
+    // margin-top:10%;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform:rotate(90deg);
+    transform:rotate(270deg);
+}
+   
+   
 .modal-background{
     display: block;
     visibility: hidden;
@@ -154,9 +233,9 @@ const { getItemLibraryYC,
     z-index: 1040;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.05);
-    -webkit-backdrop-filter: blur(0.02rem);
-    backdrop-filter: blur(0.02rem);
+    background-color: rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(0.06rem);
+    backdrop-filter: blur(0.06rem);
 }
 .item-modal-content-outer{
     display: grid;
