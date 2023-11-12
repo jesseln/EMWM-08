@@ -2,7 +2,7 @@
     <div class="item-modal-container">
         <div class="item-modal-header">
             <div class="item-modal-header-LHS">
-                    <p>Library Item Selected</p>
+                    <p>Library Item:</p>
                 <div v-if="itemTypeCheck(_item) === 'Agent'"  class="item-modal-header-title"  :style="{ borderRadius: '5rem', background: itemColour(getIDP(_item, 'colour')), color: contrastHandler(itemColour(getIDP(_item, 'colour')))}">
                     <!-- <p>Library Item Selected </p> -->
                     <p>{{ onMountedType }} </p>
@@ -532,7 +532,7 @@ const imageModalContent = ref(null)
     top: 0vh;
     min-width: 90vw;
     min-height: 90vh;
-    left: 5vw;
+    left: 3vw;
     align-items: center;
     justify-content: center;
     align-content: center;
@@ -700,7 +700,7 @@ const imageModalContent = ref(null)
     border: 0.125rem solid #ffffff;
     border-radius: 0.5rem;
     padding: 0.25rem 1.25rem;
-    filter: drop-shadow(-0px 1px 5px rgba(99, 99, 99, 0.3));
+    // filter: drop-shadow(-0px 1px 5px rgba(99, 99, 99, 0.3));
 }
 .item-modal-header p{
     margin: 0 1rem 0 0;

@@ -56,6 +56,17 @@
   const dropdownExploreLibraryRefContent = ref(null)
   const dropdownYourCollectionsRef = ref(null)
   const dropdownYourCollectionsRefContent = ref(null)
+
+  useHead({
+  title: "The Library of Early Modern Women's Marginalia",
+  meta: [
+    { name: 'description', content: "The Library of Early Modern Women's Marginalia."}
+  ],
+//   bodyAttrs: {
+//     class: 'test'
+//   },
+//   script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
+})
          
   const showModal = (callRef)=>{
     if(callRef === 'ExploreLibrary'){

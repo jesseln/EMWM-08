@@ -1,20 +1,21 @@
 <template>
-    <div class="item-modal-container">
+    <div class="imageitem-modal-container">
+        <div class="imageitem-modal-wrapper">
         <div class="item-modal-header">
             <div class="item-modal-header-LHS">
-                    <p>Library Item Selected</p>
-                <div v-if="itemTypeCheck(_itemImage) === 'Agent'"  class="item-modal-header-title"  :style="{ borderRadius: '5rem', background: itemColour(getIDP(_itemImage, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage, 'colour')))}">
+                    <p>Library Item:</p>
+                <div v-if="itemTypeCheck(_itemImage.item) === 'Agent'"  class="item-modal-header-title"  :style="{ borderRadius: '5rem', background: itemColour(getIDP(_itemImage.item, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage.item, 'colour')))}">
                     <!-- <p>Library Item Selected </p> -->
                     <p>{{ onMountedType }} </p>
                     <h3>{{onMounteditem['Female agent name']}}</h3>
                 </div>
-                <div v-if="itemTypeCheck(_itemImage) === 'Book'"  class="item-modal-header-title"  :style="{ borderRadius: '0.25rem', background: itemColour(getIDP(_itemImage, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage, 'colour')))}">
+                <div v-if="itemTypeCheck(_itemImage.item) === 'Book'"  class="item-modal-header-title"  :style="{ borderRadius: '0.25rem', background: itemColour(getIDP(_itemImage.item, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage.item, 'colour')))}">
                     <!-- <p>Library Item Selected </p> -->
                     <p>{{ onMountedType }} No. </p>
                     <h3>{{onMounteditem[onMountedID]}}</h3>
                 </div>
-                <div v-if="itemTypeCheck(_itemImage) === 'Mark'"  class="item-modal-header-title"  :style="{ borderWidth: '0.125rem', margin: '0 0 0 1rem', borderRadius: '0.25rem', background: itemColour(getIDP(_itemImage, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage, 'colour')))}">
-                    <div class="mark-item-top mark-item-modal" :style="{ background: itemColour(getIDP(_itemImage, 'colour')), width:scales.minItemWidth - 2 + 'px'}"></div>
+                <div v-if="itemTypeCheck(_itemImage.item) === 'Mark'"  class="item-modal-header-title"  :style="{ borderWidth: '0.125rem', margin: '0 0 0 1rem', borderRadius: '0.25rem', background: itemColour(getIDP(_itemImage.item, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage.item, 'colour')))}">
+                    <div class="mark-item-top mark-item-modal" :style="{ background: itemColour(getIDP(_itemImage.item, 'colour')), width:scales.minItemWidth - 2 + 'px'}"></div>
                     <div class="mark-item-top-background mark-item-modal" :style="{ width:scales.minItemWidth -1 + 'px'}"></div> <!-- <p>Library Item Selected </p> -->
                     <p>{{ onMountedType }} No. </p>
                     <h3>{{onMounteditem[onMountedID]}}</h3>
@@ -23,24 +24,52 @@
 
 
             <div class="item-modal-header-RHS">
-                <p v-if="imageFound" > Total Images: {{ imageSlides.image.length }}</p>
+                <p v-if="imageFound" > Image No. {{ imageSlides.image.findIndex((entry) => entry.name === _itemImage.name) + 1 }} of {{ imageSlides.image.length }}</p>
                
                 <button class="shelf-button item-modal-close-button" @click="$emit('close')"> 
                     <Icon name="ic:baseline-cancel" size="1.5rem" class="close-button" />
                 </button>
             </div>
         </div>
-        <div class="image-modal-container scrollable">
-            <div class="image-modal">
+        <div class="image-modal-container">
+            <div class="image-modal scrollable">
                 <div class="image-modal-inner" ref="imageHover">
-                    <NuxtImg 
+                    <div class="magnifying-glass" ref="container">
+            <NuxtImg 
                     :height="maxImageHeight"
                     :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${_itemImage.imageFolder}/${_itemImage.item[_itemImage.itemID]}/${_itemImage.name}`"
                     loading="lazy"
+                    class="magnifying-glass__img"
+
                     />
-                </div>
+        </div>
+        <div class="magnifying-glass__magnifier" ref="magnifier">
+            <div class="magnifying-glass__enlarged-image" ref="enlargedImage">
+                <NuxtImg 
+                    :height="maxImageHeight*2"
+                    :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${_itemImage.imageFolder}/${_itemImage.item[_itemImage.itemID]}/${_itemImage.name}`"
+                    loading="lazy"
+                    class="magnifying-glass__img"
+                    />
             </div>
         </div>
+                </div>
+            </div>
+            <div class="image-sidebar">
+            
+            <button @click="toggleExpand" class="shelf-button item-modal-close-button" > 
+                <Icon name="ic:baseline-open-in-full" size="1.5rem" class="close-button" />
+            </button>
+            <p>Expand</p>
+                <button @click="toggleZoom" class="shelf-button item-modal-close-button" > 
+                    <Icon name="ic:baseline-zoom-in" size="1.5rem" class="close-button" />
+                </button>
+                <p>Zoom</p>
+            </div>
+        </div>
+
+        
+    </div>
     </div>
 </template>
 
@@ -135,11 +164,11 @@ const { handleObjectProperty,
         handleObjectPath,
         contrastHandler } = useUtils();
 
-const onMounteditem = ref(_itemImage) 
+const onMounteditem = ref(_itemImage.item) 
 const onMountedID = ref(); 
 const onMountedName = ref();
 const onMountedType = ref();
-const item = ref(_itemImage)
+const item = ref(_itemImage.item)
 const itemID = ref();
 const imageRequestID = ref();
 const imageFolder = ref();
@@ -168,8 +197,8 @@ function getItemID(soureItem){
 }
 
 
-onMountedID.value = getItemID(_itemImage)
-onMountedType.value = itemTypeCheck(_itemImage)
+onMountedID.value = getItemID(_itemImage.item)
+onMountedType.value = itemTypeCheck(_itemImage.item)
 
 function updateItemRefs(){
     imageFound.value = false
@@ -244,36 +273,148 @@ const extractor = (event) => event instanceof Touch ? null : [event.offsetX, eve
 const { x, y, sourceType } = useMouse({ target: imageContainer, type: extractor })
 
 const maxImageHeight = computed(()=>{
-    console.log(windowHeight.value)
+    // console.log(windowHeight.value)
     return windowHeight.value - 150
 })
 
-watch([isHovered,x,y] ,()=>{
+const expandOption = ref(false);
+const zoomOption = ref(false);
+const zoomHover = ref(false)
+
+
+const toggleExpand = ()=>{
+    expandOption.value = !expandOption.value
+}
+const toggleZoom = ()=>{
+    zoomOption.value = !zoomOption.value
+}
+
+const deviceHasPointer = window.matchMedia('(pointer: fine)').matches;
+const container = ref();
+const magnifier = ref();
+const enlargedImage =ref();
+const speed = 0.2;
+
+const glass = reactive({ x: 0, y: 0 });
+const enlargedImagePos = reactive({ x: 0, y: 0 });
+
+
+function moveGlass () {
+  // Calculate smooth mouse movement
+  glass.x = lerp(glass.x, x.value, speed);
+  glass.y = lerp(glass.y, y.value, speed);
+  // Calculate enlarged image position
+  // Calculate enlarged image position
+  enlargedImagePos.x = (glass.x)  / width.value * -100 + 0.003 * width.value;
+  enlargedImagePos.y = (glass.y) / height.value * -100 + 0.0045 * height.value;
+//   console.log('galss', glass.x, x.value, enlargedImagePos.x, width.value)
+  
+  
+  // Set style positions
+  magnifier.value.style.transform = `translate(calc(${glass.x}px - 50%), calc(${glass.y}px  - 50%))`;
+  enlargedImage.value.style.transform = `translate(${enlargedImagePos.x}%, ${enlargedImagePos.y}%)`;
+
+
+        // enlargedImage.value.style.transformOrigin = `${x.value/width.value*100}% ${y.value/height.value*100}%`
+        // magnifier.value.style.transformOrigin = `${x.value/width.value*100}% ${y.value/height.value*100}%`
+}
+
+
+function showGlass () {
+  magnifier.value.style.opacity = '1';
+  moveGlass();
+}
+
+function hideGlass () {
+  magnifier.value.style.opacity = '0';
+}
+
+function lerp (a, b, n) {
+  return (1 - n) * a + n * b;
+}
+
+onUpdated(()=>{
+    imageContainer.value.style.width = `${width.value}px`
+})
+
+onMounted(()=>{
+    watch([isHovered,x,y,expandOption,zoomOption],()=>{
+
+        
+        if(expandOption.value) imageHover.value.style.transform = 'scale(1.75)'
+        if(expandOption.value) imageContainer.value.style.width = `${width.value * 1.75}px`
+        if(!expandOption.value) imageHover.value.style.transform = 'scale(1)'
+        if(!expandOption.value) imageContainer.value.style.width = `${width.value}px`
     if(isHovered.value){
-        imageHover.value.style.transform = 'scale(3)'
-        imageHover.value.style.transformOrigin = `${x.value/width.value*100}% ${y.value/height.value*100}%`
+        zoomHover.value = true
+        if(zoomOption.value) imageHover.value.style.transformOrigin = `${x.value/width.value*100}% ${y.value/height.value*100}%`
+        if(zoomOption.value) showGlass()
         // console.log(`${x.value/width.value*100}% ${y.value/height.value*100}%`)
     }
+
     if(!isHovered.value){
-        imageHover.value.style.transform = 'scale(1)'
+        setTimeout(() => { zoomHover.value = false; }, 250);
+        if(!zoomHover.value) imageHover.value.style.transformOrigin = `${width.value/2/width.value*100}% ${height.value/2/height.value*100}%`
+        if(!zoomHover.value) hideGlass()
     }
+
+}, {immediate: true})
 })
 
 
-    // .on('mouseover', function(){
-    //   $(this).children('.photo').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
-    // })
-    // .on('mouseout', function(){
-    //   $(this).children('.photo').css({'transform': 'scale(1)'});
-    // })
-    // .on('mousemove', function(e){
-    //   $(this).children('.photo').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
-    // })
 
 
 </script>
 
 <style lang="scss" scoped>
+.image-sidebar{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: flex-end;
+    padding: 0 0 0 0.5rem;
+}
+.image-sidebar p{
+    margin: 1rem 0 2rem;
+    font-family: 'Raleway', sans-serif;
+	font-size: 0.7rem;
+	font-weight: 650;
+	color: rgb(30, 30, 30);
+}
+.magnifying-glass {
+  display: flex;
+//   width: 50vw;
+  background: black;
+}
+
+.magnifying-glass__img {
+//   width: 100%;
+}
+
+.magnifying-glass__magnifier {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 1;
+  overflow: hidden;
+  width: 15vw;
+  max-width: 10rem;
+  height: 15vw;
+  max-height: 10rem;
+  border: 5px solid rgba(white, 0.25);
+  border-radius: 50%;
+  background-color: transparent;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.magnifying-glass__enlarged-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+//   width: 100vw;
+}
 .section-inner-item-modal{
     // margin: 1vh 0; 
 }
@@ -385,6 +526,7 @@ watch([isHovered,x,y] ,()=>{
     // background: #e2e2e2;
     // grid-row: 1/2;
     margin: 0 0 0.5rem;
+    padding: 0 0.5rem;
     height: clamp(2rem, 4vh, 4rem);
     width: 100%;
     display: flex;
@@ -414,7 +556,7 @@ watch([isHovered,x,y] ,()=>{
     border: 0.125rem solid #ffffff;
     border-radius: 0.5rem;
     padding: 0.25rem 1.25rem;
-    filter: drop-shadow(-0px 1px 5px rgba(99, 99, 99, 0.3));
+    // filter: drop-shadow(-0px 1px 5px rgba(99, 99, 99, 0.3));
 }
 .item-modal-header p{
     margin: 0 1rem 0 0;
@@ -478,21 +620,23 @@ watch([isHovered,x,y] ,()=>{
     padding: 0 1.5rem;
     max-height: 17vh;
 }
-// .item-modal-container{
-//     position: relative;
-//     padding: 10px 0;
-//     display: grid;
-//     width: 100%;
-// 	grid-template-rows: 6vh 32vh 22vh 22vh;
 
-//     justify-content: space-between;
-//     align-content: flex-end;
-//     align-items: flex-start;
-//     color: black;
-// }
-.item-modal-container{
+.imageitem-modal-container{
     position: relative;
-    padding: 0.5rem 1rem;
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+	// grid-template-rows: 6vh 32vh 22vh 22vh;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    // text-align: left;
+    // flex-grow: 1000;
+}
+.imageitem-modal-wrapper{
+    position: relative;
+    // padding: 0.5rem 1rem;
     display: flex;
     flex-flow: column nowrap;
 	// grid-template-rows: 6vh 32vh 22vh 22vh;
@@ -501,22 +645,56 @@ watch([isHovered,x,y] ,()=>{
     align-items: flex-start;
     color: black;
     // text-align: left;
+    flex-grow: 1000;
 }
 
 .image-modal-container{
-    max-width: 100vw;
+    width: 100%;
+    max-width: 90vw;
     max-height: 90vh;
-    padding: 0;
-    margin: 0;
     min-height: 10rem;
+    // overflow-y: hidden;
+    // overflow-x: hidden;
+    // min-width: 90vw;
+    position: relative;
+    // padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+	// grid-template-rows: 6vh 32vh 22vh 22vh;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    color: black;
 }
 .image-modal{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
     padding: 0;
     margin: 0;
+    // overflow-y: hidden;
+    overflow-x: hidden;
+    // max-width: fit-content;
+    // width: 40vw;
+  
+    transition: width .5s ease;
+    border: 5px solid #f0f0f0;
+    border-radius: 0.5rem;
+}
+.image-modal:hover{
+    // width: 90vw;
+    transition: width .5s ease-out;
 }
 
 .image-modal-inner{
     transition: transform .5s ease;
+    position: relative;
+    width: fit-content;
+    max-width: 90vw;
+    max-height: 90vh;
+
 }
 .image-modal-inner:hover{
     transition: transform .5s ease-out;
