@@ -15,8 +15,8 @@
                     <h3>{{onMounteditem[onMountedID]}}</h3>
                 </div>
                 <div v-if="itemTypeCheck(_itemImage.item) === 'Mark'"  class="item-modal-header-title"  :style="{ borderWidth: '0.125rem', margin: '0 0 0 1rem', borderRadius: '0.25rem', background: itemColour(getIDP(_itemImage.item, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage.item, 'colour')))}">
-                    <div class="mark-item-top mark-item-modal" :style="{ background: itemColour(getIDP(_itemImage.item, 'colour')), width:scales.minItemWidth - 2 + 'px'}"></div>
-                    <div class="mark-item-top-background mark-item-modal" :style="{ width:scales.minItemWidth -1 + 'px'}"></div> <!-- <p>Library Item Selected </p> -->
+                    <div class="mark-item-top-imageModal mark-item-modal" :style="{ background: itemColour(getIDP(_itemImage.item, 'colour')), width:scalesStandard.minItemWidth - 2 + 'px'}"></div>
+                    <div class="mark-item-top-background-imageModal mark-item-modal" :style="{ width:scalesStandard.minItemWidth -1 + 'px'}"></div> <!-- <p>Library Item Selected </p> -->
                     <p>{{ onMountedType }} No. </p>
                     <h3>{{onMounteditem[onMountedID]}}</h3>
                 </div>
@@ -159,6 +159,7 @@ const { categoryMap,
         itemModalMap,
         windowHeight,
         windowWidth,
+        scalesStandard,
     } = storeToRefs(referenceStore)
 
                 // COMPOPSABLES
@@ -377,6 +378,32 @@ onMounted(()=>{
 </script>
 
 <style lang="scss" scoped>
+
+.mark-item-top-imageModal{
+	top: 10px;
+	left: 135px;
+	height: 17px;
+	width: 100%;
+	position: absolute;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    display: inline-block;
+	border-radius: 2.5px;
+
+	/* box-shadow: rgba(99, 99, 99, 0.4) 0px 3px 8px 0px; */
+}
+
+.mark-item-top-background-imageModal{
+	z-index: -2;
+	top: 8px;
+	left: 135px;
+	height: 19px;
+	width: 100%;
+	position: absolute;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    display: inline-block;
+	background: white;
+	border-radius: 2.5px;
+}
 .image-sidebar{
     display: flex;
     flex-flow: column wrap;

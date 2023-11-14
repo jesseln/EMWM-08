@@ -2,7 +2,7 @@
 <div class="sidebar scrollable">
     <div class="sidebar-title-box">
         <h1 class="query-type-sideBar"> Library {{libraryDisplay.pageText.queryType}}  </h1>
-        <h3>Total: {{ filterTotalCount }}</h3>
+        <h3>Total: {{ filterTotalCountYC }}</h3>
     </div>
     <!-- <div class="shelf-separator-container"><div class="shelf-separator"></div></div> -->
 <div class="sidebar-content">
@@ -55,7 +55,7 @@
                             <div class="search-box"  >
                                 <Icon name="ic:baseline-search" size="1.5rem" class="search-icon" />
                                     <input class="prevent-close-on-click item-modal-input" v-model="searchEntry" type="text" placeholder="search" autofocus ref="agentInput"/>
-                                </div>
+                            </div>
                             <div class="unique-entries" >
                                 <h4 >Unique entries: {{ Object.keys(searchList(filterObject.get('Agent')[category], searchEntry)).length }}</h4>
                             </div> 
@@ -303,6 +303,7 @@ onMounted(()=>{
 
 
 <style lang="scss" scoped>
+
 .filter-instruction-block{
     display: flex;
     flex-flow: row nowrap;

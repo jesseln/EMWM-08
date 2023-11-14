@@ -34,9 +34,22 @@
         <div class="shelf-inner" >
             <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
                     <div class="section-title-box-wrapper">
-                    <div class="section-title-box" :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <h3 class="section-category">{{ categoryMap.get(libraryDisplay.viewType.bookend)[libraryDisplay.view.bookend] }}</h3>
-                        <h3 class="section-value">{{ bookend[0] }}</h3>
+                    <div class="section-title-box" 
+                    :style="{ height: scales.maxShelfHeight + 'px'}"
+                    :class="{ 
+                            zoomOut : zoomLevel === '0',
+                            zoomMid : zoomLevel === '50',
+                            zoomIn : zoomLevel === '100',
+                        }">
+                        <h3 v-if="zoomLevel !== '0'" class="section-category">{{ categoryMap.get(libraryDisplay.viewType.bookend)[libraryDisplay.view.bookend] }}</h3>
+                        <h3 class="section-value"
+                        :class="{ 
+                            zoomOut : zoomLevel === '0',
+                            zoomMid : zoomLevel === '50',
+                            zoomIn : zoomLevel === '100',
+                        }">
+                            {{ bookend[0] }}
+                        </h3>
                         <div class="section-shelf-box">
                         <!-- Shelf Box DO NOT DELETE -->
                         </div>
@@ -239,7 +252,7 @@ input {
 }
 
 .section-inner.zoomOut{
-	gap: 0px 0.25rem;
+	gap: 0px 0.28rem;
 }
 .section-inner.zoomMid{
 	gap: 0px 0.5rem;

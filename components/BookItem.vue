@@ -251,7 +251,8 @@ async function getImages(item){
 }
 
 onMounted(()=>{
-    if(zoomLevel === '100'){
+    watchEffect(()=>{
+    if(zoomLevel.value === '100'){
         itemType.value = itemTypeCheck(item)
         updateItemRefs(item)
         getItemLibrary(item)
@@ -262,6 +263,7 @@ onMounted(()=>{
             }
         }, { immediate: true })
     }
+    })
 })
         
 //Function format written to use local vairables and return to reactive value

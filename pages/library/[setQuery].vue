@@ -1,6 +1,6 @@
 <template>
     <div  class="library-explorer-container">
-        <FilterSidebar v-if="useY > 300" />
+        <FilterSidebar />
 
 
     <!-- <div class="query-box">
@@ -88,7 +88,7 @@
          <div class="explore-category-descriptor">
             <h2>The Marks</h2>
             <p>The term <span>'Marks'</span> refers to marks made by the women <span>Agents</span> within the <span>Books</span> in the collection. </p>
-            <p>These marginal marks show diverse forms of engagement with each book and their text. Collectively these marks are known as <Span>'Marginalia'.</Span></p>
+            <p>These marginal marks show diverse forms of engagement with each book and their text. Collectively these marks are known as <span>'Marginalia'.</span></p>
          </div>
         </template>
     </VMenu>
@@ -130,10 +130,10 @@
                 </button>
             </div>
         </div>
-        <div class="explore-loading-page" v-if="!dataCheck || useY <= 300">
+        <div class="explore-loading-page" v-if="!dataCheck">
             <div class="lds-default lds-grey"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
         </div>
-        <div v-if="dataCheck && useY > 300">
+        <div v-if="dataCheck">
             <LibraryView />
         </div>
 
@@ -255,9 +255,9 @@ const { handleObjectProperty,
 
     const icons = ref()
 
-    watch(route.params.setQuery,()=>{
+    watchEffect(()=>{
         icons.value = iconDimensions()
-    }, {immediate: true})
+    })
 
 
     // const showAnnotations = ref(false)
@@ -290,6 +290,7 @@ const { handleObjectProperty,
 </script>
 
 <style lang="scss" scoped>
+
 span{
     font-weight: 650;
     // color: black;

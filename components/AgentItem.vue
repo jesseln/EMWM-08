@@ -17,14 +17,84 @@
 
         <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
 
-        <div class="agent-item" :style="{ maxHeight: scales.maxItemHeight-4 + 'px', height: itemHeight(getIDP(item,'height'))-4 + 'px' , background: itemColour(getIDP(item, 'colour')),
-        width:scales.minItemWidth + 'px'}" :class="{lowlight: isHighlight}">
-
-
-
-<div class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-            <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
-        </div>
+        <div class="agent-item" 
+        :style="{ maxHeight: scales.maxItemHeight-4 + 'px',
+         height: itemHeight(getIDP(item,'height'))-4 + 'px', 
+         background: itemColour(getIDP(item, 'colour')),
+         width:scales.minItemWidth + 'px'}" 
+        :class="{lowlight: isHighlight}">
+        <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+            </div>
+            <div v-if="zoomLevel === '50'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+            </div>
+            <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                <div class="item-menu-header-container">
+                    <h2 class="item-menu-header" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">{{ itemBundle.menuHeader }}</h2>
+                    <h2 class="item-menu-subheader-ID" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">{{ handleObjectProperty(item, itemBundle.ownProp1) }}</h2>
+                    <h2 class="item-menu-subheader" 
+                    :class="{ 
+                            zoomOut : zoomLevel === '0',
+                            zoomMid : zoomLevel === '50',
+                            zoomIn : zoomLevel === '100',
+                        }"
+                    :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}"> 
+                        {{ handleObjectProperty(item, itemBundle.menuSubheader) }}
+                    </h2>
+                    <h5 class="item-menu-subheader-type" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                        {{categoryMap.get(itemBundle.itemType)[itemBundle.menuSubheader]}}
+                    </h5>
+                </div>
+            </div>
+            <div class="item-embedded-images-wrapper">
+                <div v-if="!loadedCheck && !loadedFail && imageSlides.image.length !== 0 && zoomLevel === '100'">
+                    <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
+                </div>
+                <div v-if="loadedFail">
+                    <div v-if="imageFound && zoomLevel === '100'">
+                        <p class="item-menu-subheader-type base no-border" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                            This image filetype cannot be displayed
+                        </p>
+                    </div>   
+                </div>
+                <!-- <div v-if="!loadedFail">
+                    <div v-if="!imageFound && zoomLevel === '100'">
+                        <p class="item-menu-subheader-type base no-border" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                            This item has no book images
+                        </p>
+                    </div>   
+                </div> -->
+                <div v-if="imageFound && zoomLevel === '100' && !loadedFail" class="item-embedded-images">
+                    <div class="item-embedded-image-slider">
+                        <vueper-slides 
+                        :dragging-distance="70"
+                        class="no-shadow" 
+                        slide-image-inside
+                        :visible-slides=1
+                        slide-multiple
+                        :slide-ratio="1 / 8"
+                        fixed-height="10vh"
+                        :gap="1"
+                        :arrows="false"
+                        prevent-y-scroll 
+                        lazy 
+                        lazy-load-on-drag
+                        @image-loaded = "loadedCheck = true"
+                        @image-failed = "loadedFail = true">
+                            <vueper-slide
+                                v-for="itemImage in imageSlides.image.slice(-1)"
+                                :key="itemImage"
+                                :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imageFolder}/${_item[itemID]}/${itemImage.name}`"
+                            />
+                        </vueper-slides>
+                    </div>
+                </div>
+                <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                    <h5 class="item-menu-subheader-type base" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour'))), borderColor: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                        {{imageSlides.image.length}} Images
+                    </h5>
+                </div>
+            </div> 
         </div>
     </div>
     <template #popper >
@@ -89,11 +159,16 @@
 import * as d3 from "d3";
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
+import { VueperSlides, VueperSlide } from 'vueperslides'
 import { storeToRefs } from "pinia";
+import 'vueperslides/dist/vueperslides.css'
 
+const loadedCheck = ref(false);
+const loadedFail = ref(false);
 //Props
 const {item, itemBundle} = defineProps(['item', 'itemBundle']);
 const {viewDetails} = defineEmits(['viewDetails']);
+const supabase = useSupabaseClient()
 
 // STATE MANAGERS IMPORT //    
 //View State
@@ -126,6 +201,74 @@ const {
 //Utility Functions
 const { handleObjectProperty,
         contrastHandler } = useUtils();
+
+const _item = ref()        
+const itemID = ref();
+const imageRequestID = ref();
+const imageFolder = ref();
+const itemType = ref()
+const imageFound = ref(false);
+const imageSlides = ref(
+    { 
+        image: [],
+        title: "my title",
+        content: "my content",
+    }
+)
+
+function updateItemRefs(){
+    imageFound.value = false
+    if(itemType.value === 'Agent'){
+        itemID.value = 'MargID'
+        imageRequestID.value = 'MargID'
+        imageFolder.value = 'mark-images'
+    } 
+    if(itemType.value === 'Book'){
+        itemID.value = 'BookID'
+        imageRequestID.value = 'BookID'
+        imageFolder.value = 'book-images'
+    } 
+    if(itemType.value === 'Mark'){
+        itemID.value = 'MargID'
+        imageRequestID.value = 'MargID'
+        imageFolder.value = 'mark-images'
+    } 
+}
+
+async function getImages(item){
+    _item.value = item['Marks'][0];
+    imageFound.value = false
+    const { data, error } = await supabase
+    .storage
+    .from(`${imageFolder.value}`)
+    .list(`${item['Marks'][0][imageRequestID.value]}`, {
+        limit: 100,
+        offset: 0,
+        sortBy: { column: 'name', order: 'asc' },
+    })
+    if(error) {
+            console.log(error)
+    }
+    if(data){
+        imageSlides.value.image = data
+        imageFound.value = data.length > 0 ? true : false
+        return data
+    }
+}
+
+onMounted(()=>{
+    watchEffect(()=>{
+    if(zoomLevel.value === '100'){
+        itemType.value = itemTypeCheck(item)
+        updateItemRefs(item)
+        getItemLibrary(item)
+        watch(item,()=>{
+                // console.log('itemTYpe ',itemType.value)
+                getImages(item)
+        }, { immediate: true })
+    }
+    })
+})
         
 //Function format written to use local vairables and return to reactive value
 function iconDimensions(){

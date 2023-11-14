@@ -34,12 +34,12 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         view: {
             itemType: "Book",
             id: 'BookID',
-            shelf: 'Repository', //Primary sort
-            bookend: 'Date of publication', //Secondary sort
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Not Selected',
+            colour: 'Number of marks',
             shelfOrderMethod: 'A', //Primary sort
             bookendOrderMethod: 'A', //Secondary sort
-            height: 'Date of publication',
-            colour: 'Genre/Identity',
             label: 'Title',
             agentLabel: 'Female agent name',
             bookLabel: 'Title',
@@ -53,9 +53,9 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         },
         viewType: {
             id: 'Book',
-            shelf: 'Book',
-            bookend: 'Book',
-            height: 'Book',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'NotSelected',
             colour: 'Book',
             label: 'Book',
             agentLabel: 'Agent',
@@ -93,8 +93,12 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
     const domainColourIndexYC = ref();
     const viewColourBoundsYC = ref();
     const filterLibraryYC = ref();
+    // FILTER HANDLING //
+    const activeFiltersYC = ref([])
+    const filterObjectYC = reactive(new Map())
+    const dataSizeYC = ref(0);
 
-    watch([yourCollection, libraryDisplayYC],() => {
+    watch([yourCollection, libraryDisplayYC, activeFiltersYC],() => {
         if(yourCollection.value.length !== undefined){
             formattedLibraryYC.value =  formatLibrary(yourCollection.value); //Reactive when not testing
 
@@ -142,21 +146,21 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         if(collectionName.value !== undefined){
             if(collectionName.value in allCollections.value){
                 allCollections.value[collectionName.value].items = filterLibraryYC.value
-                allCollections.value[collectionName.value].filters.set('Agent', filterObjectYC.get('Agent'))
-                allCollections.value[collectionName.value].filters.set('Book', filterObjectYC.get('Book'))
-                allCollections.value[collectionName.value].filters.set('Mark', filterObjectYC.get('Mark'))
                 activeFiltersYC.value.forEach((filterValue)=>{
                     filterActiveReinstateYC(filterValue, filterValue.category, filterValue.itemType)
                 })
+                allCollections.value[collectionName.value].filters.set('Agent', filterObjectYC.get('Agent'))
+                allCollections.value[collectionName.value].filters.set('Book', filterObjectYC.get('Book'))
+                allCollections.value[collectionName.value].filters.set('Mark', filterObjectYC.get('Mark'))
     }
 
-    function filterUpdate(filterValue, category, itemType){
-        if(filterObjectYC.get(itemType)[category][filterValue.name].active){
-            activeFiltersYC.value.push({'name': filterValue.name, 'category': category, 'itemType': itemType})
-        }
+    // function filterUpdate(filterValue, category, itemType){
+    //     if(filterObjectYC.get(itemType)[category][filterValue.name].active){
+    //         activeFiltersYC.value.push({'name': filterValue.name, 'category': category, 'itemType': itemType})
+    //     }
 
-                allCollections.value[collectionName.value].activeFilters = activeFiltersYC.value
-            }
+    //             allCollections.value[collectionName.value].activeFilters = activeFiltersYC.value
+    //         }
         }
         console.log('filterObjectYC watch', filterObjectYC)
     },{deep: true})
@@ -457,10 +461,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 item['MargID'] ? 'Mark' : ''
     }
 
-    // FILTER HANDLING //
-    const activeFiltersYC = ref([])
-    const filterObjectYC = reactive(new Map())
-    const dataSizeYC = ref(0);
+
 
     function getFilterObjectYC(targetFormat, sourceObject, viewModeType){
         let filterObjectYC = {};
@@ -508,13 +509,16 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
     })
 
     function getFilterLibrary(){
+        filterTotalCountYC.value = 0
         return formattedLibraryYC.value
             .reduce((library, shelf) => {
                 let shelfContent = shelf[1]
                 .reduce((shelf, bookend) => {
                     let bookendContent = bookend[1]
                     .filter((item) => {
-                        return itemFilterCheck(item)
+                        let filterPass = itemFilterCheck(item)
+                        filterPass ? filterTotalCountYC.value++ : null
+                        return filterPass
                     })
                     if(bookendContent.length > 0){
                         shelf.push([bookend[0], bookendContent])
@@ -527,6 +531,8 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 return library
             }, [])
         }
+        
+    const filterTotalCountYC = ref(0)
 
     function itemFilterCheck(item){
         return activeFiltersYC.value.every((filterValue)=>{
@@ -538,15 +544,20 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         })
     }
 
+    watch([filterLibraryYC],() => {
+        filterTotalCountYC.value
+        // dataSize.value =  filterLibrary.value.length?   filterLibrary.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
+    })
+
     watch([formattedLibraryYC, libraryDisplayYC],() => {
-        console.log('collectionName.value 22',collectionName.value)
-        console.log('filterLibraryYC 22',filterLibraryYC.value)
+        // console.log('collectionName.value 22',collectionName.value)
+        // console.log('filterLibraryYC 22',filterLibraryYC.value)
         filterLibraryYC.value = getFilterLibrary()
         if(collectionName.value !== undefined){
             if(collectionName.value in allCollections.value){
                 allCollections.value[collectionName.value].items = filterLibraryYC.value
-                console.log("new getCollectionData([collectionName.value])", allCollections.value[collectionName.value])
-                console.log("new getCollectionData()", allCollections.value)
+                // console.log("new getCollectionData([collectionName.value])", allCollections.value[collectionName.value])
+                // console.log("new getCollectionData()", allCollections.value)
             }
         }
     })
@@ -554,14 +565,18 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         watch([activeFiltersYC],()=>{
             if(collectionName.value !== undefined){
                 if(collectionName.value in allCollections.value){
+                    console.log('activeFiltersYC.value before 1', activeFiltersYC.value)
+                    console.log('allCollections.value[collectionName.value].activeFilters before 1',allCollections.value[collectionName.value].activeFilters)
                     allCollections.value[collectionName.value].activeFilters = activeFiltersYC.value
+                    console.log('activeFiltersYC.value after 1', activeFiltersYC.value)
+                    console.log('allCollections.value[collectionName.value].activeFilters after 1',allCollections.value[collectionName.value].activeFilters)
                 }
             }
     })
 
 
     watch([collectionName],() => {
-        console.log('collectionName.value in allCollections.value', Object.keys(allCollections.value))
+        // console.log('collectionName.value in allCollections.value', Object.keys(allCollections.value))
         if(collectionName.value !== undefined){
             if(collectionName.value in allCollections.value){
                 console.log('name changed', collectionName.value )
@@ -569,10 +584,13 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 libraryDisplayYC.viewType = allCollections.value[collectionName.value].display.viewType
                 libraryDisplayYC.pageText = allCollections.value[collectionName.value].display.pageText
                 filterLibraryYC.value = allCollections.value[collectionName.value].items
+                allCollections.value[collectionName.value].activeFilters.forEach((filterValue)=>{
+                    filterActiveReinstateYC(filterValue, filterValue.category, filterValue.itemType)
+                })
+                activeFiltersYC.value = allCollections.value[collectionName.value].activeFilters
                 filterObjectYC.set('Agent', allCollections.value[collectionName.value].filters.get('Agent'))
                 filterObjectYC.set('Book', allCollections.value[collectionName.value].filters.get('Book'))
                 filterObjectYC.set('Mark', allCollections.value[collectionName.value].filters.get('Mark'))
-                activeFiltersYC.value = allCollections.value[collectionName.value].activeFilters
                 // activeFiltersYC.value.forEach((filterValue)=>{
                 //     filterUpdate(filterValue, filterValue.category, filterValue.itemType)
                 // })
@@ -683,6 +701,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 activeFiltersYC,
                 filterObjectYC,
                 getActiveFiltersYC,
+                filterTotalCountYC,
                 getItemLibraryYC,
                 getFilterObjectYC,
                 filterActiveToggleYC,

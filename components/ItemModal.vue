@@ -14,8 +14,8 @@
                     <h3>{{onMounteditem[onMountedID]}}</h3>
                 </div>
                 <div v-if="itemTypeCheck(_item) === 'Mark'"  class="item-modal-header-title"  :style="{ borderWidth: '0.125rem', margin: '0 0 0 1rem', borderRadius: '0.25rem', background: itemColour(getIDP(_item, 'colour')), color: contrastHandler(itemColour(getIDP(_item, 'colour')))}">
-                    <div class="mark-item-top mark-item-modal" :style="{ background: itemColour(getIDP(_item, 'colour')), width:scales.minItemWidth - 2 + 'px'}"></div>
-                    <div class="mark-item-top-background mark-item-modal" :style="{ width:scales.minItemWidth -1 + 'px'}"></div> <!-- <p>Library Item Selected </p> -->
+                    <div class="mark-item-top-imageModal mark-item-modal" :style="{ background: itemColour(getIDP(_item, 'colour')), width:scalesStandard.minItemWidth - 2 + 'px'}"></div>
+                    <div class="mark-item-top-background-imageModal mark-item-modal" :style="{ width:scalesStandard.minItemWidth -1 + 'px'}"></div> <!-- <p>Library Item Selected </p> -->
                     <p>{{ onMountedType }} No. </p>
                     <h3>{{onMounteditem[onMountedID]}}</h3>
                 </div>
@@ -145,20 +145,20 @@
         </div>
             <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
                 <div class="section-title-box-wrapper">
-                <div class="section-title-box" :style="{ height: scales.maxShelfHeight-20 + 'px'}">
+                <div class="section-title-box" :style="{ height: scalesStandard.maxShelfHeight-20 + 'px'}">
                     <h3 class="section-category item-modal-category">{{ bookend[1].length }}</h3>
                     <h3 class="section-value">{{ bookend[0] }}s</h3>
                     <div class="section-shelf-box">
                     <!-- Shelf Box DO NOT DELETE -->
                     </div>
                 </div>
-                <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(0,1)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
+                <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(0,1)" :key="JSON.stringify(item2Display)" :style="{ height: scalesStandard.maxShelfHeight-20  + 'px'}">
                         <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Agent'? true : false "/>
                         <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Book'? true : false "/>
                         <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Mark'? true : false "/>
                     </div> 
                 </div>
-                    <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item2Display)" :style="{ height: scales.maxShelfHeight-20  + 'px'}">
+                    <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item2Display)" :style="{ height: scalesStandard.maxShelfHeight-20  + 'px'}">
                         <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="false"/>
                         <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="false"/>
                         <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="false"/>
@@ -256,7 +256,8 @@ const { categoryMap,
         libraryItemBundle,
         viewMap,
         colourMapFiltered,
-        itemModalMap } = storeToRefs(referenceStore)
+        itemModalMap,
+        scalesStandard } = storeToRefs(referenceStore)
 
                 // COMPOPSABLES
 //Utility Functions
@@ -507,7 +508,31 @@ const imageModalContent = ref(null)
 </script>
 
 <style lang="scss" scoped>
+.mark-item-top-imageModal{
+	top: 18px;
+	left: 143px;
+	height: 17px;
+	width: 100%;
+	position: absolute;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    display: inline-block;
+	border-radius: 2.5px;
 
+	/* box-shadow: rgba(99, 99, 99, 0.4) 0px 3px 8px 0px; */
+}
+
+.mark-item-top-background-imageModal{
+	z-index: -2;
+	top: 16px;
+	left: 143px;
+	height: 19px;
+	width: 100%;
+	position: absolute;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    display: inline-block;
+	background: white;
+	border-radius: 2.5px;
+}
 
 .image-modal-background{
     display: block;

@@ -3,9 +3,9 @@
 
     <div v-if="libraryDisplay.viewType.colour !== 'NotSelected'" class="library-nav-colour-wrapper">
         <div class="library-catalogue-title-box">
-        <h2 class="library-catalogue-title">Colour Categories</h2>
-        <h3 class="library-catalogue-subtitle">This colour legend shows the values for each item</h3>
-    </div>
+            <h2 class="library-catalogue-title">Colour Categories</h2>
+            <h3 class="library-catalogue-subtitle">This colour legend shows the values for each item</h3>
+        </div>
         <div v-if="viewMap.get(libraryDisplay.viewType.colour)[libraryDisplay.view.colour].func === 'scaleOrdinal'"
             class="library-nav-colour-block"> 
 

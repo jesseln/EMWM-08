@@ -154,6 +154,14 @@ export const useReferenceStore = defineStore('reference', ()=>{
         minItemWidth: 16 * zoomFactor[zoomLevel.value].width     
     })
 
+    const scalesStandard = reactive({
+        maxItemHeight: 100 * zoomFactor[50].height,
+        maxShelfHeight: 110 * zoomFactor[50].height,
+        minItemHeight: 50 * zoomFactor[50].height,
+        minItemWidth: 16 * zoomFactor[50].width     
+    })
+
+
     watchEffect(()=>{
         scales.maxItemHeight = 100 * zoomFactor[zoomLevel.value].height;
         scales.maxShelfHeight = 110 * zoomFactor[zoomLevel.value].height;
@@ -687,6 +695,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 filterMap,
                 colourMapFiltered, 
                 scales, 
+                scalesStandard,
                 viewRouteQueries,
                 libraryItemBundle, 
                 yourCollectionItemBundle,
