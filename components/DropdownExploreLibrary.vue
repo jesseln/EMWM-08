@@ -181,18 +181,17 @@ watchEffect(()=>{
 	font-size: 1.0rem;
 	font-weight:350;
 	letter-spacing: 0.2rem;
-    color: grey;
+    color: rgb(80, 80, 80);
 
 }
 .menu-subtitle{
     padding: 0;
     margin: 3rem 0 1.25rem 0;
-	color: rgb(56, 56, 56);
 	font-family: 'Source Serif 4', serif;
 	font-size: 1.0rem;
 	font-weight:350;
 	letter-spacing: 0.2rem;
-    color: grey;
+    color: rgb(80, 80, 80);
 
 }
 .menu-page{

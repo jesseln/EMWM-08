@@ -44,12 +44,17 @@
                 <h2 class="main-navbar-link dropbtn" >Home</h2>
             </div>   
           </NuxtLink>
-            <div class="dropdown" ref="dropdownExploreLibraryRef" @mouseover="showModal('ExploreLibrary')" @mouseleave="hideModal('ExploreLibrary')">
+          <NuxtLink to="/library/explore" activeClass="nav-active">
+            <div class="dropdown">
+                <h2 class="main-navbar-link dropbtn" >Explore the Collection</h2>
+            </div>   
+          </NuxtLink>
+            <!-- <div class="dropdown" ref="dropdownExploreLibraryRef" @mouseover="showModal('ExploreLibrary')" @mouseleave="hideModal('ExploreLibrary')">
             <h2 class="main-navbar-link dropbtn">Explore the Collection</h2>
                 <div class="dropdown-content" ref="dropdownExploreLibraryRefContent" >
                     <DropdownExploreLibrary @modalClicked="hideModalClicked('ExploreLibrary')" />
                 </div>
-            </div>
+            </div> -->
             <div class="dropdown" ref="dropdownYourCollectionsRef" @mouseover="showModal('YourCollections')" @mouseleave="hideModal('YourCollections')">
             <h2 class="main-navbar-link dropbtn">View Your Collections</h2>
                 <div class="dropdown-content" ref="dropdownYourCollectionsRefContent" >

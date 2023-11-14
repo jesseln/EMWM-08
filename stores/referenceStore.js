@@ -343,6 +343,30 @@ export const useReferenceStore = defineStore('reference', ()=>{
             libraryTypeSubtitle: 'in the libraries',
         }
     })
+    const exploreView = ({
+        //Query - How Many Agents In Collection?
+        view: {
+            itemType: "Book",
+            id: 'BookID',
+            shelf: 'Not Selected', //Primary sort
+            bookend: 'Not Selected', //Secondary sort
+            height: 'Not Selected',
+            colour: 'Number of marks',
+        },
+        viewType: {
+            id: 'Book',
+            shelf: 'NotSelected',
+            bookend: 'NotSelected',
+            height: 'NotSelected',
+            colour: 'Book',
+        },
+        pageText: {
+            queryType: 'Books ',
+            queryBreadcrumb: '',
+            libraryTypeTitle: 'The Books',
+            libraryTypeSubtitle: 'in the libraries',
+        }
+    })
 
     const marksView = ({
         //Query - How Many Agents In Collection?
@@ -552,6 +576,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
         agents: agentsView,
         books: booksView,
         marks: marksView,
+        explore: exploreView,
         agent01: agentsInCollection,
         agent02: agentsYearsMade,
         book01: booksTheyRead,

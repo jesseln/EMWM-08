@@ -9,7 +9,8 @@
                 </datalist>
             </div> 
         </div> -->
-        <div class="slider-wrapper">
+    
+        <div class="slider-wrapper" v-if="useY > 300">
             <div class="library-catalogue-title-box">
                 <h2 class="library-catalogue-title">Adjust Zoom</h2>
                 <h3 class="library-catalogue-subtitle">Click below to Zoom In and Out of the library</h3>
@@ -20,11 +21,6 @@
                 <input class="slider range" type="range" min="0" max="100" v-model="zoomLevel" id="fader" step="50" list="volsettings" ref="zoomSlider">
                 <p @click="zoomIn">+</p>  
             </div>
-            <!-- <datalist id="volsettings" >
-                <option value="0" label="Close-Up" :class="{ activeZoom : zoomLevel === '100'}"></option>
-                <option value="50" label="Standard View" :class="{ activeZoom : zoomLevel === '50'}"></option>
-                <option value="100" label="Overview" :class="{ activeZoom : zoomLevel === '0'}"></option>
-            </datalist> -->
             <div id="volsettings" >
                 <p value="0" label="Close-Up" :class="{ activeZoom : zoomLevel === '100'}">Close-Up</p>
                 <p value="50" label="Standard View" :class="{ activeZoom : zoomLevel === '50'}">Standard View</p>
@@ -185,6 +181,11 @@ const { getItemLibraryYC,
         itemModalContentOuter.value.style.visibility = 'hidden'
     }  
   })
+
+    // To Top Button
+    const { x, y } = useWindowScroll() // To replace below
+    const useX = ref(x)
+    const useY = ref(y)
 
   const zoomOut = ()=>{
     if(zoomLevel.value === '50' ) zoomLevel.value = '0';

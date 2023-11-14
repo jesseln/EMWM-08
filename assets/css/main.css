@@ -152,7 +152,9 @@ body {
 	padding: 1rem 0 0.5rem 0;
 	margin: 0 0 1rem;
 	display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
 	border-bottom: 0.35rem solid rgb(241, 241, 241);;
 }
 
@@ -163,9 +165,9 @@ body {
 	margin: 0px;
 	color: black;
 	font-family: 'Source Sans 3', sans-serif;
-	font-size: 1.25rem;
-	font-weight:350;
-    letter-spacing: 0.1rem;
+	font-size: 1.5rem;
+	font-weight:450;
+    letter-spacing: 0.2rem;
 }  
 
 
@@ -244,7 +246,7 @@ body {
 	/* margin: 0, 5px; */
 	/* padding: 1rem var(--sideMargins) 0 var(--sideMargins); */
 	/* gap: 3rem; */
-	margin: 2rem 0;
+	margin: 0.5rem 0 2rem;
 }
 
 .view-top-section-wrapper{
@@ -310,6 +312,26 @@ body {
 	/* clip-path: inset(-10px -100px -100px 0px); */
 	height: 0.125rem;
 	width: 100%;
+}
+.shelf-separator-container-homepage{
+	margin: 0 0 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    /* max-width: 10vw; */
+}
+.shelf-separator-homepage{
+	border-top: 1px solid rgb(231, 231, 231);
+	border-bottom: 1px solid rgb(231, 231, 231);
+	background-color: rgb(182, 182, 182);
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px;
+	clip-path: inset(-10px -100px -100px 0px);
+	height: 0.125rem;
+    width: 10vw;
+	/* width: 100%; */
+    /* max-width: 10vw; */
 }
 
 .view-facet-title-box{
@@ -394,8 +416,265 @@ body {
 	font-weight:350;
 }
 
+.explore-library-title{
+    margin: 4rem var(--libraryMargins) 0;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+}
+.explore-library-title h1{
+    color: black;
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.1rem;
+    font-weight: 250;
+    letter-spacing: 0.2rem;
+    text-align: center;
+}
+.explore-library-title h4{
+    margin: 1rem  var(--libraryMargins);
+    padding: 0;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 350;
+    letter-spacing: 0.05rem;
+    color: rgb(80, 80, 80);
+    text-align: center;
+}
+.about-library-title{
+    margin: 4rem var(--libraryMargins) 0;
+    padding: 0 0 3rem;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgb(241, 241, 241);
+}
+.about-library-title h1{
+    margin: 0 0 1.5rem;
+    color: black;
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.1rem;
+    font-weight: 250;
+    letter-spacing: 0.2rem;
+    text-align: center;
+}
+.about-library-title h4{
+    display: block;
+    margin: 1rem  var(--libraryMargins);
+    padding: 0;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 350;
+    line-height: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: rgb(80, 80, 80);
+    text-align: center;
+}
+.about-main-content-wrapper{
+    margin: 5vh var(--libraryMargins) 20vh;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 5vw;
+}
+.about-detail-wrapper{
+    display: flex;
+    flex-flow: column wrap;
+    max-width: 40vw;
+    flex-shrink: 1000000;
+}
+
+.about-library-detail{
+    margin: 2vh 0;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.about-library-detail h1{
+    margin: 0.5rem 0 1rem;
+    color: black;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    letter-spacing: 0.2rem;
+}
+.about-library-detail h2{
+    margin: 0.5rem 0;
+    color: black;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 1.7rem;
+    font-weight: 350;
+    letter-spacing: 0.2rem;
+}
+.about-library-detail p{
+    display: block;
+    margin: 0.25rem 0;
+    padding: 0;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 350;
+    line-height: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: rgb(80, 80, 80);
+}
+.home-library-title{
+    margin: 4rem var(--libraryMargins) 0;
+    padding: 0 0 3rem;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    align-items: center;
+    /* border-bottom: 2px solid rgb(241, 241, 241); */
+}
+.home-library-title h1{
+    max-width: 40vw;;
+    margin: 0 0 1.5rem;
+    color: black;
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.1rem;
+    font-weight: 250;
+    letter-spacing: 0.2rem;
+    text-align: center;
+}
+.home-library-title h4{
+    display: block;
+    margin: 1rem  var(--libraryMargins);
+    padding: 0;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 350;
+    line-height: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: rgb(80, 80, 80);
+    text-align: center;
+}
+.home-main-content-wrapper{
+    margin: 5vh var(--libraryMargins) 20vh;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 5vw;
+}
+.home-detail-wrapper{
+    display: flex;
+    flex-flow: column wrap;
+    max-width: 40vw;
+    flex-shrink: 1000000;
+}
+
+.home-library-detail{
+    margin: 2vh 0;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.home-library-detail h1{
+    margin: 0.5rem 0 1rem;
+    color: black;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    letter-spacing: 0.2rem;
+}
+.home-library-detail h2{
+    margin: 0.5rem 0;
+    color: black;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 1.7rem;
+    font-weight: 350;
+    letter-spacing: 0.2rem;
+}
+.home-library-detail p{
+    display: block;
+    margin: 0.25rem 0;
+    padding: 0;
+    font-family: "Source Serif 4", serif;
+    font-size: 0.9rem;
+    font-weight: 350;
+    line-height: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: rgb(80, 80, 80);
+}
+
+.type-selector-wrapper{
+    /* margin: 0 clamp(6rem, 30vw, 23.5rem); */
+    margin: 0 var(--libraryMargins) 2rem;
+    padding: 0 0 2rem;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 2vw;
+    /* border-bottom: 2px solid rgb(241, 241, 241);; */
+}
+
+
 .library-type-title-box{
-	margin: 2rem var(--libraryMargins) 3rem;
+    /* max-width: 20vw; */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
+	margin: 0.5rem  1rem;
+    padding: 1rem 2rem;
+    border: 2px solid  rgb(231, 231, 231);
+    border-radius: 0.3rem;
+    background: rgb(253, 253, 253);
+    border: 0;
+    border-radius: .5rem;
+    box-sizing: border-box;
+    color: #111827;
+    font-family:'Raleway', sans-serif;
+    font-size: .7rem;
+    font-weight: 600;
+    line-height: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    text-align: center;
+    text-decoration: none #D1D5DB solid;
+    text-decoration-thickness: auto;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.library-type-title-box.activePage{
+    background-color: rgb(152, 121, 238);
+    color: white;
+}
+
+.library-type-title-box .icon-container{
+    padding: 0.5rem 1rem 0.5rem 0;
+    border-right: 1px solid #1A1A1AFF;
+}
+.library-type-title-box.activePage .icon-container {
+    border-right: 1px solid white;
+}
+
+
+.library-type-title-box:hover {
+  background-color: rgb(240, 240, 240);
+}
+.library-type-title-box.activePage:hover {
+  background-color: rgb(188, 170, 236);
+}
+
+.library-type-title-box:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.library-type-title-box:focus-visible {
+  box-shadow: none;
+}
+
+.library-type-title-box:active {
+	box-shadow: none;
 }
 
 .library-type-title{
@@ -416,6 +695,31 @@ body {
 	font-weight:350;
     letter-spacing: 0.2rem;
 }  
+
+.explore-category-descriptor{
+    margin: 0.5rem;
+    padding: 0.5rem;
+    max-width: 12vw;
+}
+
+.explore-category-descriptor h2{
+    margin: 0 0 0.5rem 0;
+    color: #111827;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 1.45rem;
+    font-weight: 350;
+    letter-spacing: 0.125rem;
+    
+}
+
+.explore-category-descriptor p{
+    margin: 0.5rem 0;
+    color: #111827;
+    font-family:'Source Serif 4', sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+}
 
 
 .query-box{
@@ -1389,6 +1693,30 @@ body {
 	z-index: 2;
   }
 
+  .explore-button-wrapper{
+    margin: 5rem var(--libraryMargins) 10rem;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+.to-explore-button {
+	border-radius: 50%;
+	height: 4rem;
+	width: 4rem;
+	padding: 4px;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+	cursor: pointer;
+	background-color: rgb(241, 241, 241);
+	border: none;
+	border-radius: 50%;
+	color: rgb(107, 107, 107);
+	cursor: pointer;
+	z-index: 2;
+  }
+
   .annotation-button {
 	border-radius: 50%;
 	height: 3rem;
@@ -1698,6 +2026,22 @@ body {
     background: #fff;
     border-radius: 50%;
     animation: lds-default 1.2s linear infinite;
+   
+  }
+.explore-loading-page{
+    margin: 5vh var(--libraryMargins);
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+  .lds-grey{
+    width: 80px;
+    height: 80px;
+  }
+  .lds-grey div{
+    background: rgb(177, 177, 177);
   }
   .lds-default div:nth-child(1) {
     animation-delay: 0s;

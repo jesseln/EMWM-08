@@ -195,7 +195,7 @@ const iconScaleFactor = ref(0.5)
 	border-radius: 20rem;
 
     border: 1px solid rgb(255, 255, 255);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    // box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     min-width:3.5rem;
     // box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px;
 }
