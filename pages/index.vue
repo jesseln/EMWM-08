@@ -3,14 +3,16 @@
         <div class="home-library-title">
             <h1>Welcome to the Collection of Early Modern Women's Marginalia</h1>
             <h4>
-                <span>Marginalia</span> are marks made in the margins of books. The marks in this collection were made by women during the 16th and 17th centuries. 
-                This period of time is known as <span>the Early Modern Period</span>.
+                <span>Marginalia are marks made in the margins of books. The marks in this collection were made by women during the 16th and 17th centuries. 
+                This period of time is known as the Early Modern Period</span>.
+            </h4>
+            <h4>
                 Marginalia give us a window into what books early modern women read or owned, and how they engaged with them. 
                 This site tracks a growing archive of women’s annotations in 16th and 17th century books, including ownership marks, 
                 inscriptions, and notes,  as well as material uses of books such as drawing, record keeping, pen trials and handwriting practice.
             </h4>
             <h4>
-                The digital library presents over 1,000 instances of marginalia found from this period. These have been catalogued with a significant amount of detail provided by the research team. 
+                This digital library presents over 1,000 instances of marginalia found from this period. These have been catalogued and a significant amount of detail has been provided by the research team. 
                 This library has been designed to explore this collection. It provides a wide range of features for viewing and arranging the collection to suit the needs of literary  researchers.
             </h4>
             </div>
@@ -39,8 +41,8 @@
                  <h3> the <span>Books</span> in which the marks were found.  </h3>
                  <h4 class="low-top-margin"> </h4>
             <h4>
-                Elements you would like to explore further can be added to <span>Your Collection</span> and viewed with all their associated elements at once.
-            <span>To begin viewing the collection,</span> select from one of the three elements below to begin viewing the collection, or click on "Explore the collection" above.
+                Items you would like to explore further can be added to <span>Your Collection</span> and viewed with all their associated elements at once.
+            <span>To begin viewing the collection,</span> select from one of the three categories below to begin viewing the collection, or click "Explore the collection" above.
             </h4>
             <h4>
                  
