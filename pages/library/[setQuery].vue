@@ -11,7 +11,7 @@
     <div class="explore-library-title">
         <h1>Explore the Collection </h1>
         <h4>The library presents <span>the Agents</span>, the 'women marginalists' in the collection, <span>the Books</span> they owned and <span>the Marks</span> they made in the margins during the 16th and 17th centuries.</h4>
-        <h4>Select from one of the 3 collections below, the click on the arrow to begin.</h4>
+        <h4>Select from one of the 3 collections below, then click on the arrow to begin.</h4>
     </div>
     <div class="type-selector-wrapper" >
         <NuxtLink to="/library/agents">

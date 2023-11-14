@@ -10,22 +10,48 @@
                 inscriptions, and notes,  as well as material uses of books such as drawing, record keeping, pen trials and handwriting practice.
             </h4>
             <h4>
-                The digital library presents over 1,000 instances of marginalia found from this period. These have been catalogued with a significant amount of detail provided. 
-                There are images avaiable for hundreds of the books and marks which have been catalogued. 
-
-                This library has been designed to explore this collection both as whole and in precise detail. It provides a wide range of digital features for viewing and arranging the collection. 
-                
-                Each view of the collection focusses on one of these connected elements:
-                 <span>the Women Agents</span> 
-                 <span>the Marks</span> they made 
-                 and the <span> the Books</span> in which the marks were found.
+                The digital library presents over 1,000 instances of marginalia found from this period. These have been catalogued with a significant amount of detail provided by the research team. 
+                This library has been designed to explore this collection. It provides a wide range of features for viewing and arranging the collection to suit the needs of literary  researchers.
+            </h4>
+            </div>
+            <div class="shelf-separator-container-homepage"><div class="shelf-separator-homepage"></div></div>
+            <div class="home-library-title">
+            <h2 class="low-top-margin">
+                Each view of the collection focusses on one of three connected elements:
+            </h2>
+            <div class="homepage-icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" :width="11*icons.agentIcon.iconWidth" :height="33*icons.agentIcon.iconHeight" viewBox="0 0 11 33" fill="none">
+                        <path d="M0 5.35535C0 2.39767 2.39767 0 5.35535 0C8.31302 0 10.7107 2.39767 10.7107 5.35535V26.7767C10.7107 29.7344 8.31302 32.1321 5.35535 32.1321C2.39767 32.1321 0 29.7344 0 26.7767V5.35535Z" :fill="icons.agentIcon.iconFill"/>
+                    </svg>
+                </div>
+                <h3>The <span>Women Agents,</span> </h3>
+                <div class="homepage-icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.markIcon.iconWidth" :height="33*icons.markIcon.iconHeight" viewBox="0 0 10 33" fill="none">
+                            <path d="M0.379883 6.90698L4.99988 0L9.61988 6.90698V33H0.379883V6.90698Z" :fill="icons.markIcon.iconFill"/>
+                        </svg>
+                    </div>
+                <h3>  the  <span>Marks</span> they made, and </h3>
+                <div class="homepage-icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.bookIcon.iconWidth" :height="30*icons.bookIcon.iconHeight" viewBox="0 0 10 30" fill="none">
+                        <path d="M0.00512695 0H10V29.9846H0.00512695V0Z" :fill="icons.bookIcon.iconFill"/>
+                    </svg>
+                </div>
+                 <h3> the <span>Books</span> in which the marks were found.  </h3>
+                 <h4 class="low-top-margin"> </h4>
+            <h4>
+                Elements you would like to explore further can be added to <span>Your Collection</span> and viewed with all their associated elements at once.
+            <span>To begin viewing the collection,</span> select from one of the three elements below to begin viewing the collection, or click on "Explore the collection" above.
+            </h4>
+            <h4>
                  
-                 If there are any elements you would like to explore further you can create your own collection and view all the connected elements at once.
-
-                 Select from one of the three elements below to begin viewing the collection, or select "Explore the collection" above.
             </h4> 
         </div>
         <div class="shelf-separator-container-homepage"><div class="shelf-separator-homepage"></div></div>
+        <div class="home-library-second-title">
+            <h1>
+                View the Collection
+            </h1>
+            </div>
         <div class="type-selector-wrapper" >
         <NuxtLink to="/library/agents">
     <VMenu

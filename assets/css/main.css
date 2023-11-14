@@ -519,9 +519,22 @@ body {
     letter-spacing: 0.05rem;
     color: rgb(80, 80, 80);
 }
+
+.home-page-wrapper{
+    margin: 0 0 30vh;
+}
 .home-library-title{
+    margin: 4rem var(--libraryMargins) 2rem;
+    /* padding: 0 0 3rem; */
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    align-items: center;
+    /* border-bottom: 2px solid rgb(241, 241, 241); */
+}
+.home-library-second-title{
     margin: 4rem var(--libraryMargins) 0;
-    padding: 0 0 3rem;
+    /* padding: 0 0 3rem; */
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
@@ -538,6 +551,50 @@ body {
     letter-spacing: 0.2rem;
     text-align: center;
 }
+.home-library-second-title h1{
+    max-width: 40vw;;
+    margin: 0 0 1.5rem;
+    color: black;
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.1rem;
+    font-weight: 250;
+    letter-spacing: 0.2rem;
+    text-align: center;
+}
+.home-library-title h2{
+    max-width: 25vw;;
+    margin: 2rem 0 .5rem;
+    color: black;
+    font-family: "Raleway", sans-serif;
+    font-size: 1.45rem;
+    font-weight: 300;
+    line-height: 1.75rem;
+    letter-spacing: 0.0rem;
+    text-align: center;
+}
+.home-library-title h3{
+    display: block;
+    margin: 0.5rem  var(--libraryMargins);
+    padding: 0;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 350;
+    line-height: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: rgb(80, 80, 80);
+    text-align: center;
+}
+.home-library-title h3 span{
+    display: inline-block;
+    padding: 0;
+    font-family: "Raleway", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 450;
+    line-height: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: rgb(80, 80, 80);
+    text-align: center;
+}
 .home-library-title h4{
     display: block;
     margin: 1rem  var(--libraryMargins);
@@ -549,6 +606,14 @@ body {
     letter-spacing: 0.05rem;
     color: rgb(80, 80, 80);
     text-align: center;
+}
+.home-library-title h2.low-top-margin{
+    margin: 0 var(--libraryMargins) 1rem;
+  
+}
+.home-library-title h4.low-bottom-margin{
+    margin: 1rem var(--libraryMargins) 0;
+  
 }
 .home-main-content-wrapper{
     margin: 5vh var(--libraryMargins) 20vh;
@@ -1309,6 +1374,18 @@ body {
     padding: 0.1rem 0.35rem 0.25rem;
     min-width: 2.5rem;
     margin: 0 0.25rem 
+}
+ .homepage-icon-container{
+    /* border-right: 1px solid #bdbdbd; */
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    /* border-bottom: 1px solid #e4e4e4; */
+    /* border-radius: 0.3rem; */
+    padding: 0.1rem 0.35rem 0.25rem;
+    min-width: 3rem;
+    margin: 1rem 0.25rem 0;
+    border-bottom: 0.1rem solid rgb(214, 214, 214);
 }
 
 .item-menu-totals-badge>p{
