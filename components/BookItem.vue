@@ -251,15 +251,17 @@ async function getImages(item){
 }
 
 onMounted(()=>{
-    itemType.value = itemTypeCheck(item)
-    updateItemRefs(item)
-    getItemLibrary(item)
-    watch(item,()=>{
-        if(itemType.value !== 'Agent') {
-            // console.log('itemTYpe ',itemType.value)
-            getImages(item)
-        }
-    }, { immediate: true })
+    if(zoomLevel === '100'){
+        itemType.value = itemTypeCheck(item)
+        updateItemRefs(item)
+        getItemLibrary(item)
+        watch(item,()=>{
+            if(itemType.value !== 'Agent') {
+                // console.log('itemTYpe ',itemType.value)
+                getImages(item)
+            }
+        }, { immediate: true })
+    }
 })
         
 //Function format written to use local vairables and return to reactive value

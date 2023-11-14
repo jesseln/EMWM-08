@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div class="page-container" >
 
     <NuxtPage />
 
@@ -15,7 +15,9 @@
 
   </script>
   
-  <style scoped>
-  
+  <style lang="scss" scoped>
+  .page-container{
+    // max-width: 100vw;
+  }
 
   </style>

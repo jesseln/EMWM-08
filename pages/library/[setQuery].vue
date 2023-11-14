@@ -59,7 +59,7 @@
         🖊️
     </button>
         <AnnotationPanel v-if="showAnnotations"/> -->
-    <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button>
+    <!-- <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button> -->
 
 
     </div>
@@ -143,25 +143,25 @@ const { handleObjectProperty,
  
 
 
-    const showAnnotations = ref(false)
+    // const showAnnotations = ref(false)
 
-    // To Top Button
-    const { x, y } = useWindowScroll() // To replace below
-    const useX = x
-    const useY = y
-    const toTopButton = ref();
-    onMounted(() => {
-        watchEffect(()=>{
-            if (useY.value > 550) {
-                toTopButton.value.classList.add("showButton");
-            } else {
-                toTopButton.value.classList.remove("showButton");
-            }
-        })
-    })
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
+    // // To Top Button
+    // const { x, y } = useWindowScroll() // To replace below
+    // const useX = x
+    // const useY = y
+    // const toTopButton = ref();
+    // onMounted(() => {
+    //     watchEffect(()=>{
+    //         if (useY.value > 550) {
+    //             toTopButton.value.classList.add("showButton");
+    //         } else {
+    //             toTopButton.value.classList.remove("showButton");
+    //         }
+    //     })
+    // })
+    // const scrollToTop = () => {
+    //     window.scrollTo({ top: 0, behavior: "smooth" });
+    // };
 
 
 
@@ -169,11 +169,15 @@ const { handleObjectProperty,
 
 <style lang="scss" scoped>
 
+.library-explorer-container{
+    // max-width: 100vw;
+}
+
     .nav-div{
         z-index: 10;
         position: sticky;
         top: 0;
-        background-color: rgba(255,255,255,0.98);
+        background-color: rgba(255,255,255,1);
         // width: 100%;
         // height: 100%;
         // opacity: 100%;
@@ -181,10 +185,10 @@ const { handleObjectProperty,
     }
 
     .nav-bottom-div{
-        z-index: 5;
+        z-index: 15;
         position: sticky;
         bottom: -1px;
-        background-color: rgba(255,255,255,0.98);
+        background-color: rgba(255,255,255,1);
         // width: 100%;
         // height: 100%;
         // opacity: 100%;

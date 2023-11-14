@@ -1,6 +1,11 @@
 <template>
     <div class="library-nav-container">
+
     <div v-if="libraryDisplay.viewType.colour !== 'NotSelected'" class="library-nav-colour-wrapper">
+        <div class="library-catalogue-title-box">
+        <h2 class="library-catalogue-title">Colour Categories</h2>
+        <h3 class="library-catalogue-subtitle">This colour legend shows the values for each item</h3>
+    </div>
         <div v-if="viewMap.get(libraryDisplay.viewType.colour)[libraryDisplay.view.colour].func === 'scaleOrdinal'"
             class="library-nav-colour-block"> 
 
@@ -42,25 +47,25 @@
             </div>
                 <h3 class="library-nav-colour-label" >Max: {{getIDP(viewColourBounds[1], 'colour')}}</h3>
         </div>
-
-        <div class="bottom-label">
-            <div class="library-nav-title-block-colour">
-                <h3 class="library-nav-view">Colour categories:</h3>
+    </div>
+    
+            <div class="bottom-label">
+                <div class="library-nav-title-block-colour">
+                    <h3 class="library-nav-view-bottom">Current Category:</h3>
+                </div>
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" :width="43*iconScaleFactor" :height="38*iconScaleFactor" viewBox="0 0 43 38" fill="none">
+                    <circle cx="32.7285" cy="28.0532" r="9.35102" fill="#B3DE69"/>
+                    <circle cx="21.0395" cy="9.35102" r="9.35102" fill="#BDB9D9"/>
+                    <circle cx="9.35102" cy="28.351" r="9.35102" fill="#FB8072"/>
+                </svg> -->
+                <p v-if="libraryDisplay.viewType['colour'] !== 'NotSelected'">
+                    {{libraryDisplay.viewType['colour']}} | 
+                    {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
+                </p>
+                <p v-else="">
+                    {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
+                </p>
             </div>
-            <!-- <svg xmlns="http://www.w3.org/2000/svg" :width="43*iconScaleFactor" :height="38*iconScaleFactor" viewBox="0 0 43 38" fill="none">
-                <circle cx="32.7285" cy="28.0532" r="9.35102" fill="#B3DE69"/>
-                <circle cx="21.0395" cy="9.35102" r="9.35102" fill="#BDB9D9"/>
-                <circle cx="9.35102" cy="28.351" r="9.35102" fill="#FB8072"/>
-            </svg> -->
-            <p v-if="libraryDisplay.viewType['colour'] !== 'NotSelected'">
-                {{libraryDisplay.viewType['colour']}} | 
-                {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
-            </p>
-            <p v-else="">
-                {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
-            </p>
-        </div>
-        </div>
 </div>
 </template>
 
@@ -106,33 +111,68 @@ const iconScaleFactor = ref(0.5)
 
 <style lang="scss" scoped>
 
+.library-catalogue-title-box{
+    flex-shrink: 1000000000;
+    // flex-grow: 1;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: flex-end;
+    // margin: 0.4rem 0 0.4rem 0.4rem ;
+    margin: 0.15rem 0.5rem 0 0;
+    padding: 0.1rem 0.5rem 0 0;
+    border-right: 2px solid #ebebeb;
+  }
+  .library-catalogue-title{
+	color: #111827;
+	font-family:'Source Sans 3', sans-serif;
+	font-size: 1.5rem;
+	font-weight: 450;
+	line-height: 1.5rem;
+    padding: 0.1rem 0 0;
+    letter-spacing: 0.05rem;
+    width: 7.2vw
+    
+  }
+
+.library-catalogue-subtitle{
+    color: #575757;
+	font-family:'Raleway', sans-serif;
+	font-size: .825rem;
+	font-weight: 450;
+	line-height: 1.2rem;
+    padding: 0.3rem 0 0;
+    width: 8.2vw
+}
+
 .library-nav-container{
-    margin: 0 var(--sideMargins) 0;
+    margin: 0 clamp(5rem, 10vw, 8rem) 0;
     display: grid;
     grid-template-rows: auto auto;
     justify-content: center;
     border-top: 2px solid rgb(255, 255, 255);
     // height: 100%;
     max-width: 100vw;
+    z-index: 15;
 }
 .library-nav-colour-wrapper{
-    grid-row: 2/3;
+    grid-row: 1/2;
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row nowrap;
     justify-content: center;
     
 }
 
 .library-nav-colour-block{
-    grid-row: 2/3;
+    // flex-grow: 100000000;
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    align-items: center;
     padding: 0.3rem 0 0.2rem;
 }
 
 .scaleSequential-large-title{
-    grid-row: 2/3;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -343,16 +383,27 @@ const iconScaleFactor = ref(0.5)
         visibility: visible;
     }
 
+    .library-nav-view-bottom{
+    // position: relative;
+    margin: 0;
+    font-family: "Source Sans 3", sans-serif;
+	font-size: 0.9rem;
+	font-weight: 400;
+    letter-spacing: 0.05rem;
+    line-height: 1.25rem;
+	color: black;
+}
     .bottom-label {
+        grid-row: 2/3;
         display: flex;
         flex-flow: row wrap;
         align-items: center;
         gap: 0.5rem;
         min-width: 16rem;
-        padding: 0.3rem 1.25rem 0.2rem 0.5rem;
+        padding: 0.5rem 1.25rem 0.5rem 0.5rem;
         font-family: "Raleway", sans-serif;
-        font-size: 0.725rem;
-        font-weight: 500;
+        font-size: 0.8rem;
+        font-weight: 600;
         letter-spacing: 0.05rem;
         line-height: 1.25rem;
         color: black;

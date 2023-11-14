@@ -1,20 +1,44 @@
 <template>
     <div class="library-nav-container">
+        <div class="library-nav-intro-wrapper">
+            <h2>Group, Sort, Resize and Colour the Items in the Library</h2>
+            <p>Organise all the library items using the dropdowns below</p>
+            </div>
     <div class="library-nav-wrapper">
         <div class="library-nav-dropdown">
             <div class="library-nav-title-block">
-                <h3 class="library-nav-view">Section by:</h3>
+                <h3 class="library-nav-view">Choose a category to group each item:</h3>
             </div>
             <div class="aselect" >
                 <div ref="section" class="selector" @click="toggle('section')">
                     <div class="label">
+                        <svg xmlns="http://www.w3.org/2000/svg" :width="49*iconScaleFactor*0.95" :height="36*iconScaleFactor*0.95" viewBox="0 0 49 36" fill="none">
+                            <g filter="url(#filter0_d_605_90)">
+                                <path d="M6 9H16V25H6V9Z" fill="#5B5B5B"/>
+                                <path d="M21 2H31V25H21V2Z" fill="#5B5B5B"/>
+                                <path d="M4 27H45V30H4V27Z" fill="#F5F5F5"/>
+                                <path d="M6.05 9.05H15.95V24.95H6.05V9.05ZM21.05 2.05H30.95V24.95H21.05V2.05ZM4.05 27.05H44.95V29.95H4.05V27.05Z" stroke="#9B9B9B" stroke-width="0.1"/>
+                            </g>
+                            <defs>
+                                <filter id="filter0_d_605_90" x="0" y="0" width="49" height="36" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                <feOffset dy="2"/>
+                                <feGaussianBlur stdDeviation="2"/>
+                                <feComposite in2="hardAlpha" operator="out"/>
+                                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/>
+                                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_605_90"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_605_90" result="shape"/>
+                                </filter>
+                            </defs>
+                        </svg>
                         <p v-if="libraryDisplay.viewType['shelf'] !== 'NotSelected'">
                             {{libraryDisplay.viewType['shelf']}} | 
                             {{categoryMap.get(libraryDisplay.viewType['shelf'])[libraryDisplay.view['shelf']]}} - 
                             {{ libraryDisplay.view['shelfOrderMethod']==='A'? 'A to Z': 'Low to High' }}
                         </p>
                         <p v-else="">
-                            {{categoryMap.get(libraryDisplay.viewType['shelf'])[libraryDisplay.view['shelf']]}}
+                            All Items
                         </p>
                     </div>
                     <div class="arrow" :class="{ expanded : visible }">
@@ -27,7 +51,7 @@
                     
                             <li :class="{ current : `NotSelected:${item.category}` === value.section }" v-for="item in sectionCategories.NotSelected" 
                                 @click="handleViewSelection('shelf', item.category, 'NotSelected')">
-                                Not Selected
+                                All Items
                             </li>
                             <li :class="{ current : `Agent:${item.category}` === value.section }" v-for="item in sectionCategories.Agent" 
                             @click="handleViewSelection('shelf', item.category, 'Agent')">
@@ -49,7 +73,7 @@
         </div>
         <div class="library-nav-dropdown">
             <div class="library-nav-title-block">
-                <h3 class="library-nav-view">Sort by:</h3>
+                <h3 class="library-nav-view">Choose a category to sort each group:</h3>
             </div>
             <div class="aselect" >
                 <div ref="sort" class="selector" @click="toggle('sort')">
@@ -65,7 +89,7 @@
                             {{ libraryDisplay.view['bookendOrderMethod']==='A'? 'A to Z': 'Low to High' }}
                         </p>
                         <p v-else="">
-                            {{categoryMap.get(libraryDisplay.viewType['bookend'])[libraryDisplay.view['bookend']]}}
+                            All Items
                         </p>
                     </div>
                     <div class="arrow" :class="{ expanded : visible }">
@@ -77,7 +101,7 @@
                         <ul class="scrollable">
                             <li :class="{ current : `NotSelected:${item.category}` === value.sort }" v-for="item in sortCategories.NotSelected" 
                                 @click="handleViewSelection('bookend', item.category, 'NotSelected')">
-                                Not Selected
+                                All Items
                             </li>
                             <li :class="{ current : `Agent:${item.category}` === value.sort }" v-for="item in sortCategories.Agent" 
                             @click="handleViewSelection('bookend', item.category, 'Agent')">
@@ -98,22 +122,22 @@
         </div>
         <div class="library-nav-dropdown">
             <div class="library-nav-title-block">
-                <h3 class="library-nav-view">Size by:</h3>
+                <h3 class="library-nav-view">Choose a category to resize each item:</h3>
             </div>
             <div class="aselect" >
                 <div ref="height" class="selector" @click="toggle('height')">
                     <div class="label">
-                        <svg xmlns="http://www.w3.org/2000/svg" :width="36*iconScaleFactor" :height="31*iconScaleFactor" viewBox="0 0 36 31" fill="none">
-                            <rect x="0.299561" y="18.6895" width="9.33333" height="12.1333" fill="grey"/>
-                            <rect x="13.033" y="0.956055" width="9.33333" height="29.8667" fill="grey"/>
-                            <rect x="26.0994" y="10.2891" width="9.33333" height="20.5333" fill="grey"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" :width="36*iconScaleFactor*0.85" :height="31*iconScaleFactor*0.85" viewBox="0 0 36 31" fill="none">
+                            <rect x="0.299561" y="18.6895" width="9.33333" height="12.1333" fill="#5B5B5B"/>
+                            <rect x="13.033" y="0.956055" width="9.33333" height="29.8667" fill="#5B5B5B"/>
+                            <rect x="26.0994" y="10.2891" width="9.33333" height="20.5333" fill="#5B5B5B"/>
                         </svg>
                         <p v-if="libraryDisplay.viewType['height'] !== 'NotSelected'">
                             {{libraryDisplay.viewType['height']}} | 
                             {{categoryMap.get(libraryDisplay.viewType['height'])[libraryDisplay.view['height']]}}
                         </p>
                         <p v-else="">
-                            {{categoryMap.get(libraryDisplay.viewType['height'])[libraryDisplay.view['height']]}}
+                            No Selection
                         </p>
                     </div>
                     <div class="arrow" :class="{ expanded : visible }">
@@ -125,7 +149,7 @@
                         <ul class="scrollable">
                             <li :class="{ current : `NotSelected:${item.category}` === value.height }" v-for="item in heightCategories.NotSelected" 
                                 @click="handleViewSelection('height', item.category, 'NotSelected')">
-                                Not Selected
+                                No Selection
                             </li>
                             <li :class="{ current : `Agent:${item.category}` === value.height }" v-for="item in heightCategories.Agent" 
                             @click="handleViewSelection('height', item.category, 'Agent')">
@@ -146,12 +170,12 @@
         </div>
         <div class="library-nav-dropdown">
             <div class="library-nav-title-block">
-                <h3 class="library-nav-view">Colour by:</h3>
+                <h3 class="library-nav-view">Choose a category to change item colours:</h3>
             </div>
             <div class="aselect" >
                 <div ref="colour" class="selector" @click="toggle('colour')">
                     <div class="label">
-                        <svg xmlns="http://www.w3.org/2000/svg" :width="43*iconScaleFactor" :height="38*iconScaleFactor" viewBox="0 0 43 38" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" :width="43*iconScaleFactor*0.8" :height="38*iconScaleFactor*0.8" viewBox="0 0 43 38" fill="none">
                             <circle cx="32.7285" cy="28.0532" r="9.35102" fill="#B3DE69"/>
                             <circle cx="21.0395" cy="9.35102" r="9.35102" fill="#BDB9D9"/>
                             <circle cx="9.35102" cy="28.351" r="9.35102" fill="#FB8072"/>
@@ -161,7 +185,7 @@
                             {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
                         </p>
                         <p v-else="">
-                            {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
+                            No Selection
                         </p>
                     </div>
                     <div class="arrow" :class="{ expanded : visible }">
@@ -173,7 +197,7 @@
                         <ul class="scrollable">
                             <li :class="{ current : `NotSelected:${item.category}` === value.colour }" v-for="item in colourCategories.NotSelected" 
                                 @click="handleViewSelection('colour', item.category, 'NotSelected')">
-                                Not Selected
+                                No Selection
                             </li>
                             <li :class="{ current : `Agent:${item.category}` === value.colour }" v-for="item in colourCategories.Agent" 
                             @click="handleViewSelection('colour', item.category, 'Agent')">
@@ -192,10 +216,7 @@
                 </div>
             </div>
         </div>
-        
-
-    
-    </div>
+</div>
 </div>
 </template>
 
@@ -323,24 +344,56 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 <style lang="scss" scoped>
 .categories{
 }
+
 .library-nav-container{
     margin: 0 var(--sideMargins) 0;
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     justify-content: center;
     border-bottom: 2px solid rgb(255, 255, 255);
     // height: 100%;
 }
+.library-nav-intro-wrapper{
+    margin: 1rem 0 0;
+    padding: 0 0 0.5rem;
+    grid-row: 1/2;
+    display: flex;
+    flex-flow: column wrap;
+    // gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid #ebebeb;
+}
+
+.library-nav-intro-wrapper h2{
+	color: #111827;
+	font-family:'Source Sans 3', sans-serif;
+	font-size: 1.5rem;
+	font-weight: 450;
+	line-height: 1.5rem;
+	padding: 0 0 0.3rem;
+    letter-spacing: 0.05rem;
+  }
+
+  .library-nav-intro-wrapper p{
+    color: #575757;
+	font-family:'Raleway', sans-serif;
+	font-size: .825rem;
+	font-weight: 450;
+	line-height: 1.2rem;
+}
+  
 .library-nav-wrapper{
     margin: 0.5rem 0 0;
-    grid-row: 1/2;
+    grid-row: 2/3;
     display: flex;
     flex-flow: row wrap;
     // gap: 2rem;
     justify-content: center;
+
 }
 .library-nav-colour-wrapper{
-    grid-row: 2/3;
+    grid-row: 3/4;
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -421,10 +474,10 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 }
 .library-nav-dropdown{
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
     justify-content: flex-start;
     align-items: center;
-    max-height: 2rem ;
+    // max-height: 2rem ;
     margin: 0.3rem 0 0.2rem 1.5rem;
 }
 
@@ -432,7 +485,7 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 .library-nav-title-block{
     display: flex;
     flex-flow: row nowrap;
-    margin: 0 0.6rem 0 0;
+    margin: 0 0.6rem 0.1rem 1.25rem;
     width: 100%;
     align-self: center;
     text-align: right;
@@ -448,11 +501,12 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
 .library-nav-view{
     margin: 0;
     font-family: 'Raleway', sans-serif;
-	font-size: 0.7rem;
-	font-weight: 450;
-    letter-spacing: 0.05rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+    // letter-spacing: 0.05rem;
     line-height: 1.25rem;
-	color: black;
+	color: rgb(125, 84, 238);
+	// color: rgb(34, 34, 34);
 }
 
 .library-nav-view-colour{
@@ -548,15 +602,16 @@ Object.entries(referenceStore.viewMap.get("Mark")).forEach(entry => {
         cursor: pointer;
         &:hover {
             // color: white;
-            background:#f5f5f5;
+            background:rgb(125, 84, 238);
+            color: white;
             // colour was #f7e8f777;
         }
     }
     .current {
         font-size: 0.725rem;
         font-weight: 500;
-        color:  black;
-        background: #f5f5f5;
+        color:  white;
+        background: rgb(125, 84, 238);
     }
     .hidden {
         visibility: hidden;

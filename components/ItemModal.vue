@@ -113,9 +113,6 @@
                         :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imageFolder}/${item[itemID]}/${itemImage.name}`"
                         @click="openImageViewer({item: item, itemID: itemID, imageFolder: imageFolder, name: itemImage.name})"
                         />
-                        <template>
-                            <div>click</div>
-                        </template>
                 </vueper-slides>
             </div>
         </div>

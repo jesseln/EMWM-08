@@ -246,9 +246,9 @@ watchEffect(()=>{
     color: black;  
 }
 
-  .library-query li:hover {background-color: #eeeeee;}
+  .library-query li:hover {background-color: rgb(241, 241, 241);}
   .library-query li:focus {background-color: #fdfdfd;}
   
- .nuxtlink:hover {background-color: #eeeeee;}
+ .nuxtlink:hover {background-color: rgb(241, 241, 241);}
 .nuxtlink:focus {background-color: #fdfdfd;}
 </style>

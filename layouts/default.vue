@@ -7,8 +7,37 @@
           <h1 class="site-header-title">Early Modern Women's Marginalia</h1>
           <p class="site-header-subtitle">The Library of Libraries</p>
         </div>
+
     </NuxtLink>
     </header>
+    <div class="top-images">
+    <div v-if="imagePreviews" class="top-images-wrapper">
+      <div class="top-images-inner">
+
+          <vueper-slides :dragging-distance="70"
+          class="no-shadow" 
+          slide-image-inside
+          :visible-slides="15"
+          slide-multiple
+          :slide-ratio="1 / 2"
+          fixed-height="10vh"
+          :gap="1"
+          :bullets="false"
+          :arrows-outside="false"
+          prevent-y-scroll 
+          lazy 
+          lazy-load-on-drag
+          >
+              <vueper-slide
+                  v-for="imagePreview in imagePreviews"
+                  :key="imagePreview"
+                  :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imagePreview.imageFolder}/${imagePreview.item[imagePreview.itemID]}/${imagePreview.name}`"
+                  @click="openImageViewer({item: imagePreview.item, itemID: imagePreview.itemID, imageFolder: imagePreview.imageFolder, name: imagePreview.name})"
+                  />
+          </vueper-slides>
+      </div>
+  </div>
+</div>
       <div class="main-navbar">
         <NuxtLink to="/" activeClass="nav-active">
             <div class="dropdown">
@@ -38,6 +67,13 @@
             </div>   
           </NuxtLink>
       </div>
+      <div class="image-modal-background"  ref="imageModalBackground" @click="closeImageModal">
+            <div class="image-modal-content-outer" ref="imageModalContentOuter">
+                <div class="image-modal-content" ref="imageModalContent">
+                    <ImageModal :key="_itemImage" v-if="_itemImage" @close="hideImageModal" :_itemImage="_itemImage" />
+                </div>
+            </div>
+        </div>
       <div class="library-slot">
         <slot />
       </div>
@@ -45,12 +81,54 @@
   </template>
   
   <script setup>
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import { storeToRefs } from "pinia";
+import 'vueperslides/dist/vueperslides.css'
+
+
+
+
+  //View State
+const viewStore = useViewStore();
+const { 
+        libraryData,
+        libraryDisplay,
+        formattedLibrary,
+        filterLibrary,
+        activeFilters,
+        getActiveFilters,
+        filterObject,
+        dataSize,
+        filterTotalCount,
+         } = storeToRefs(viewStore)
+const { 
+        filterActiveToggle,
+        getImagePreviews,
+ } = useViewStore();
+
+
   //libraryStore call is placed in this layout file as this will initially update the store state from the database for all pages.
   const libraryStore = useLibraryStore();
+
+  const { 
+        Agent,
+        Book,
+        Mark
+         } = storeToRefs(libraryStore)
 
   libraryStore.getAgents();
   libraryStore.getBooks();
   libraryStore.getMarks();
+
+  const imagePreviews = ref()
+  watchEffect(()=>{
+    if(Mark.value.length > 0){
+         getImagePreviews(Mark.value).then(data=> imagePreviews.value = data);
+    }
+    // console.log('imagePreviewList', imagePreviews.value)
+  })
+
+
 
   const dropdownExploreLibraryRef = ref(null)
   const dropdownExploreLibraryRefContent = ref(null)
@@ -67,7 +145,15 @@
 //   },
 //   script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
 })
-         
+
+
+
+    // watch(imagePreviewList,()=>{
+
+        
+    //     imagePreviews
+    // })
+ 
   const showModal = (callRef)=>{
     if(callRef === 'ExploreLibrary'){
         dropdownExploreLibraryRefContent.value.style.transitionDelay = '.1s'
@@ -103,13 +189,93 @@
 }
 
 
+const imageModalContent = ref(null)
+  const imageModalContentOuter = ref(null)
+  const imageModalBackground = ref(null)
+  const _itemImage = ref();
+         
+  function openImageViewer(itemImage){
+    //Component Prop
+    _itemImage.value = itemImage;
+    //Styles
+    imageModalContent.value.style.transitionDelay = '.15s'
+    imageModalContent.value.style.visibility = 'visible'
+    imageModalBackground.value.style.transitionDelay = '.075s'
+    imageModalBackground.value.style.visibility = 'visible'
+    imageModalContentOuter.value.style.transitionDelay = '.075s'
+    imageModalContentOuter.value.style.visibility = 'visible'
+  }
+
+  const hideImageModal = ()=>{
+    imageModalContent.value.style.transitionDelay = '.3s'
+    imageModalContent.value.style.visibility = 'hidden'
+    imageModalBackground.value.style.transitionDelay = '.15s'
+    imageModalBackground.value.style.visibility = 'hidden'
+    imageModalContentOuter.value.style.transitionDelay = '.15s'
+    imageModalContentOuter.value.style.visibility = 'hidden'
+  }
+
+  const closeImageModal = (event) => {
+    console.log('clicked', event.target)
+    if(imageModalContent.value.style.visibility === 'visible' && (event.target.matches('.image-modal-background')) || event.target.matches('.image-modal-content-outer')){
+        imageModalContent.value.style.transitionDelay = '.3s'
+        imageModalContent.value.style.visibility = 'hidden'
+        imageModalBackground.value.style.transitionDelay = '.15s'
+        imageModalBackground.value.style.visibility = 'hidden'
+        imageModalContentOuter.value.style.transitionDelay = '.15s'
+        imageModalContentOuter.value.style.visibility = 'hidden'
+    }  
+  }
+
 
   </script>
   
-  <style scoped>
-
-    .badge{
-      position: relative;
-      left: -15px;
-    }
+    <style lang="scss" scoped>
+.image-modal-background{
+    display: block;
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2040;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(0.2rem);
+    backdrop-filter: blur(0.2rem);
+}
+.image-modal-content-outer{
+    display: grid;
+    grid-template-rows: 100vh;
+    position: fixed;
+    top: 0vh;
+    min-width: 90vw;
+    min-height: 90vh;
+    left: 3vw;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+  .image-modal-content {
+    grid-row: 1 / 2;
+    display: flex;
+    flex-flow: column wrap;
+    visibility: hidden;
+    height: fit-content;
+    width: fit-content;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 12px 0px;
+    z-index: 200;
+    background: #ffffff;
+    padding: 7px;
+    border: 0.1rem #eeeeee solid;
+    border-radius: 0.3rem;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+  }
+  
+    // .badge{
+    //   position: relative;
+    //   left: -15px;
+    // }
   </style>

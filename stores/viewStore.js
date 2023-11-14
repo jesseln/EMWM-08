@@ -2,7 +2,9 @@ import * as d3 from "d3";
 import { storeToRefs } from "pinia";
 
 export const useViewStore = defineStore('view', ()=>{
+    const supabase = useSupabaseClient()
     const referenceStore = useReferenceStore();
+
     const { viewMap, filterMap, colourMapFiltered, scales } =  storeToRefs(referenceStore);
     const { alphabetically,
             handleNumeric,
@@ -90,6 +92,7 @@ export const useViewStore = defineStore('view', ()=>{
     const domainColourIndex = ref();
     const viewColourBounds = ref();
     const filterLibrary = ref();
+    const imagePreviewList = ref();
 
 
     watch([libraryData, libraryDisplay],() => {
@@ -488,13 +491,16 @@ export const useViewStore = defineStore('view', ()=>{
     })
 
     function getFilterLibrary(){
+        filterTotalCount.value = 0
         return formattedLibrary.value
             .reduce((library, shelf) => {
                 let shelfContent = shelf[1]
                 .reduce((shelf, bookend) => {
                     let bookendContent = bookend[1]
                     .filter((item) => {
-                        return itemFilterCheck(item)
+                        let filterPass = itemFilterCheck(item)
+                        filterPass ? filterTotalCount.value++ : null
+                        return filterPass
                     })
                     if(bookendContent.length > 0){
                         shelf.push([bookend[0], bookendContent])
@@ -508,6 +514,8 @@ export const useViewStore = defineStore('view', ()=>{
             }, [])
         }
 
+    const filterTotalCount = ref(0)
+
     function itemFilterCheck(item){
         return activeFilters.value.every((filterValue)=>{
             const itemValue = getIFP(item, filterValue.category, filterValue.itemType, 'display name')
@@ -520,16 +528,58 @@ export const useViewStore = defineStore('view', ()=>{
 
 
     watch([filterLibrary],() => {
-        dataSize.value =  filterLibrary.value.length?   filterLibrary.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
+        filterTotalCount.value
+        // dataSize.value =  filterLibrary.value.length?   filterLibrary.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
     })
 
-    // watch([formattedLibrary, libraryDisplay],() => {
-    //     filterLibrary.value = getFilterLibrary()
-    // })
 
     watchEffect(() => {
         filterLibrary.value = getFilterLibrary()
     })
+
+
+    
+    function getImageRefs(itemType){
+        if(itemType === 'Agent') return {id: 'FemaleAgentID', folder: 'mark-images'}
+        if(itemType === 'Book') return {id: 'BookID', folder: 'book-images'}
+        if(itemType === 'Mark') return {id: 'MargID', folder: 'mark-images'}
+    }
+
+
+    async function getImagePreviews(itemArray){
+        let itemType
+        let imageRefs 
+        let imageData
+        let imagePreviews = [];
+        let index = 0
+            while (index < 20){
+                itemType = itemTypeCheck(itemArray[index])
+                imageRefs = getImageRefs(itemType)
+                imageData = await getImages(itemArray[index], imageRefs)
+                // console.log('imageData', imageData)
+                imagePreviews.push(...imageData.map(image => ({name: image.name, itemID: [imageRefs.id], item: itemArray[index], imageFolder: imageRefs.folder})))
+                index++;
+            }
+            return imagePreviews
+    }
+
+    async function getImages(item, imageRefs){
+        const { data, error } = await supabase
+        .storage
+        .from(`${imageRefs.folder}`)
+        .list(`${item[imageRefs.id]}`, {
+            limit: 100,
+            offset: 0,
+            sortBy: { column: 'name', order: 'asc' },
+        })
+        if(error) {
+                console.log(error)
+        }
+        if(data){
+            return data
+        }
+    }
+
 
 
       return {  libraryData,
@@ -555,6 +605,9 @@ export const useViewStore = defineStore('view', ()=>{
                 filterObject,
                 getActiveFilters,
                 filterLibrary,
+                filterTotalCount,
+                imagePreviewList,
+                getImagePreviews,
                 getItemLibrary,
                 getFilterObject,
                 filterActiveToggle,

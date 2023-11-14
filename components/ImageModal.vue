@@ -33,36 +33,39 @@
         </div>
         <div class="image-modal-container">
             <div class="image-modal scrollable">
-                <div class="image-modal-inner" ref="imageHover">
-                    <div class="magnifying-glass" ref="container">
-            <NuxtImg 
-                    :height="maxImageHeight"
-                    :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${_itemImage.imageFolder}/${_itemImage.item[_itemImage.itemID]}/${_itemImage.name}`"
-                    loading="lazy"
-                    class="magnifying-glass__img"
+                <div class="image-modal-inner" ref="imageTest">
+                        <div ref="imageHover"> 
 
-                    />
-        </div>
-        <div class="magnifying-glass__magnifier" ref="magnifier">
-            <div class="magnifying-glass__enlarged-image" ref="enlargedImage">
-                <NuxtImg 
-                    :height="maxImageHeight*2"
-                    :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${_itemImage.imageFolder}/${_itemImage.item[_itemImage.itemID]}/${_itemImage.name}`"
-                    loading="lazy"
-                    class="magnifying-glass__img"
-                    />
-            </div>
-        </div>
+                                    
+                                    <div class="magnifying-glass" ref="container">
+                            <NuxtImg 
+                                    :height="maxImageHeight"
+                                    :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${_itemImage.imageFolder}/${_itemImage.item[_itemImage.itemID]}/${_itemImage.name}`"
+                                    loading="lazy"
+                                    class="magnifying-glass__img"
+
+                                    />
+                        </div>
+                        <div class="magnifying-glass__magnifier" ref="magnifier">
+                            <div class="magnifying-glass__enlarged-image" ref="enlargedImage">
+                                <NuxtImg 
+                                    :height="maxImageHeight*2"
+                                    :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${_itemImage.imageFolder}/${_itemImage.item[_itemImage.itemID]}/${_itemImage.name}`"
+                                    loading="lazy"
+                                    class="magnifying-glass__img"
+                                    />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="image-sidebar">
-            
-            <button @click="toggleExpand" class="shelf-button item-modal-close-button" > 
-                <Icon name="ic:baseline-open-in-full" size="1.5rem" class="close-button" />
-            </button>
-            <p>Expand</p>
-                <button @click="toggleZoom" class="shelf-button item-modal-close-button" > 
-                    <Icon name="ic:baseline-zoom-in" size="1.5rem" class="close-button" />
+            <div class="image-sidebar">  
+                <button @click="toggleExpand" class="catalogue-filter-category-box item-modal-close-button" :class="{ filterActive : expandOption }"> 
+                    <Icon name="ic:baseline-open-in-full" size="1.5rem" />
+                </button>
+                <p>Expand</p>
+                <button @click="toggleZoom" class="catalogue-filter-category-box item-modal-close-button" :class="{ filterActive : zoomOption}" > 
+                    <Icon name="ic:baseline-zoom-in" size="1.5rem" />
                 </button>
                 <p>Zoom</p>
             </div>
@@ -266,9 +269,10 @@ const value = computed (()=> {
 
 
 const imageHover = ref()
+const imageTest = ref()
 const isHovered = useElementHover(imageHover)
-const imageContainer = useParentElement(imageHover)
-const { width, height } = useElementSize(imageHover)
+const imageContainer = useParentElement(imageTest)
+const { width, height } = useElementSize(imageTest)
 const extractor = (event) => event instanceof Touch ? null : [event.offsetX, event.offsetY]
 const { x, y, sourceType } = useMouse({ target: imageContainer, type: extractor })
 
@@ -279,11 +283,12 @@ const maxImageHeight = computed(()=>{
 
 const expandOption = ref(false);
 const zoomOption = ref(false);
-const zoomHover = ref(false)
+
 
 
 const toggleExpand = ()=>{
     expandOption.value = !expandOption.value
+    console.log('expand')
 }
 const toggleZoom = ()=>{
     zoomOption.value = !zoomOption.value
@@ -333,29 +338,34 @@ function lerp (a, b, n) {
   return (1 - n) * a + n * b;
 }
 
-onUpdated(()=>{
+watch(width, ()=>{
     imageContainer.value.style.width = `${width.value}px`
 })
 
 onMounted(()=>{
     watch([isHovered,x,y,expandOption,zoomOption],()=>{
 
+        if(expandOption.value){
+            imageTest.value.style.transform = 'scale(1.75)'
+            imageContainer.value.style.width = `${width.value * 1.75}px`
+        } 
+            
         
-        if(expandOption.value) imageHover.value.style.transform = 'scale(1.75)'
-        if(expandOption.value) imageContainer.value.style.width = `${width.value * 1.75}px`
-        if(!expandOption.value) imageHover.value.style.transform = 'scale(1)'
-        if(!expandOption.value) imageContainer.value.style.width = `${width.value}px`
+        if(!expandOption.value) {
+            imageTest.value.style.transform = 'scale(1)'
+            imageContainer.value.style.width = `${width.value}px`
+        }
+            
+
     if(isHovered.value){
-        zoomHover.value = true
-        if(zoomOption.value) imageHover.value.style.transformOrigin = `${x.value/width.value*100}% ${y.value/height.value*100}%`
+        // if(zoomOption.value) imageHover.value.style.transformOrigin = `${x.value/width.value*100}% ${y.value/height.value*100}%`
         if(zoomOption.value) showGlass()
         // console.log(`${x.value/width.value*100}% ${y.value/height.value*100}%`)
     }
 
     if(!isHovered.value){
-        setTimeout(() => { zoomHover.value = false; }, 250);
-        if(!zoomHover.value) imageHover.value.style.transformOrigin = `${width.value/2/width.value*100}% ${height.value/2/height.value*100}%`
-        if(!zoomHover.value) hideGlass()
+        // if(!zoomHover.value) imageHover.value.style.transformOrigin = `${width.value/2/width.value*100}% ${height.value/2/height.value*100}%`
+        hideGlass()
     }
 
 }, {immediate: true})
@@ -689,6 +699,7 @@ onMounted(()=>{
 }
 
 .image-modal-inner{
+    transform-origin: top center;
     transition: transform .5s ease;
     position: relative;
     width: fit-content;
