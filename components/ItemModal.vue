@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div class="shelf-button-wrapper item-modal-button">
-                    <button class="shelf-button" @click="addToCollection(item)"> Add to Collection </button>
+                    <button class="shelf-button" @click="addItemsToCollection(itemLibrary, _item, onMountedID, onMountedType)"> Add to Collection </button>
             </div>
         </div>
         </div>
@@ -199,6 +199,7 @@ const { libraryData,
         libraryDisplay,
         formattedLibrary, 
         formattedItemLibrary,
+        itemLibrary,
         filterLibrary,
         itemHeight,
         itemColour, 
@@ -246,7 +247,8 @@ const { getItemLibraryYC,
         itemTypeCheckYC,
         addToCollection, 
         removeFromCollection,
-        getCollectionData } = useYourCollectionStore();
+        getCollectionData,
+        addItemsToCollection } = useYourCollectionStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
@@ -264,6 +266,7 @@ const { categoryMap,
 const { handleObjectProperty,
         handleObjectPath,
         contrastHandler } = useUtils();
+
 
 const onMounteditem = ref(_item) 
 const onMountedID = ref(); 

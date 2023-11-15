@@ -129,7 +129,7 @@
          <div class="explore-category-descriptor">
             <h2>The Marks</h2>
             <p>The term <span>'Marks'</span> refers to marks made by the women <span>Agents</span> within the <span>Books</span> in the collection. </p>
-            <p>These marginal marks show diverse forms of engagement with each book and their text. Collectively these marks are known as <Span>'Marginalia'.</Span></p>
+            <p>These marginal marks show diverse forms of engagement with each book and their text. Collectively these marks are known as <span>'Marginalia'.</span></p>
          </div>
         </template>
     </VMenu>

@@ -16,7 +16,7 @@
                             </NuxtLink>            
                         </ul>
                         <ul v-else class="library-query">
-                            <li @click="$emit('modalClicked')">Create a collection from an item in the libraries below</li>              
+                            <li @click="$emit('modalClicked')">Create a collection by selecting <span>'View Details'</span> on an item in the libraries and adding it to a new collection.</li>              
                         </ul>
                     </div>
                 </div>

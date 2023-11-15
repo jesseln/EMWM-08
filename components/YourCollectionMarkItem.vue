@@ -178,22 +178,42 @@ const supabase = useSupabaseClient()
 
 // STATE MANAGERS IMPORT //    
 //View State
-const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        formattedItemLibrary,
-        filterLibrary,
+const yourCollectionStore = useYourCollectionStore();
+const { allColleciton,
+        yourCollection, 
+        itemLibraryYC, 
+        dataSizeYC,
+        libraryDisplayYC,
+        formattedLibraryYC,
+        formattedItemLibraryYC,
+        filterLibraryYC, 
+        heightCategoryYC,
         itemHeightYC,
-        itemColourYC, 
-        viewHeightBounds, 
-        viewColourSet } = storeToRefs(viewStore)
-const { parseDatabase,
-        handleViewSelection,
+        itemColourYC,
+        colourScaleYC,
+        colourScaleConverterYC,
+        colourSetYC, 
+        ordinalColourMapYC,
+        viewColourSetYC,
+        domainIndexYC,
+        viewHeightBoundsYC,
+        domainColourIndexYC,
+        viewColourBoundsYC,
+        activeFiltersYC,
+        filterObjectYC,
+        getActiveFiltersYC } = storeToRefs(yourCollectionStore)
+const { getItemLibraryYC,
+        getFilterObjectYC,
+        filterActiveToggleYC,
+        parseDatabaseYC,
+        handleViewSelectionYC,
         getIDP_YC,
+        getIFP_YC,
         itemTypeCheckYC,
-        getItemLibraryYC,
-        getItemLibraryCountYC } = useViewStore();
+        addToCollection, 
+        removeFromCollection,
+        getItemLibraryCountYC, 
+    } = useYourCollectionStore();
     
 //Reference Constants
 const referenceStore = useReferenceStore();

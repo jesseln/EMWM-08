@@ -887,6 +887,7 @@ body {
 
 
 .section-inner{
+    position: relative;
 	margin: 10px 0;
 	display: flex;
 	flex-wrap: wrap;
@@ -2048,6 +2049,143 @@ body {
     align-items: center;
     justify-content: center;
     
+}
+
+/* Collection Badges */
+.item-collection-badge-wrapper.zoomIn{
+    position: absolute;
+    bottom: -40px;
+    left: 30px;
+    z-index: 5;
+    /* background: white; */
+}
+.item-collection-badge-wrapper.zoomMid{
+    position: absolute;
+    bottom: -15px;
+    left: 0px;
+    z-index: 5;
+    /* background: white; */
+}
+
+.item-collection-badge-wrapper.zoomOut{
+    position: absolute;
+    bottom: 1px;
+    left: 0px;
+    z-index: 5;
+    /* background: white; */
+}
+
+.zoomIn .item-collection-badge{
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+	padding: 0 0 0 0.2rem;
+    /* gap: 0.1rem; */
+    margin:  0.05rem 0.05rem; 
+	border-radius: 20rem;
+    background:rgb(251, 213, 36);
+    border: 3px solid rgb(214, 214, 214);
+    /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); */
+    /* min-width:3.5rem; */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px;
+
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    /* line-height: 0.8rem; */
+    color: black;
+    text-align: right;
+}
+.zoomMid .item-collection-badge{
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+	padding: 0 0 0 0.2rem;
+    gap: 0;
+    margin:  0.05rem 0.05rem; 
+	border-radius: 20rem;
+    background:rgb(251, 213, 36);
+    border: 1px solid rgb(214, 214, 214);
+    /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); */
+    /* min-width:3.5rem; */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px;
+
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    /* line-height: 0.8rem; */
+    color: black;
+    text-align: right;
+}
+.zoomOut .item-collection-badge{
+    position: relative;
+    width: 0.7rem;
+    height: 0.7rem;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+	/* padding: 0.1rem 0.1rem; */
+    gap: 0;
+    padding:  0.15rem 0.1rem; 
+	border-radius: 20rem;
+    background:rgb(251, 213, 36);
+    /* border: 1px solid rgb(214, 214, 214); */
+    /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); */
+    /* min-width:3.5rem; */
+    /* box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px 0px; */
+
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.45rem;
+    font-weight: 300;
+    /* line-height: 0.8rem; */
+    color: black;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.main .item-collection-badge{
+    background: rgb(152, 121, 238);
+    color: white;
+}
+
+
+.item-collection-badge h4{
+    display: inline-block;
+    padding: 0 0.1rem 0 0;
+    text-align: right;
+}
+
+.item-collection-badge p{
+    display: inline-block;
+    padding: 0 0.25rem 0.25rem 0;
+    text-align: left;
+}
+
+
+.zoomOut .item-collection-badge h4{
+    display: inline-block;
+    padding: 0 0 0 0;
+    text-align: center;
+}
+
+.zoomOut .item-collection-badge p{
+    display: inline-block;
+    padding: 0 0 0.1rem 0;
+    font-size: 0.62rem;
+    text-align: center;
 }
 
 

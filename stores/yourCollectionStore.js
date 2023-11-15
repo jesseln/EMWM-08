@@ -2,6 +2,14 @@ import * as d3 from "d3";
 import { storeToRefs } from "pinia";
 
 export const useYourCollectionStore = defineStore('yourCollection', ()=>{
+    const libraryStore = useLibraryStore();
+
+    // const { 
+    //       Agent,
+    //       Book,
+    //       Mark
+    //        } = storeToRefs(libraryStore)
+
     const referenceStore = useReferenceStore();
     const { viewMap, filterMap, colourMapFiltered, scales } =  storeToRefs(referenceStore);
     const { alphabetically,
@@ -15,7 +23,8 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
             isString,
             isArray,
             containsNumber,
-            processDomain } = useUtils();
+            processDomain,
+            checkObjectPath } = useUtils();
 
     const heightCategoryYC = {
         logarithmic: ['Number of marks', 'Number of book images', 'Size'],
@@ -410,7 +419,11 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
             library = [item, getUnique(item['Marks'], 'MargID'), getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID')].flat()
         }else if(itemType === 'Mark'){
             //Mark Item paths
-            library = [item, getUnique(item['Agents'], 'FemaleAgentID'), getUnique(item['BookID'], 'BookID')].flat()
+            library = [
+                item, 
+                item['Agents'], 
+                item['Books']
+            ]
         }
 
         library ? itemLibraryYC.value = library : "no data"
@@ -574,8 +587,9 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
             }
     })
 
-
+    
     watch([collectionName],() => {
+        console.log('name changed fired', collectionName.value,allCollections.value )
         // console.log('collectionName.value in allCollections.value', Object.keys(allCollections.value))
         if(collectionName.value !== undefined){
             if(collectionName.value in allCollections.value){
@@ -650,7 +664,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
       const collectionIndex = getCollectionindex()
 
 
-    async function addToCollection(item) {
+    function addToCollection(item) {
         if(collectionName.value !== undefined){
             let id; 
             if(item['FemaleAgentID']) id = 'FemaleAgentID'
@@ -668,7 +682,61 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
         }
       }
 
-      async function removeFromCollection(item) {
+      function addItemsToCollectionCheck(item, accumulator) {
+        if(collectionName.value !== undefined){
+            let id; 
+            if(item['FemaleAgentID']) id = 'FemaleAgentID'
+            if(item['BookID']) id = 'BookID'
+            if(item['MargID']) id = 'MargID'
+
+            const exists = yourCollection.value.find(i => i[id] === item[id]) 
+            const batchExists = accumulator.find(i => i[id] === item[id]) 
+
+            if(exists || batchExists) {
+                alert('Item already on shelf') //Placeholder for modal option
+            }
+            if(!exists && !batchExists) {
+                return true
+            }
+        }
+      }
+
+      function getOriginalItem(item){
+        let id; 
+        let itemType = itemTypeCheckYC(item)
+
+        if(itemType === 'Agent') id = 'FemaleAgentID'
+        if(itemType === 'Book') id = 'BookID'
+        if(itemType === 'Mark') id = 'MargID'
+
+        return libraryStore[itemType].find((originalItem) => originalItem[id] ===  item[id])
+      }
+
+
+
+      function addItemsToCollection(items, originalItem, originalItemID, originalItemType){
+        let itemBatch = items.filter((element, index, array) =>{
+            return addItemsToCollectionCheck(element, array.slice(0, index))
+        })
+
+        let batchOriginals = itemBatch.map((element) =>{
+            return getOriginalItem(element)
+        })
+
+        let batchLinked = batchOriginals.map((element) =>{
+            if(checkObjectPath(element, originalItemID) === checkObjectPath(originalItem, originalItemID) ){
+                return {...element, main: true, linkedItemIDNumber: originalItem[originalItemID], linkedItemType: originalItemType}
+            }else{
+                return {...element, main: false, linkedItemIDNumber: originalItem[originalItemID], linkedItemType: originalItemType}
+            }
+            
+        })
+
+        console.log('batchLinked',batchLinked)
+        yourCollection.value.push(...batchLinked) 
+    }
+
+     function removeFromCollection(item) {
         let id; 
         if(item['FemaleAgentID']) id = 'FemaleAgentID'
         if(item['BookID']) id = 'BookID'
@@ -714,6 +782,7 @@ export const useYourCollectionStore = defineStore('yourCollection', ()=>{
                 removeFromCollection,
                 getItemLibraryCountYC,
                 getCollectionData,
+                addItemsToCollection,
             }
   })
 

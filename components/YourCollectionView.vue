@@ -54,9 +54,31 @@
                         }"
                     :key="JSON.stringify(item)" 
                     :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <YourCollectionAgentItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Agent'" :item="item" :itemBundle="yourCollectionItemBundle.Agent"/>
-                        <YourCollectionBookItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Book'" :item="item" :itemBundle="yourCollectionItemBundle.Book"/>
-                        <YourCollectionMarkItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Mark'" :item="item" :itemBundle="yourCollectionItemBundle.Mark"/>
+                        <LazyYourCollectionAgentItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Agent'" :item="item" :itemBundle="yourCollectionItemBundle.Agent"/>
+                        <LazyYourCollectionBookItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Book'" :item="item" :itemBundle="yourCollectionItemBundle.Book"/>
+                        <LazyYourCollectionMarkItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Mark'" :item="item" :itemBundle="yourCollectionItemBundle.Mark"/>
+                        <div v-if="item.main"  class="item-collection-badge-wrapper main" 
+                            :class="{ 
+                                zoomOut : zoomLevel === '0',
+                                zoomMid : zoomLevel === '50',
+                                zoomIn : zoomLevel === '100',
+                            }">
+
+                            <div class="item-collection-badge" >
+                                <h4 >{{ zoomLevel === '100'? item.linkedItemType : item.linkedItemType.slice(0,1)  }}</h4><p v-if="zoomLevel !== '0'">{{ item.linkedItemIDNumber }}</p>
+                            </div>
+                        </div>
+                        <div v-if="!item.main"  class="item-collection-badge-wrapper" 
+                            :class="{ 
+                                zoomOut : zoomLevel === '0',
+                                zoomMid : zoomLevel === '50',
+                                zoomIn : zoomLevel === '100',
+                            }">
+
+                            <div class="item-collection-badge" >
+                                <h4 >{{ zoomLevel === '100'? item.linkedItemType : item.linkedItemType.slice(0,1) }}</h4><p v-if="zoomLevel !== '0'">{{ item.linkedItemIDNumber }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                     <div class="section-inner" 
@@ -68,9 +90,31 @@
                         }"
                     :key="JSON.stringify(item)" 
                     :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <YourCollectionAgentItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Agent'" :item="item" :itemBundle="yourCollectionItemBundle.Agent"/>
-                        <YourCollectionBookItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Book'" :item="item" :itemBundle="yourCollectionItemBundle.Book"/>
-                        <YourCollectionMarkItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Mark'" :item="item" :itemBundle="yourCollectionItemBundle.Mark"/>
+                        <LazyYourCollectionAgentItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Agent'" :item="item" :itemBundle="yourCollectionItemBundle.Agent"/>
+                        <LazyYourCollectionBookItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Book'" :item="item" :itemBundle="yourCollectionItemBundle.Book"/>
+                        <LazyYourCollectionMarkItem @viewDetails="showModal" v-if="itemTypeCheckYC(item) === 'Mark'" :item="item" :itemBundle="yourCollectionItemBundle.Mark"/>
+                        <div v-if="item.main"  class="item-collection-badge-wrapper main" 
+                            :class="{ 
+                                zoomOut : zoomLevel === '0',
+                                zoomMid : zoomLevel === '50',
+                                zoomIn : zoomLevel === '100',
+                            }">
+
+                            <div class="item-collection-badge" >
+                                <h4 >{{ zoomLevel === '100'? item.linkedItemType : item.linkedItemType.slice(0,1)  }}</h4><p v-if="zoomLevel !== '0'">{{ item.linkedItemIDNumber }}</p>
+                            </div>
+                        </div>
+                        <div v-if="!item.main"  class="item-collection-badge-wrapper" 
+                            :class="{ 
+                                zoomOut : zoomLevel === '0',
+                                zoomMid : zoomLevel === '50',
+                                zoomIn : zoomLevel === '100',
+                            }">
+
+                            <div class="item-collection-badge" >
+                                <h4 >{{ zoomLevel === '100'? item.linkedItemType : item.linkedItemType.slice(0,1) }}</h4><p v-if="zoomLevel !== '0'">{{ item.linkedItemIDNumber }}</p>
+                            </div>
+                        </div>
                     </div>
             </template>
         </div>
@@ -172,9 +216,9 @@ const { getItemLibraryYC,
     }  
   })
 
-  watchEffect(()=>{
-    console.log('allcollections',allCollections)
-  })
+//   watchEffect(()=>{
+//     console.log('allcollections',allCollections)
+//   })
 
       // To Top Button
       const { x, y } = useWindowScroll() // To replace below

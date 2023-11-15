@@ -15,6 +15,7 @@
         height: itemHeightYC(getIDP_YC(item,'height')) + 'px', 
         width:scales.minItemWidth + 'px'}">    
         <div class="book-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeightYC(getIDP_YC(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
+            
         <div class="book-item" 
             :style="{ maxHeight: scales.maxItemHeight-4 + 'px', 
             height: itemHeightYC(getIDP_YC(item,'height'))-4 + 'px' , 

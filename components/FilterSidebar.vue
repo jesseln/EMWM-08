@@ -2,7 +2,7 @@
 <div class="sidebar scrollable">
     <div class="sidebar-title-box">
         <h1 class="query-type-sideBar"> Library {{libraryDisplay.pageText.queryType}}  </h1>
-        <h3>Total: {{ filterTotalCountYC }}</h3>
+        <h3>Total: {{ filterTotalCount }}</h3>
     </div>
     <!-- <div class="shelf-separator-container"><div class="shelf-separator"></div></div> -->
 <div class="sidebar-content">

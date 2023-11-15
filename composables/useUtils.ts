@@ -57,6 +57,22 @@ export const useUtils = () => {
             }
     }
 
+        //Checks all properties on path exist and returns handled value
+        function checkObjectPath(item: any, ...path: any) {
+            if(!item) return 'false'
+            let obj = item;
+            for (let i = 0; i < path.length; i++) {
+                let prop = path[i];
+            
+                if (!obj || !obj.hasOwnProperty(prop)) {
+                  return false;
+                } else {
+                  obj = obj[prop];
+                }
+              }
+          return obj
+        }
+
     //Checks for valid property and returns handled value
     function handleObjectProperty(obj: any, prop: any) {
         let value;
@@ -267,5 +283,6 @@ export const useUtils = () => {
         maxItemIndex,
         processDomain,
         invertObject,
+        checkObjectPath,
     }
 }

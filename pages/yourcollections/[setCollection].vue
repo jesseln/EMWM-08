@@ -5,7 +5,7 @@
 
         <div class="shelf-separator-container"><div class="shelf-separator"></div></div>
     <div class="explore-library-title">
-        <h1>{{ route.params.setCollection}}n </h1>
+        <h1>{{ route.params.setCollection}} </h1>
         <h4><span>Your Collection</span> will save your items and your view selections.</h4>
         <!-- <h4>Select from one of the 3 collections below, then click on the arrow to begin.</h4> -->
     </div>
@@ -15,7 +15,7 @@
         :delay="{ show: 50, hide: 200 }"
     >
 
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'agents'}">
+        <div class="library-type-title-box" >
             <h1 class="library-type-title"></h1>
             <div class="index-list-main">
                 <div class="icon-container">
@@ -23,7 +23,7 @@
                         <path d="M0 5.35535C0 2.39767 2.39767 0 5.35535 0C8.31302 0 10.7107 2.39767 10.7107 5.35535V26.7767C10.7107 29.7344 8.31302 32.1321 5.35535 32.1321C2.39767 32.1321 0 29.7344 0 26.7767V5.35535Z" :fill="icons.agentIcon.iconFill"/>
                     </svg>
                 </div>
-                <h3 :class="{ activePage : route.params.setQuery === 'agents'}">The Agents</h3>   
+                <h3>The Agents</h3>   
             </div>
         </div>
         <template #popper >
@@ -39,7 +39,7 @@
         :delay="{ show: 50, hide: 200 }"
     >
 
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'books'}">
+        <div class="library-type-title-box" >
             <h1 class="library-type-title"></h1>
             <div class="index-list-main">
                 <div class="icon-container">
@@ -47,7 +47,7 @@
                         <path d="M0.00512695 0H10V29.9846H0.00512695V0Z" :fill="icons.bookIcon.iconFill"/>
                     </svg>
                 </div>
-                <h3 :class="{ activePage : route.params.setQuery === 'books'}">The Books</h3>
+                <h3 >The Books</h3>
             </div>
         </div>
         <template #popper >
@@ -63,7 +63,7 @@
         :delay="{ show: 50, hide: 200 }"
     >
 
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'marks'}">
+        <div class="library-type-title-box" >
             <h1 class="library-type-title"></h1>
             <div class="index-list-main">
                         <div class="icon-container">
@@ -71,7 +71,7 @@
                             <path d="M0.379883 6.90698L4.99988 0L9.61988 6.90698V33H0.379883V6.90698Z" :fill="icons.markIcon.iconFill"/>
                         </svg>
                         </div>
-                        <h3 :class="{ activePage : route.params.setQuery === 'marks'}">The Marks</h3>
+                        <h3 >The Marks</h3>
                     </div>
 
         </div>
@@ -123,7 +123,7 @@
         </div>
 
     <div class="nav-bottom-div">
-        <div v-if="dataCheck && useY > 150">
+        <div v-if="dataCheck">
         <YourCollectionBottomNav />
         </div>
     </div>
@@ -131,7 +131,7 @@
         🖊️
     </button>
         <AnnotationPanel v-if="showAnnotations"/> -->
-    <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button>
+    <!-- <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button> -->
 
 
     </div>
@@ -224,17 +224,17 @@ const { handleObjectProperty,
             agentIcon:{
                 iconHeight: 0.9  * scaleHeight,
                 iconWidth: 0.7 * scaleWidth,
-                iconFill: route.params.setQuery === 'agents'? activeFill : fill,
+                iconFill: false? activeFill : fill,
             },
             bookIcon:{
                 iconHeight: 1 * scaleHeight,
                 iconWidth: 0.7 * scaleWidth,
-                iconFill: route.params.setQuery === 'books'? activeFill : fill,
+                iconFill: false? activeFill : fill,
             },
             markIcon:{
                 iconHeight: 0.9 * scaleHeight,
                 iconWidth: 0.75 * scaleWidth,
-                iconFill: route.params.setQuery === 'marks'? activeFill : fill,
+                iconFill: false? activeFill : fill,
             },
         }
     }
@@ -248,11 +248,11 @@ const { handleObjectProperty,
     const showAnnotations = ref(false)
 
     // To Top Button
-    const { x, y } = useWindowScroll() // To replace below
-    const useX = ref(x)
-    const useY = ref(y)
-    const toExploreButton = ref();
-    const toTopButton = ref();
+    // const { x, y } = useWindowScroll() // To replace below
+    // const useX = ref(x)
+    // const useY = ref(y)
+    // const toExploreButton = ref();
+    // const toTopButton = ref();
     // onMounted(() => {
     //     watchEffect(()=>{
     //         if (useY.value > 550) {
@@ -328,7 +328,7 @@ span{
     }
 
     .nav-bottom-div{
-        z-index: 15;
+        z-index: 8;
         position: sticky;
         bottom: -1px;
         background-color: rgba(255,255,255,1);
