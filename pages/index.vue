@@ -3,51 +3,20 @@
         <div class="home-library-title">
             <h1>Welcome to the Collection of Early Modern Women's Marginalia</h1>
             <h4>
-                <span>Marginalia are marks made in the margins of books. The marks in this collection were made by women during the 16th and 17th centuries. 
-                This period of time is known as the Early Modern Period</span>.
+                Early Modern Women’s Marginalia: the Library of Libraries is a database of the marks that women made in books between 1530 and 1680, drawing from hundreds of repositories across the world. It presents the data from a wider project that explores how early modern women engaged with the margins of books, as owners, readers,  writers, artists, and students, registering a range of book uses from humanist annotation through handwriting practice and pen trials to doodles, smudges and stains. Bringing together details about the marginalia, the books, and the agents who marked them, the database is designed to encourage exploration of the collection and further research using these materials, providing views of both the aggregated data and individual instances of marginal marks.
             </h4>
             <h4>
-                Marginalia give us a window into what books early modern women read or owned, and how they engaged with them. 
-                This site tracks a growing archive of women’s annotations in 16th and 17th century books, including ownership marks, 
-                inscriptions, and notes,  as well as material uses of books such as drawing, record keeping, pen trials and handwriting practice.
+                The database is organised using three broad categories: Marks, Books and Agents. Rich metadata is provided in each of these sections, providing information about the kinds of marks that were made and where they appear, bibliographic details about the books in which they are found, and further details about the women agents themselves: their names, any dates, and the stability of the attribution, from certain to possible. You can zoom out to see all the marks, books or agents through different views, or zoom in to view subsets of the data.
             </h4>
             <h4>
-                This digital library presents over 1,000 instances of marginalia found from this period. These have been catalogued and a significant amount of detail has been provided by the research team. 
-                This library has been designed to explore this collection. It provides a wide range of features for viewing and arranging the collection to suit the needs of literary  researchers.
+                Items you would like to explore further can be added to a shelf in your own digital library: Your Collection. Each item can then be viewed with all the metadata about mark, book and agent at once, alongside images of the marginalia where available. 
+            </h4>
+            <h4>
+                To begin viewing the collection, select from one of the three categories below, or click "Explore the collection" above.
+
             </h4>
             </div>
-            <div class="shelf-separator-container-homepage"><div class="shelf-separator-homepage"></div></div>
-            <div class="home-library-title">
-            <h2 class="low-top-margin">
-                Each view of the collection focusses on one of three connected elements:
-            </h2>
-            <div class="homepage-icon-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" :width="11*icons.agentIcon.iconWidth" :height="33*icons.agentIcon.iconHeight" viewBox="0 0 11 33" fill="none">
-                        <path d="M0 5.35535C0 2.39767 2.39767 0 5.35535 0C8.31302 0 10.7107 2.39767 10.7107 5.35535V26.7767C10.7107 29.7344 8.31302 32.1321 5.35535 32.1321C2.39767 32.1321 0 29.7344 0 26.7767V5.35535Z" :fill="icons.agentIcon.iconFill"/>
-                    </svg>
-                </div>
-                <h3>The <span>Women Agents,</span> </h3>
-                <div class="homepage-icon-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.markIcon.iconWidth" :height="33*icons.markIcon.iconHeight" viewBox="0 0 10 33" fill="none">
-                            <path d="M0.379883 6.90698L4.99988 0L9.61988 6.90698V33H0.379883V6.90698Z" :fill="icons.markIcon.iconFill"/>
-                        </svg>
-                    </div>
-                <h3>  the  <span>Marks</span> they made, and </h3>
-                <div class="homepage-icon-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.bookIcon.iconWidth" :height="30*icons.bookIcon.iconHeight" viewBox="0 0 10 30" fill="none">
-                        <path d="M0.00512695 0H10V29.9846H0.00512695V0Z" :fill="icons.bookIcon.iconFill"/>
-                    </svg>
-                </div>
-                 <h3> the <span>Books</span> in which the marks were found.  </h3>
-                 <h4 class="low-top-margin"> </h4>
-            <h4>
-                Items you would like to explore further can be added to <span>Your Collection</span> and viewed with all their associated elements at once.
-            <span>To begin viewing the collection,</span> select from one of the three categories below to begin viewing the collection, or click "Explore the collection" above.
-            </h4>
-            <h4>
-                 
-            </h4> 
-        </div>
+
         <div class="shelf-separator-container-homepage"><div class="shelf-separator-homepage"></div></div>
         <div class="home-library-second-title">
             <h1>
@@ -55,28 +24,29 @@
             </h1>
             </div>
         <div class="type-selector-wrapper" >
-        <NuxtLink to="/library/agents">
-    <VMenu
+            <NuxtLink to="/library/marks">
+        <VMenu
         placement="top" 
         :delay="{ show: 50, hide: 200 }"
     >
 
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'agents'}">
+        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'marks'}">
             <h1 class="library-type-title"></h1>
             <div class="index-list-main">
-                <div class="icon-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" :width="11*icons.agentIcon.iconWidth" :height="33*icons.agentIcon.iconHeight" viewBox="0 0 11 33" fill="none">
-                        <path d="M0 5.35535C0 2.39767 2.39767 0 5.35535 0C8.31302 0 10.7107 2.39767 10.7107 5.35535V26.7767C10.7107 29.7344 8.31302 32.1321 5.35535 32.1321C2.39767 32.1321 0 29.7344 0 26.7767V5.35535Z" :fill="icons.agentIcon.iconFill"/>
-                    </svg>
-                </div>
-                <h3 :class="{ activePage : route.params.setQuery === 'agents'}">The Agents</h3>   
-            </div>
+                        <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.markIcon.iconWidth" :height="33*icons.markIcon.iconHeight" viewBox="0 0 10 33" fill="none">
+                            <path d="M0.379883 6.90698L4.99988 0L9.61988 6.90698V33H0.379883V6.90698Z" :fill="icons.markIcon.iconFill"/>
+                        </svg>
+                        </div>
+                        <h3 :class="{ activePage : route.params.setQuery === 'marks'}">The Marks</h3>
+                    </div>
+
         </div>
         <template #popper >
          <div class="explore-category-descriptor">
-            <h2>The Agents</h2>
-            <p>In these collections the term <span>'Agents'</span> refers to the women who made the marginal marks in each book. They can also be referred to as <span>'Marginalists'</span>.</p>
-            <p>The names of these women are known through the marks they made. These often included marks of ownership with the inscription, <span>"Her Book"</span>.</p>
+            <h2>The Marks</h2>
+            <p>The term <span>'Marks'</span> refers to marks made by the women <span>Agents</span> within the <span>Books</span> in the collection. </p>
+            <p>These marginal marks show diverse forms of engagement with each book and their text. Collectively these marks are known as <span>'Marginalia'.</span></p>
          </div>
         </template>
     </VMenu>
@@ -107,29 +77,28 @@
         </template>
     </VMenu>
     </NuxtLink>
-    <NuxtLink to="/library/marks">
-        <VMenu
+    <NuxtLink to="/library/agents">
+    <VMenu
         placement="top" 
         :delay="{ show: 50, hide: 200 }"
     >
 
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'marks'}">
+        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'agents'}">
             <h1 class="library-type-title"></h1>
             <div class="index-list-main">
-                        <div class="icon-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.markIcon.iconWidth" :height="33*icons.markIcon.iconHeight" viewBox="0 0 10 33" fill="none">
-                            <path d="M0.379883 6.90698L4.99988 0L9.61988 6.90698V33H0.379883V6.90698Z" :fill="icons.markIcon.iconFill"/>
-                        </svg>
-                        </div>
-                        <h3 :class="{ activePage : route.params.setQuery === 'marks'}">The Marks</h3>
-                    </div>
-
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" :width="11*icons.agentIcon.iconWidth" :height="33*icons.agentIcon.iconHeight" viewBox="0 0 11 33" fill="none">
+                        <path d="M0 5.35535C0 2.39767 2.39767 0 5.35535 0C8.31302 0 10.7107 2.39767 10.7107 5.35535V26.7767C10.7107 29.7344 8.31302 32.1321 5.35535 32.1321C2.39767 32.1321 0 29.7344 0 26.7767V5.35535Z" :fill="icons.agentIcon.iconFill"/>
+                    </svg>
+                </div>
+                <h3 :class="{ activePage : route.params.setQuery === 'agents'}">The Agents</h3>   
+            </div>
         </div>
         <template #popper >
          <div class="explore-category-descriptor">
-            <h2>The Marks</h2>
-            <p>The term <span>'Marks'</span> refers to marks made by the women <span>Agents</span> within the <span>Books</span> in the collection. </p>
-            <p>These marginal marks show diverse forms of engagement with each book and their text. Collectively these marks are known as <span>'Marginalia'.</span></p>
+            <h2>The Agents</h2>
+            <p>In these collections the term <span>'Agents'</span> refers to the women who made the marginal marks in each book. They can also be referred to as <span>'Marginalists'</span>.</p>
+            <p>The names of these women are known through the marks they made. These often included marks of ownership with the inscription, <span>"Her Book"</span>.</p>
          </div>
         </template>
     </VMenu>
