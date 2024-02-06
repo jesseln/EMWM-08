@@ -13,9 +13,8 @@
             </h4>
             <h4>
                 To begin viewing the collection, select from one of the three categories below, or click "Explore the collection" above.
-
             </h4>
-            </div>
+        </div>
 
         <div class="shelf-separator-container-homepage"><div class="shelf-separator-homepage"></div></div>
         <div class="home-library-second-title">
