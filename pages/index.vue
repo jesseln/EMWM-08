@@ -11,98 +11,38 @@
             <h4>
                 Items you would like to explore further can be added to a shelf in your own digital library: Your Collection. Each item can then be viewed with all the metadata about mark, book and agent at once, alongside images of the marginalia where available. 
             </h4>
-            <h4>
-                To begin viewing the collection, select from one of the three categories below, or click "Explore the collection" above.
-            </h4>
+        
         </div>
+        <div class="top-images">
+    <div v-if="imagePreviews" class="top-images-wrapper">
+      <div class="top-images-inner">
 
-        <div class="shelf-separator-container-homepage"><div class="shelf-separator-homepage"></div></div>
-        <div class="home-library-second-title">
-            <h1>
-                View the Collection
-            </h1>
-            </div>
-        <div class="type-selector-wrapper" >
-            <NuxtLink to="/library/marks">
-        <VMenu
-        placement="top" 
-        :delay="{ show: 50, hide: 200 }"
-    >
+          <vueper-slides :dragging-distance="70"
+          class="no-shadow" 
+          slide-image-inside
+          :visible-slides="1"
+          slide-multiple
+          :slide-ratio="1"
+          fixed-height="40rem"
+          :gap="1"
+          :bullets="false"
+          :arrows-outside="false"
+          prevent-y-scroll 
+          lazy 
+          lazy-load-on-drag
+          >
+              <vueper-slide
+                  v-for="imagePreview in imagePreviews"
+                  :key="imagePreview"
+                  :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imagePreview.imageFolder}/${imagePreview.item[imagePreview.itemID]}/${imagePreview.name}`"
+                  @click="openImageViewer({item: imagePreview.item, itemID: imagePreview.itemID, imageFolder: imagePreview.imageFolder, name: imagePreview.name})"
+                  />
+          </vueper-slides>
+      </div>
+  </div>
+</div>
 
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'marks'}">
-            <h1 class="library-type-title"></h1>
-            <div class="index-list-main">
-                        <div class="icon-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.markIcon.iconWidth" :height="33*icons.markIcon.iconHeight" viewBox="0 0 10 33" fill="none">
-                            <path d="M0.379883 6.90698L4.99988 0L9.61988 6.90698V33H0.379883V6.90698Z" :fill="icons.markIcon.iconFill"/>
-                        </svg>
-                        </div>
-                        <h3 :class="{ activePage : route.params.setQuery === 'marks'}">The Marks</h3>
-                    </div>
-
-        </div>
-        <template #popper >
-         <div class="explore-category-descriptor">
-            <h2>The Marks</h2>
-            <p>The term <span>'Marks'</span> refers to marks made by the women <span>Agents</span> within the <span>Books</span> in the collection. </p>
-            <p>These marginal marks show diverse forms of engagement with each book and their text. Collectively these marks are known as <span>'Marginalia'.</span></p>
-         </div>
-        </template>
-    </VMenu>
-    </NuxtLink>
-    <NuxtLink to="/library/books">
-        <VMenu
-        placement="top" 
-        :delay="{ show: 50, hide: 200 }"
-    >
-
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'books'}">
-            <h1 class="library-type-title"></h1>
-            <div class="index-list-main">
-                <div class="icon-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" :width="10*icons.bookIcon.iconWidth" :height="30*icons.bookIcon.iconHeight" viewBox="0 0 10 30" fill="none">
-                        <path d="M0.00512695 0H10V29.9846H0.00512695V0Z" :fill="icons.bookIcon.iconFill"/>
-                    </svg>
-                </div>
-                <h3 :class="{ activePage : route.params.setQuery === 'books'}">The Books</h3>
-            </div>
-        </div>
-        <template #popper >
-         <div class="explore-category-descriptor">
-            <h2>The Books</h2>
-            <p>The <span>Books</span> in these collections are books which have each been annotated by women <span>Agents</span>. These inscriptions are referred to as marginal <span>Marks</span>.</p>
-              <p>These books have been sourced from international respositories. Images of the books and the marginal marks they contain can be viewed in the library.</p>
-         </div>
-        </template>
-    </VMenu>
-    </NuxtLink>
-    <NuxtLink to="/library/agents">
-    <VMenu
-        placement="top" 
-        :delay="{ show: 50, hide: 200 }"
-    >
-
-        <div class="library-type-title-box" :class="{ activePage : route.params.setQuery === 'agents'}">
-            <h1 class="library-type-title"></h1>
-            <div class="index-list-main">
-                <div class="icon-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" :width="11*icons.agentIcon.iconWidth" :height="33*icons.agentIcon.iconHeight" viewBox="0 0 11 33" fill="none">
-                        <path d="M0 5.35535C0 2.39767 2.39767 0 5.35535 0C8.31302 0 10.7107 2.39767 10.7107 5.35535V26.7767C10.7107 29.7344 8.31302 32.1321 5.35535 32.1321C2.39767 32.1321 0 29.7344 0 26.7767V5.35535Z" :fill="icons.agentIcon.iconFill"/>
-                    </svg>
-                </div>
-                <h3 :class="{ activePage : route.params.setQuery === 'agents'}">The Agents</h3>   
-            </div>
-        </div>
-        <template #popper >
-         <div class="explore-category-descriptor">
-            <h2>The Agents</h2>
-            <p>In these collections the term <span>'Agents'</span> refers to the women who made the marginal marks in each book. They can also be referred to as <span>'Marginalists'</span>.</p>
-            <p>The names of these women are known through the marks they made. These often included marks of ownership with the inscription, <span>"Her Book"</span>.</p>
-         </div>
-        </template>
-    </VMenu>
-    </NuxtLink>
-    </div>
+        
     </div>
    
     
@@ -113,6 +53,8 @@
 import { storeToRefs } from "pinia";
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
 // ROUTE MANAGERS
 const route = useRoute()
 
@@ -140,10 +82,11 @@ const { libraryData,
         domainColourIndex,
         viewColourBounds,
         viewColourSet } = storeToRefs(viewStore)
-        const { parseDatabase,
+const { parseDatabase,
         handleViewSelection,
         getIDP,
         filterActiveToggle,
+        getImagePreviews,
         handleColour } = useViewStore();
 
 //Reference Constants
@@ -158,7 +101,19 @@ const { categoryMap,
 const { handleObjectProperty,
         contrastHandler } = useUtils();
 
+        const { 
+        Agent,
+        Book,
+        Mark
+         } = storeToRefs(libraryStore)
 
+  const imagePreviews = ref()
+  watchEffect(()=>{
+    if(Mark.value.length > 0){
+         getImagePreviews(Mark.value).then(data=> imagePreviews.value = data);
+    }
+    // console.log('imagePreviewList', imagePreviews.value)
+  })
  
     function iconDimensions(){
     const scaleWidth = 1;

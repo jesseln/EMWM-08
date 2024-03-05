@@ -44,9 +44,19 @@
                 <h2 class="main-navbar-link dropbtn" >Home</h2>
             </div>   
           </NuxtLink>
-          <NuxtLink to="/library/explore" activeClass="nav-active">
+          <NuxtLink to="/about" activeClass="nav-active">
             <div class="dropdown">
-                <h2 class="main-navbar-link dropbtn" >Explore the Collection</h2>
+                <h2 class="main-navbar-link dropbtn" >About</h2>
+            </div>   
+          </NuxtLink>
+          <NuxtLink to="/explore/article1" activeClass="nav-active">
+            <div class="dropdown">
+                <h2 class="main-navbar-link dropbtn" >Explore the Library</h2>
+            </div>   
+          </NuxtLink>
+          <NuxtLink to="/library/searchView" activeClass="nav-active">
+            <div class="dropdown">
+                <h2 class="main-navbar-link dropbtn" >Search/View the Library</h2>
             </div>   
           </NuxtLink>
             <!-- <div class="dropdown" ref="dropdownExploreLibraryRef" @mouseover="showModal('ExploreLibrary')" @mouseleave="hideModal('ExploreLibrary')">
@@ -56,21 +66,21 @@
                 </div>
             </div> -->
             <div class="dropdown" ref="dropdownYourCollectionsRef" @mouseover="showModal('YourCollections')" @mouseleave="hideModal('YourCollections')">
-            <h2 class="main-navbar-link dropbtn">View Your Collections</h2>
+            <h2 class="main-navbar-link dropbtn">Make a Library</h2>
                 <div class="dropdown-content" ref="dropdownYourCollectionsRefContent" >
                     <DropdownYourCollections @modalClicked="hideModalClicked('YourCollections')" />
                 </div>
             </div>
+            <NuxtLink to="/about" activeClass="nav-active">
+            <div class="dropdown">
+                <h2 class="main-navbar-link dropbtn" >Add to the Library</h2>
+            </div>   
+          </NuxtLink>
           <!-- <NuxtLink to="/yourcollection/collection01" activeClass="nav-active">
             <div class="dropdown">
                 <h2 class="main-navbar-link dropbtn" >View Your Collections</h2>
             </div>   
           </NuxtLink> -->
-          <NuxtLink to="/about" activeClass="nav-active">
-            <div class="dropdown">
-                <h2 class="main-navbar-link dropbtn" >Read About the Collection</h2>
-            </div>   
-          </NuxtLink>
       </div>
       <div class="image-modal-background"  ref="imageModalBackground" @click="closeImageModal">
             <div class="image-modal-content-outer" ref="imageModalContentOuter">

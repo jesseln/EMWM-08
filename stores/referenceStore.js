@@ -584,7 +584,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
         agents: agentsView,
         books: booksView,
         marks: marksView,
-        explore: exploreView,
+        searchView: exploreView,
         agent01: agentsInCollection,
         agent02: agentsYearsMade,
         book01: booksTheyRead,
