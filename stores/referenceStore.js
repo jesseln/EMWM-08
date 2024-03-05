@@ -17,6 +17,30 @@ export const useReferenceStore = defineStore('reference', ()=>{
         return height.value
     })
 
+    const topViews = ref({
+        ['Women agents']: {},
+        ['Ownership']: {},
+        ['Reading']: {},
+        ['Recording']: {},
+        ['Graffiti']: {},
+        ['Attribution']: {},
+        ['Types of book']: {},
+        ['Locations']: {},
+        ['Repositories']: {}
+    })
+
+    const topViewList = ref([
+        'Women agents',
+        'Ownership',
+        'Reading',
+        'Recording',
+        'Graffiti',
+        'Attribution',
+        'Types of book',
+        'Locations',
+        'Repositories'
+    ])
+
     ///////////////////////
     // LABEL CONVERSIONS //
     ///////////////////////
@@ -703,7 +727,10 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 viewColourItemBundle,
                 itemModalMap,
                 windowHeight,
-                windowWidth,}
+                windowWidth,
+                topViews,
+                topViewList
+            }
   })
 
 

@@ -2,6 +2,7 @@
     <div class="about-page-wrapper" >
         <div class="about-library-title">
         <h1>About the Collection</h1>
+        
         <h4>
             This collection is part of the research project: 
             <a href="https://cems.anu.edu.au/marginalia-and-the-early-modern-woman-writer-1530-1660/">

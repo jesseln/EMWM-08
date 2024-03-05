@@ -49,7 +49,7 @@
                 <h2 class="main-navbar-link dropbtn" >About</h2>
             </div>   
           </NuxtLink>
-          <NuxtLink to="/explore/article1" activeClass="nav-active">
+          <NuxtLink to="/explore" activeClass="nav-active">
             <div class="dropdown">
                 <h2 class="main-navbar-link dropbtn" >Explore the Library</h2>
             </div>   

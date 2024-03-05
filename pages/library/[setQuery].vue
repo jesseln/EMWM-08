@@ -11,6 +11,13 @@
     <div class="explore-library-title">
         <h1>Explore the Collection </h1>
         <h4>The library presents <span>the Agents</span>, the 'women marginalists' in the collection, <span>the Books</span> they owned and <span>the Marks</span> they made in the margins during the 16th and 17th centuries.</h4>
+        <h4>
+                The database is organised using three broad categories: Marks, Books and Agents. Rich metadata is provided in each of these sections, providing information about the kinds of marks that were made and where they appear, bibliographic details about the books in which they are found, and further details about the women agents themselves: their names, any dates, and the stability of the attribution, from certain to possible. You can zoom out to see all the marks, books or agents through different views, or zoom in to view subsets of the data.
+            </h4>
+            <h4>
+                Items you would like to explore further can be added to a shelf in your own digital library: Your Collection. Each item can then be viewed with all the metadata about mark, book and agent at once, alongside images of the marginalia where available. 
+            </h4>
+        
         <h4>Select from one of the 3 collections below, then click on the arrow to begin.</h4>
     </div>
     <div class="type-selector-wrapper" >
