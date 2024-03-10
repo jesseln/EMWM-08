@@ -29,17 +29,72 @@ export const useReferenceStore = defineStore('reference', ()=>{
         ['Repositories']: {}
     })
 
-    const topViewList = ref([
-        'Women agents',
-        'Ownership',
-        'Reading',
-        'Recording',
-        'Graffiti',
-        'Attribution',
-        'Types of book',
-        'Locations',
-        'Repositories'
-    ])
+    const topViewsList = ref(
+        [[0,
+            [[1,
+                [           
+                {name: 'Women Agents', imageFolder: 'mark-images',
+                itemID:'625',
+                itemImage: {name:'MargID_625_(1_of_1).JPG'},
+                class: 'topViewClassWomen'},
+
+                {name: 'Ownership', imageFolder: 'mark-images',
+                itemID:'101',
+                itemImage: {name:'MargID_101_(2_of_2).jpg'},
+                class: 'topViewClassOwnership'},
+
+                {name: 'Reading', imageFolder:'mark-images',
+                itemID:'372',
+                itemImage: {name:'MargID_372_(2_of_2).jpeg'},
+                class: 'topViewClassReading'},
+
+                {name: 'Recording', imageFolder: 'mark-images',
+                itemID:'48',
+                itemImage: {name:'MargID_48_(2_of_4).jpg'},
+                class: 'topViewClassRecording'},
+
+                {name: 'Graffiti', imageFolder: 'mark-images',
+                itemID:'21',
+                itemImage: {name:'MargID_21_(1_of_1).jpg'},
+                class: 'topViewClassGraffiti'},
+
+                // {name: 'Graffiti', imageFolder: 'mark-images',
+                // itemID:'224',
+                // itemImage: {name:'MargID_224_(1_of_1).jpg'}},
+
+                {name: 'Attribution', imageFolder: 'mark-images',
+                itemID:'80',
+                itemImage: {name:'MargID_80_(2_of_2).jpg'},
+                class: 'topViewClassAttribution'},
+
+                {name: 'Types of Book', imageFolder: 'book-images',
+                itemID:'289',
+                itemImage: {name:'BookID_289_(3_of_3).JPG'},
+                class: 'topViewClassBookTypes'},
+
+                {name: 'Locations', imageFolder: 'book-images',
+                itemID:'96',
+                itemImage: {name:'BookID_96_(2_of_4).jpg'},
+                class: 'topViewClassLocations'},
+
+                {name: 'Repositories', imageFolder: 'book-images',
+                itemID:'226',
+                itemImage: {name:'BookID_226_(2_of_2).JPG'},
+                class: 'topViewClassRepositories'},
+
+                ]
+            ]]
+        ]]
+        // [['Women agents'],[0]]
+        // [['Ownership'],[0]]
+        // [['Reading'],[0]]
+        // [['Recording'],[0]]
+        // [['Graffiti'],[0]]
+        // [['Attribution'],[0]]
+        // [['Types of book'],[0]]
+        // [['Locations'],[0]]
+        // [['Repositories'],[0]]
+    )
 
     ///////////////////////
     // LABEL CONVERSIONS //
@@ -729,7 +784,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 windowHeight,
                 windowWidth,
                 topViews,
-                topViewList
+                topViewsList
             }
   })
 

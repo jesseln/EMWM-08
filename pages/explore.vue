@@ -8,12 +8,15 @@
     </div> -->
     <div class="shelf-separator-container"><div class="shelf-separator"></div></div>
     <div class="explore-library-title">
-        <h1>Explore the Collection </h1>
-        <h4>The library presents <span>the Agents</span>, the 'women marginalists' in the collection, <span>the Books</span> they owned and <span>the Marks</span> they made in the margins during the 16th and 17th centuries.</h4>
+        <h1>Explore the Library </h1>
+        <h2>Curated Libraries with Articles to View</h2>
+        <h4>Each library contains <span>the Agents</span>, the 'women marginalists' in the collection, <span>the Books</span> they owned and <span>the Marks</span> they made in the margins during the 16th and 17th centuries.</h4>
         
     </div>
 
-
+    <div >
+            <ExploreView />
+    </div>
 
 
     <!-- <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
@@ -123,6 +126,7 @@ const { handleObjectProperty,
 
     watchEffect(()=>{
         icons.value = iconDimensions()
+        console.log('dataCheck', dataCheck)
     })
 
 

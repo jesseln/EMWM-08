@@ -10,87 +10,27 @@
             </div> 
         </div> -->
     
-        <div class="slider-wrapper" v-if="useY > 300">
-            <div class="library-catalogue-title-box">
-                <h2 class="library-catalogue-title">Adjust Zoom</h2>
-                <h3 class="library-catalogue-subtitle">Click below to Zoom In and Out of the library</h3>
 
-            </div>
-            <div class="shelf-button slider-box">
-                <p @click="zoomOut">-</p>  
-                <input class="slider range" type="range" min="0" max="100" v-model="zoomLevel" id="fader" step="50" list="volsettings" ref="zoomSlider">
-                <p @click="zoomIn">+</p>  
-            </div>
-            <div id="volsettings" >
-                <p value="0" label="Close-Up" :class="{ activeZoom : zoomLevel === '100'}">Close-Up</p>
-                <p value="50" label="Standard View" :class="{ activeZoom : zoomLevel === '50'}">Standard View</p>
-                <p value="100" label="Overview" :class="{ activeZoom : zoomLevel === '0'}">Overview</p>
-            </div>
-        </div>
-    <div class="shelf" v-for="shelf in filterLibrary" :key="shelf">
+    <div class="shelf" v-for="shelf in topViewsList" :key="shelf">
         <div class="shelf-title-box">
-            <h2 class="shelf-title">{{shelf[0]}}</h2>
+            <!-- <h2 class="explore-shelf-title">{{shelf[0]}}</h2> -->
         </div>
         <div class="shelf-inner" >
-            <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
+            <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend">
                     <div class="section-title-box-wrapper">
-                    <div class="section-title-box" 
-                    :style="{ height: scales.maxShelfHeight + 'px'}"
-                    :class="{ 
-                            zoomOut : zoomLevel === '0',
-                            zoomMid : zoomLevel === '50',
-                            zoomIn : zoomLevel === '100',
-                        }">
-                        <h3 v-if="zoomLevel !== '0'" class="section-category">{{ categoryMap.get(libraryDisplay.viewType.bookend)[libraryDisplay.view.bookend] }}</h3>
-                        <h3 class="section-value"
-                        :class="{ 
-                            zoomOut : zoomLevel === '0',
-                            zoomMid : zoomLevel === '50',
-                            zoomIn : zoomLevel === '100',
-                        }">
-                            {{ bookend[0] }}
-                        </h3>
+                    <div class="section-title-box">
+                        <!-- <h3 class="section-value">
+                            {{ bookend[0]}}
+                        </h3> -->
                         <div class="section-shelf-box">
                         <!-- Shelf Box DO NOT DELETE -->
                         </div>
                     </div>
-                        <div class="section-inner" 
-                        :class="{ 
-                            zoomOut : zoomLevel === '0',
-                            zoomMid : zoomLevel === '50',
-                            zoomIn : zoomLevel === '100',
-                        }"
-                        v-for="item in bookend[1].slice(0,1)" 
-                        :key="JSON.stringify(item)" 
-                        :style="{ height: scales.maxShelfHeight + 'px'}">
-                            <LazyAgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
-                            <LazyBookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
-                            <LazyMarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
+                        <div class="explore-section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)">
+                            <ExploreItem :item="item"/>
                     </div> 
-                
-                    </div>
-                    <div class="section-inner" 
-                        v-for="item in bookend[1].slice(1, 
-                        bookend[1].length)" 
-                        :class="{ 
-                            zoomOut : zoomLevel === '0',
-                            zoomMid : zoomLevel === '50',
-                            zoomIn : zoomLevel === '100',
-                        }"
-                        :key="JSON.stringify(item)" 
-                        :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <LazyAgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
-                        <LazyBookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
-                        <LazyMarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
-                    </div>
-                </template>
-        </div>
-    </div>
-    <div class="modal-background"  ref="modalBackground">
-        <div class="item-modal-content-outer" ref="itemModalContentOuter">
-            <div class="item-modal-content" ref="itemModalContent" >
-                <ItemModal :key="_item" v-if="_item" @close="hideModal" :_item="_item" />
-            </div>
+                </div>
+            </template>
         </div>
     </div>
 </div>
@@ -98,6 +38,8 @@
 
 <script setup>
     import { storeToRefs } from "pinia";
+    import * as d3 from "d3";
+   
    
     // STATE MANAGERS IMPORT //    
     //View State
@@ -156,12 +98,15 @@ const { getItemLibraryYC,
             categoryMap, 
             invCategoryMap, 
             scales,
-            libraryItemBundle } = storeToRefs(referenceStore)
+            libraryItemBundle,
+            topViewsList } = storeToRefs(referenceStore)
 
   const itemModalContent = ref(null)
   const itemModalContentOuter = ref(null)
   const modalBackground = ref(null)
   const _item = ref(null)
+
+  console.log("topViewsList", topViewsList.value)
          
   function showModal(item){
     //Component Prop
@@ -194,6 +139,30 @@ const { getItemLibraryYC,
         itemModalContentOuter.value.style.visibility = 'hidden'
     }  
   })
+
+
+  // Event Handlers
+const itemHandlers = {
+  mouseover: handleMouseOver,
+  mouseout: handleMouseOut
+}
+
+function handleMouseOver(d) {
+    console.log('handle', d.currentTarget)
+    d3.select(d.currentTarget)
+        .style('transform', getUpPos(d.currentTarget, true));
+}
+
+function handleMouseOut(d) {
+    d3.select(d.currentTarget)
+        .style('transform', getUpPos(d.currentTarget, false));
+}
+
+function getUpPos(elm, isUp) {
+    if( elm.classList.contains('explore-item-wrapper')){
+        return `translate(0, ${(isUp ? -10 : 0)}px)`
+    }
+}
 
     // To Top Button
     const { x, y } = useWindowScroll() // To replace below
