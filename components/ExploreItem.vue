@@ -101,7 +101,7 @@ function handleMouseOut(d) {
     position: absolute;
 	bottom: -200px;
 	left: -160px;
-    // clip-path: circle(65px at 145px 155px);
+    clip-path: circle(65px at 234px 141px);
     height: 425px;
 }
 
