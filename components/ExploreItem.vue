@@ -12,8 +12,6 @@
             <NuxtImg class="explore-item-image" 
             :class="[topViewClass]"
             :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${item.imageFolder}/${item.itemID}/${item.itemImage.name}`" 
-
-            loading="lazy"
             />
         </div>
     <h2 class="explore-item-title">{{item.name}}</h2>

@@ -25,7 +25,6 @@
           :bullets="false"
           :arrows-outside="false"
           prevent-y-scroll 
-          lazy 
           lazy-load-on-drag
           >
               <vueper-slide
