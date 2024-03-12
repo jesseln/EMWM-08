@@ -9,7 +9,6 @@
                 </datalist>
             </div> 
         </div> -->
-    
 
     <div class="shelf" v-for="shelf in topViewsList" :key="shelf">
         <div class="shelf-title-box">
@@ -27,7 +26,9 @@
                         </div>
                     </div>
                         <div class="explore-section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)">
+                        <NuxtLink to="/explore/graffiti">
                             <ExploreItem :item="item"/>
+                        </NuxtLink>
                     </div> 
                 </div>
             </template>

@@ -1,6 +1,5 @@
 <template>
     <div  class="library-explorer-container">
-        <FilterSidebar />
 
 
     <!-- <div class="query-box">
@@ -8,10 +7,22 @@
         <h2 class="query-breadcrumb">Total Items: {{ dataSize }}</h2>
     </div> -->
     <div class="shelf-separator-container"><div class="shelf-separator"></div></div>
-    <div class="explore-library-title">
-        <h1>Explore the Collection </h1>
-        <h4>The library presents <span>the Agents</span>, the 'women marginalists' in the collection, <span>the Books</span> they owned and <span>the Marks</span> they made in the margins during the 16th and 17th centuries.</h4>
-        <h4>Select from one of the 3 collections below, then click on the arrow to begin.</h4>
+    <div class="article-library-title">
+        <h1>Graffiti</h1>
+        <h2><span>Definition:</span></h2>
+        <h4>The database uses the term graffiti for a range of marks that are primarily visual in nature, consisting of images, pasted material, object traces, letter practice, doodles, smudges and stains.</h4>
+        <div class="article-hero">
+        <NuxtImg class="explore-item-image" 
+            :class="[heroImageClass]"
+            src="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/mark-images/21/MargID_21_(1_of_1).jpg"
+            />
+        </div>
+        <h4>
+            RCIN 1051956 Psaultier de David, Royal Collection Trust, Windsor Castle Royal Library, Windsor (link to card Jesse - if there is one? Same for the next group of images or image) 
+        </h4>
+        <p>
+            Most scholarship on early modern women’s marginalia to date has concentrated on its verbal forms, yet women’s annotations also include visual marks or images of varying degrees of legibility and complexity, ranging from stars and manicules, doodles, copies of typographical ornaments, drawings in pen and ink, and the insertion of images into texts through cutting and pasting. These visual forms, which we have grouped under the term ‘graffiti’, comprise an exciting and largely unexamined sub-corpus within early modern women’s marginalia, providing new evidence of how women read, how they saw their world, and how they used their books. Graffiti also illuminate how women engaged with formal categories of visual expression such as calligraphy, copying and drawing, with implications for our understanding of their education and their relationship to humanism. The collection of graffiti found in our database show how important both texts and images were to the ways in which women perceived and represented their worlds. 
+        </p>
     </div>
 
 
@@ -29,12 +40,17 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
+import * as d3 from "d3";
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
+
 // ROUTE MANAGERS
 const route = useRoute()
 
 // STATE MANAGERS IMPORT //    
+const supabase = useSupabaseClient()
 
 //Library State
 const libraryStore = useLibraryStore();
@@ -77,65 +93,7 @@ const { handleObjectProperty,
         contrastHandler } = useUtils();
 
 
-    const setQueryView = referenceStore.viewRouteQueries[route.params.setQuery]
-    // console.log("setQueryView", setQueryView)
-    // console.log("viewStore", viewStore.libraryDisplay)
-    // console.log("query check", setQueryView.view.itemType)
-    Object.assign(viewStore.libraryDisplay.view, setQueryView.view)
-    Object.assign(viewStore.libraryDisplay.viewType, setQueryView.viewType)
-    Object.assign(viewStore.libraryDisplay.pageText, setQueryView.pageText)
 
-//    console.log('library display', viewStore.libraryDisplay)
-//    console.log('computed ', formattedLibrary)
-//    console.log('computed length', formattedLibrary.length !== undefined)
-   
-   const dataCheck = computed (() => {
-        return formattedLibrary.value.length !== undefined
-    })
-
-    watchEffect(()=>{
-        parseDatabase(libraryStore[viewStore.libraryDisplay.view.itemType])
-        // console.log('watchEffect',formattedLibrary)
-    })
-
-    // Error Page
-    // if(route.params.setQuery !== 'myQuery'){
-    //     throw createError({ statusCode: 404, statusMessage: "View not Found"})
-    // }
-
- 
-    function iconDimensions(){
-    const scaleWidth = 1;
-    const scaleHeight = 1;
-    const fill = '#222';
-    const activeFill = '#FFF';
-        return {
-            agentIcon:{
-                iconHeight: 0.9  * scaleHeight,
-                iconWidth: 0.7 * scaleWidth,
-                iconFill: route.params.setQuery === 'agents'? activeFill : fill,
-            },
-            bookIcon:{
-                iconHeight: 1 * scaleHeight,
-                iconWidth: 0.7 * scaleWidth,
-                iconFill: route.params.setQuery === 'books'? activeFill : fill,
-            },
-            markIcon:{
-                iconHeight: 0.9 * scaleHeight,
-                iconWidth: 0.75 * scaleWidth,
-                iconFill: route.params.setQuery === 'marks'? activeFill : fill,
-            },
-        }
-    }
-
-    const icons = ref()
-
-    watchEffect(()=>{
-        icons.value = iconDimensions()
-    })
-
-
-    // const showAnnotations = ref(false)
 
     // To Top Button
     const { x, y } = useWindowScroll() // To replace below
@@ -160,11 +118,24 @@ const { handleObjectProperty,
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
+    const heroImageClass = ref('graffitiHero')
 
 
 </script>
 
 <style lang="scss" scoped>
+
+.graffitiHero{
+    position: relative;
+    width: 60vw
+    // height: 325px;
+}
+
+.article-hero{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 span{
     font-weight: 650;

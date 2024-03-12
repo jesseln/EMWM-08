@@ -3,6 +3,7 @@
         :style="{ maxHeight: 250 + 'px', 
         height: 200 + 'px', 
         width: 150 + 'px'}">
+        <NuxtLink to="/explore/graffiti">
         <div class="explore-item" 
         v-on="itemHandlers" 
         :style="{ 
@@ -14,6 +15,7 @@
             :src="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${item.imageFolder}/${item.itemID}/${item.itemImage.name}`" 
             />
         </div>
+        </NuxtLink>
     <h2 class="explore-item-title">{{item.name}}</h2>
     </div>
     <div class="section-shelf-box">

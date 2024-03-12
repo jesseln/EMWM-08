@@ -1,6 +1,6 @@
 <template>
-    <div  class="library-explorer-container">
-
+    <NuxtPage />
+    <div v-if="!route.params.articlePage" class="library-explorer-container">
 
     <!-- <div class="query-box">
         <h2 class="query-breadcrumb"> {{ libraryDisplay.pageText.queryBreadcrumb }}</h2>
@@ -11,11 +11,15 @@
         <h1>Explore the Library </h1>
         <h2>Curated Libraries with Articles to View</h2>
         <h4>Each library contains <span>the Agents</span>, the 'women marginalists' in the collection, <span>the Books</span> they owned and <span>the Marks</span> they made in the margins during the 16th and 17th centuries.</h4>
+        <h4>
+            Each of these views highlights an aspect of the early modern women’s marginalia library. They provide definitions, selected images, data visualisations and essays on the four main kinds of marginalia in the library (ownership, evidence of reading, marks of recording, and graffiti); the locations in the material book where such marks are found; and how such marks were attributed to women agents. Other views enlarge upon who those women agents were, the repositories from which the marginalia came, and the types of book that women marked.
+        </h4>
         
     </div>
 
     <div >
-            <ExploreView />
+            
+
     </div>
 
 
@@ -24,111 +28,171 @@
     </button>
         <AnnotationPanel v-if="showAnnotations"/> -->
     <!-- <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button> -->
-
+    <div class="library-wrapper">
+    <div class="shelf" v-for="shelf in topViewsList" :key="shelf">
+        <div class="shelf-title-box">
+            <!-- <h2 class="explore-shelf-title">{{shelf[0]}}</h2> -->
+        </div>
+        <div class="shelf-inner" >
+            <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend">
+                    <div class="section-title-box-wrapper">
+                    <div class="section-title-box">
+                        <!-- <h3 class="section-value">
+                            {{ bookend[0]}}
+                        </h3> -->
+                        <div class="section-shelf-box">
+                        <!-- Shelf Box DO NOT DELETE -->
+                        </div>
+                    </div>
+                        <div class="explore-section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)">
+                            <ExploreItem :item="item"/>
+                    </div> 
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
 
     </div>
+
 </template>
 
 <script setup>
 import { storeToRefs } from "pinia";
+import * as d3 from "d3";
 import FloatingVue from 'floating-vue'
 import 'floating-vue/dist/style.css'
 // ROUTE MANAGERS
 const route = useRoute()
 
-// STATE MANAGERS IMPORT //    
+    // STATE MANAGERS IMPORT //    
+    //View State
+    const viewStore = useViewStore();
+    const { libraryData,
+            libraryDisplay,
+            formattedLibrary, 
+            filterLibrary,
+            itemHeight,
+            itemColour, 
+            viewHeightBounds, 
+            viewColourSet } = storeToRefs(viewStore)
+    const { parseDatabase,
+            handleViewSelection,
+            getIDP,
+            itemTypeCheck } = useViewStore();
+        
+const yourCollectionStore = useYourCollectionStore();
+const { allCollections,
+        yourCollection, 
+        itemLibraryYC, 
+        dataSizeYC,
+        libraryDisplayYC,
+        formattedLibraryYC,
+        formattedItemLibraryYC,
+        filterLibraryYC, 
+        heightCategoryYC,
+        itemHeightYC,
+        itemColourYC,
+        colourScaleYC,
+        colourScaleConverterYC,
+        colourSetYC, 
+        ordinalColourMapYC,
+        viewColourSetYC,
+        domainIndexYC,
+        viewHeightBoundsYC,
+        domainColourIndexYC,
+        viewColourBoundsYC,
+        activeFiltersYC,
+        filterObjectYC,
+        getActiveFiltersYC } = storeToRefs(yourCollectionStore)
+const { getItemLibraryYC,
+        getFilterObjectYC,
+        filterActiveToggleYC,
+        parseDatabaseYC,
+        handleViewSelectionYC,
+        getIDP_YC,
+        getIFP_YC,
+        itemTypeCheckYC,
+        addToCollection, 
+        removeFromCollection } = useYourCollectionStore();
+        
+    //Reference Constants
+    const referenceStore = useReferenceStore();
+    const { zoomLevel,
+            categoryMap, 
+            invCategoryMap, 
+            scales,
+            libraryItemBundle,
+            topViewsList } = storeToRefs(referenceStore)
 
-//Library State
-const libraryStore = useLibraryStore();
+  const itemModalContent = ref(null)
+  const itemModalContentOuter = ref(null)
+  const modalBackground = ref(null)
+  const _item = ref(null)
 
-//View State
-const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        itemHeight,
-        itemColour, 
-        colourSet,
-        colourScale,
-        dataSize,
-        getActiveFilters,
-        filterObject,
-        colourScaleConverter,
-        ordinalColourMap,
-        domainIndex,
-        viewHeightBounds,
-        domainColourIndex,
-        viewColourBounds,
-        viewColourSet } = storeToRefs(viewStore)
-        const { parseDatabase,
-        handleViewSelection,
-        getIDP,
-        filterActiveToggle,
-        handleColour } = useViewStore();
+  console.log("topViewsList", topViewsList.value)
+         
+  function showModal(item){
+    //Component Prop
+    _item.value = item;
+    //Styles
+    itemModalContent.value.style.transitionDelay = '.15s'
+    itemModalContent.value.style.visibility = 'visible'
+    modalBackground.value.style.transitionDelay = '.075s'
+    modalBackground.value.style.visibility = 'visible'
+    itemModalContentOuter.value.style.transitionDelay = '.075s'
+    itemModalContentOuter.value.style.visibility = 'visible'
+  }
 
-//Reference Constants
-const referenceStore = useReferenceStore();
-const { categoryMap, 
-        viewMap,
-        invCategoryMap, 
-        colourMapFiltered,
-        scales,
-        topViewList,
-        topViews} = storeToRefs(referenceStore)
+  const hideModal = ()=>{
+    itemModalContent.value.style.transitionDelay = '.3s'
+    itemModalContent.value.style.visibility = 'hidden'
+    modalBackground.value.style.transitionDelay = '.15s'
+    modalBackground.value.style.visibility = 'hidden'
+    itemModalContentOuter.value.style.transitionDelay = '.15s'
+    itemModalContentOuter.value.style.visibility = 'hidden'
+  }
 
-        //Utility Functions
-const { handleObjectProperty,
-        contrastHandler } = useUtils();
+  onClickOutside(itemModalContent, (event) => {
+    if(itemModalContent.value.style.visibility === 'visible' && event.target.matches('.modal-background')){
+        itemModalContent.value.style.transitionDelay = '.3s'
+        itemModalContent.value.style.visibility = 'hidden'
+        modalBackground.value.style.transitionDelay = '.15s'
+        modalBackground.value.style.visibility = 'hidden'
+        itemModalContentOuter.value.style.transitionDelay = '.15s'
+        itemModalContentOuter.value.style.visibility = 'hidden'
+    }  
+  })
 
-
-
-
-//    console.log('library display', viewStore.libraryDisplay)
-//    console.log('computed ', formattedLibrary)
-//    console.log('computed length', formattedLibrary.length !== undefined)
-   
-   const dataCheck = computed (() => {
-        return formattedLibrary.value.length !== undefined
-    })
+  watchEffect(()=>{
+    console.log('route.params.articlePage', route.params.articlePage)
+  })
 
 
-    // Error Page
-    // if(route.params.setQuery !== 'myQuery'){
-    //     throw createError({ statusCode: 404, statusMessage: "View not Found"})
-    // }
+  // Event Handlers
+const itemHandlers = {
+  mouseover: handleMouseOver,
+  mouseout: handleMouseOut
+}
 
- 
-    function iconDimensions(){
-    const scaleWidth = 1;
-    const scaleHeight = 1;
-    const fill = '#222';
-    const activeFill = '#FFF';
-        return {
-            agentIcon:{
-                iconHeight: 0.9  * scaleHeight,
-                iconWidth: 0.7 * scaleWidth,
-                iconFill: route.params.setQuery === 'agents'? activeFill : fill,
-            },
-            bookIcon:{
-                iconHeight: 1 * scaleHeight,
-                iconWidth: 0.7 * scaleWidth,
-                iconFill: route.params.setQuery === 'books'? activeFill : fill,
-            },
-            markIcon:{
-                iconHeight: 0.9 * scaleHeight,
-                iconWidth: 0.75 * scaleWidth,
-                iconFill: route.params.setQuery === 'marks'? activeFill : fill,
-            },
-        }
+function handleMouseOver(d) {
+    console.log('handle', d.currentTarget)
+    d3.select(d.currentTarget)
+        .style('transform', getUpPos(d.currentTarget, true));
+}
+
+function handleMouseOut(d) {
+    d3.select(d.currentTarget)
+        .style('transform', getUpPos(d.currentTarget, false));
+}
+
+function getUpPos(elm, isUp) {
+    if( elm.classList.contains('explore-item-wrapper')){
+        return `translate(0, ${(isUp ? -10 : 0)}px)`
     }
+}
 
     const icons = ref()
-
-    watchEffect(()=>{
-        icons.value = iconDimensions()
-        console.log('dataCheck', dataCheck)
-    })
-
 
     // const showAnnotations = ref(false)
 
