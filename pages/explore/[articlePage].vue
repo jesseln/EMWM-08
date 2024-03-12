@@ -20,6 +20,12 @@
         <h4>
             RCIN 1051956 Psaultier de David, Royal Collection Trust, Windsor Castle Royal Library, Windsor (link to card Jesse - if there is one? Same for the next group of images or image) 
         </h4>
+        <div class="article-hero">
+        <NuxtImg class="explore-item-image" 
+            :class="[heroImageClass]"
+            src="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/mark-images/21/MargID_21_(1_of_1).jpg"
+            />
+        </div>
         <p>
             Most scholarship on early modern women’s marginalia to date has concentrated on its verbal forms, yet women’s annotations also include visual marks or images of varying degrees of legibility and complexity, ranging from stars and manicules, doodles, copies of typographical ornaments, drawings in pen and ink, and the insertion of images into texts through cutting and pasting. These visual forms, which we have grouped under the term ‘graffiti’, comprise an exciting and largely unexamined sub-corpus within early modern women’s marginalia, providing new evidence of how women read, how they saw their world, and how they used their books. Graffiti also illuminate how women engaged with formal categories of visual expression such as calligraphy, copying and drawing, with implications for our understanding of their education and their relationship to humanism. The collection of graffiti found in our database show how important both texts and images were to the ways in which women perceived and represented their worlds. 
         </p>
@@ -41,6 +47,18 @@
         <h4>
             Sir Philip Sidney, The Countess of Pembroke’s Arcadia (London, 1623), Bodleian Library, J-J Sidney 25, title page.
         </h4>
+        <div class="article-hero">
+        <NuxtImg class="explore-item-image" 
+            :class="[heroImageClass]"
+            src="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/mark-images/21/MargID_21_(1_of_1).jpg"
+            />
+        </div>
+        <div class="article-hero">
+        <NuxtImg class="explore-item-image" 
+            :class="[heroImageClass]"
+            src="https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/mark-images/21/MargID_21_(1_of_1).jpg"
+            />
+        </div>
         <h4>
             Emmerson Collection State Library Victoria, Melbourne, RAREEMM 322/21, Samuel Daniel, Certaine Poems (London,  on blank leaves inserted after sig. F6v
         </h4>
