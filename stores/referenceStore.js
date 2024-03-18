@@ -53,7 +53,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 itemImage: {name:'MargID_48_(2_of_4).jpg'},
                 class: 'topViewClassRecording'},
 
-                {name: 'Graffiti', imageFolder: 'mark-images',
+                {name: 'Visual', imageFolder: 'mark-images',
                 itemID:'21',
                 itemImage: {name:'MargID_21_(1_of_1).jpg'},
                 class: 'topViewClassGraffiti'},

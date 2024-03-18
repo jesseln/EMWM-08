@@ -8,7 +8,7 @@
     </div> -->
     <div class="shelf-separator-container"><div class="shelf-separator"></div></div>
     <div class="article-library-title">
-        <h1>Graffiti</h1>
+        <h1>Visual</h1>
         <h2><span>Definition:</span></h2>
         <h4>The database uses the term graffiti for a range of marks that are primarily visual in nature, consisting of images, pasted material, object traces, letter practice, doodles, smudges and stains.</h4>
         <div class="article-hero">

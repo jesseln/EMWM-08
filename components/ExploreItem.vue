@@ -3,7 +3,7 @@
         :style="{ maxHeight: 250 + 'px', 
         height: 200 + 'px', 
         width: 150 + 'px'}">
-        <NuxtLink to="/explore/graffiti">
+        <NuxtLink to="/explore/visual">
         <div class="explore-item" 
         v-on="itemHandlers" 
         :style="{ 

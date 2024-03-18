@@ -55,7 +55,7 @@
           </NuxtLink>
           <NuxtLink to="/library/searchView" activeClass="nav-active">
             <div class="dropdown">
-                <h2 class="main-navbar-link dropbtn" >Search/View the Library</h2>
+                <h2 class="main-navbar-link dropbtn" >Search the Library</h2>
             </div>   
           </NuxtLink>
             <!-- <div class="dropdown" ref="dropdownExploreLibraryRef" @mouseover="showModal('ExploreLibrary')" @mouseleave="hideModal('ExploreLibrary')">
@@ -65,14 +65,14 @@
                 </div>
             </div> -->
             <div class="dropdown" ref="dropdownYourCollectionsRef" @mouseover="showModal('YourCollections')" @mouseleave="hideModal('YourCollections')">
-            <h2 class="main-navbar-link dropbtn">Make a Library</h2>
+            <h2 class="main-navbar-link dropbtn">Your Library</h2>
                 <div class="dropdown-content" ref="dropdownYourCollectionsRefContent" >
                     <DropdownYourCollections @modalClicked="hideModalClicked('YourCollections')" />
                 </div>
             </div>
             <NuxtLink to="/about" activeClass="nav-active">
             <div class="dropdown">
-                <h2 class="main-navbar-link dropbtn" >Add to the Library</h2>
+                <h2 class="main-navbar-link dropbtn" >Contribute</h2>
             </div>   
           </NuxtLink>
           <!-- <NuxtLink to="/yourcollection/collection01" activeClass="nav-active">

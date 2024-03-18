@@ -1,7 +1,6 @@
 <template>
     <div class="home-page-wrapper" >
         <div class="home-library-title">
-            <h1>Welcome to the Collection of Early Modern Women's Marginalia</h1>
             <h4>
                 Early Modern Women’s Marginalia: the Library of Libraries is a database of the marks that women made in books between 1530 and 1680, drawing from hundreds of repositories across the world. It presents the data from a wider project that explores how early modern women engaged with the margins of books, as owners, readers,  writers, artists, and students, registering a range of book uses from humanist annotation through handwriting practice and pen trials to doodles, smudges and stains. Bringing together details about the marginalia, the books, and the agents who marked them, the database is designed to encourage exploration of the collection and further research using these materials, providing views of both the aggregated data and individual instances of marginal marks. 
             </h4>
