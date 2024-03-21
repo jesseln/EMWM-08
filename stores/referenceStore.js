@@ -139,7 +139,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
             ['Location sig. ; p. ; pp.']: 'Location',
             ['Recording type']: 'Recording type',
             ['Transcription']: 'Transcription',
-            ['Mark type (Mark of?)']: 'Type of mark',
+            ['Mark type (Mark of?)']: 'Type of Mark',
             ['Class']: 'Class',
             ['Position on page']: 'Position on page',
             ['Location other']: 'Location detail',
@@ -242,11 +242,15 @@ export const useReferenceStore = defineStore('reference', ()=>{
 
 
     watchEffect(()=>{
+        updateScales()
+    })
+
+    function updateScales(){
         scales.maxItemHeight = 100 * zoomFactor[zoomLevel.value].height;
         scales.maxShelfHeight = 110 * zoomFactor[zoomLevel.value].height;
         scales.minItemHeight = 50 * zoomFactor[zoomLevel.value].height;
         scales.minItemWidth = 16 * zoomFactor[zoomLevel.value].width;
-    })
+    }
 
     const viewMap = reactive(new Map());
     viewMap
@@ -658,6 +662,74 @@ export const useReferenceStore = defineStore('reference', ()=>{
         }
     })
 
+    const articleVisual = ({
+            name: 'visual',
+            totalSections: 2,
+            sections: ['graffiti','graffiti2'],
+            sectionViews: [
+                {   view: {
+                    itemType: "Mark",
+                    id: 'MargID',
+                    shelf: 'Not Selected', //Primary sort
+                    bookend: 'Graffiti type', //Secondary sort
+                    height: 'Not Selected',
+                    colour: 'Graffiti type',
+                },
+                viewType: {
+                    id: 'Mark',
+                    shelf: 'Mark',
+                    bookend: 'Mark',
+                    height: 'NotSelected',
+                    colour: 'Mark',
+                },
+                pageText: {
+                    queryType: 'Mark ',
+                    queryBreadcrumb: '',
+                    libraryTypeTitle: 'The Marks',
+                    libraryTypeSubtitle: 'in the libraries',
+                },
+                zoom: {
+                    zoomLevel: '50'   
+                },
+                articleFilter: {
+                    useFilter: true,
+                    itemType: "Mark",
+                    category: 'Mark type (Mark of?)',
+                    option: 'Graffiti'
+                }},
+                {   view: {
+                    itemType: "Mark",
+                    id: 'MargID',
+                    shelf: 'Not Selected', //Primary sort
+                    bookend: 'Mark type (Mark of?)', //Secondary sort
+                    height: 'Not Selected',
+                    colour: 'Mark type (Mark of?)',
+                },
+                viewType: {
+                    id: 'Mark',
+                    shelf: 'Mark',
+                    bookend: 'Mark',
+                    height: 'NotSelected',
+                    colour: 'Mark',
+                },
+                pageText: {
+                    queryType: 'Mark ',
+                    queryBreadcrumb: '',
+                    libraryTypeTitle: 'The Marks',
+                    libraryTypeSubtitle: 'in the libraries',
+                },
+                zoom: {
+                    zoomLevel: '0'   
+                },
+                articleFilter: {
+                    useFilter: false,
+                    itemType: "Mark",
+                    category: 'Mark type (Mark of?)',
+                    option: 'Graffiti'
+                }}
+            ]
+    })
+
 
     const viewRouteQueries = reactive({
         agents: agentsView,
@@ -671,6 +743,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
         book03: booksYearsPublished,
         mark01: marksTheyMade,
         mark02: marksHowMany,
+        visual: articleVisual,
     })
 
     //Objects passed to Components 
@@ -784,7 +857,8 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 windowHeight,
                 windowWidth,
                 topViews,
-                topViewsList
+                topViewsList,
+                updateScales
             }
   })
 

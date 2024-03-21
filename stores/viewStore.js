@@ -93,10 +93,16 @@ export const useViewStore = defineStore('view', ()=>{
     const viewColourBounds = ref();
     const filterLibrary = ref();
     const imagePreviewList = ref();
+    const viewUpdated = ref(false)
 
 
     watch([libraryData, libraryDisplay],() => {
         if(libraryData.value.length !== undefined){
+            updateView()
+        }
+    })
+
+    function updateView(){
         formattedLibrary.value =  formatLibrary(libraryData.value); //Reactive when not testing
 
         domainIndex.value = getDomainIndex('height');
@@ -117,8 +123,11 @@ export const useViewStore = defineStore('view', ()=>{
         colourScaleConverter.value =  colourFunction();
 
         ordinalColourMap.value = getOrdinalColourMap();
-        }
-    })
+
+        updateFilteredLibrary()
+
+        return true
+    }
 
     watch([itemLibrary],() => {
         if(itemLibrary.value.length !== undefined){
@@ -127,10 +136,19 @@ export const useViewStore = defineStore('view', ()=>{
     })
 
     watch([libraryData],() => {
+        getAllFilters()
+    })
+
+    function updateFilteredLibrary(){
+        filterLibrary.value = getFilterLibrary()
+    }
+
+
+    function getAllFilters(){
         filterObject.set('Agent', getFilterObject(referenceStore.filterMap.get('Agent'), libraryData.value, 'Agent'))
         filterObject.set('Book', getFilterObject(referenceStore.filterMap.get('Book'), libraryData.value, 'Book'))
         filterObject.set('Mark', getFilterObject(referenceStore.filterMap.get('Mark'), libraryData.value, 'Mark'))
-    })
+    }
 
     //Get item height bounds
     function getDomainIndex(viewMode) {
@@ -295,6 +313,7 @@ export const useViewStore = defineStore('view', ()=>{
     //Parse Data Object from Supabase
     async function parseDatabase(tableData) {
             libraryData.value = await JSON.parse(JSON.stringify(tableData))
+            return true
             // unformattedData.value =  await JSON.parse(JSON.stringify(libraryData.value))
             // formattedLibrary.value =  formatLibrary(libraryData.value, libraryDisplay);
     }
@@ -323,8 +342,15 @@ export const useViewStore = defineStore('view', ()=>{
     //getIDP - getItemDisplayPath - Condensed for frequent use.
     function getIDP(item, viewMode) {
         if(viewMode === 'Not Selected') return 'Not Selected'
-        const viewSelection = libraryDisplay.view[viewMode]
-        const viewModeType = libraryDisplay.viewType[viewMode]
+        let viewSelection;
+        let viewModeType;
+        if(item.hasOwnProperty('view') && item.hasOwnProperty('viewType')){
+            viewSelection = item.view[viewMode]
+            viewModeType = item.viewType[viewMode]
+        }else{
+            viewSelection = libraryDisplay.view[viewMode]
+            viewModeType = libraryDisplay.viewType[viewMode]
+        }
         return itemPath(viewModeType, item, viewMode, viewSelection)
     }
 
@@ -341,8 +367,15 @@ export const useViewStore = defineStore('view', ()=>{
     function getISP(item, viewMode) {
         let viewMethod = 'filter'
         if(viewMode === 'Not Selected') return 'Not Selected'
-        const viewSelection = libraryDisplay.view[viewMode]
-        const viewModeType = libraryDisplay.viewType[viewMode]
+        let viewSelection;
+        let viewModeType;
+        if(item.hasOwnProperty('view') && item.hasOwnProperty('viewType')){
+            viewSelection = item.view[viewMode]
+            viewModeType = item.viewType[viewMode]
+        }else{
+            viewSelection = libraryDisplay.view[viewMode]
+            viewModeType = libraryDisplay.viewType[viewMode]
+        }
         return itemPath(viewModeType, item, viewMethod, viewSelection)
     }
 
@@ -527,14 +560,8 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
 
-    watch([filterLibrary],() => {
-        filterTotalCount.value
-        // dataSize.value =  filterLibrary.value.length?   filterLibrary.value.map(d => d[1].map(D => D[1]))[0][0].length : 0
-    })
-
-
     watchEffect(() => {
-        filterLibrary.value = getFilterLibrary()
+        // filterLibrary.value = getFilterLibrary()
     })
 
 
@@ -604,19 +631,24 @@ export const useViewStore = defineStore('view', ()=>{
                 activeFilters,
                 filterObject,
                 getActiveFilters,
-                filterLibrary,
                 filterTotalCount,
                 imagePreviewList,
+                viewUpdated,
                 getImagePreviews,
                 getItemLibrary,
                 getFilterObject,
+                getAllFilters,
                 filterActiveToggle,
+                updateFilteredLibrary,
                 parseDatabase,
                 handleViewSelection,
                 getIDP,
                 getIFP,
                 itemTypeCheck,
-                getItemLibraryCount  }
+                getItemLibraryCount,
+                updateView,
+                formatHeight,
+                formatColour  }
   })
 
 

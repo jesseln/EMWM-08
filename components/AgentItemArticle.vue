@@ -4,24 +4,26 @@
         :delay="{ show: 50, hide: 200 }"
         @show="menuShown"
     >
-    <div class="item-wrapper" 
+    <div class="item-wrapper"
         :class="{ 
-                    zoomOut : zoomLevel === '0',
-                    zoomMid : zoomLevel === '50',
-                    zoomIn : zoomLevel === '100',
-                }"
-        v-on="itemHandlers" 
-        :style="{ maxHeight: scales.maxItemHeight + 'px', 
-        height: itemHeight(getIDP(item,'height')) + 'px', 
-        width:scales.minItemWidth + 'px'}">    
-        <div class="book-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
-        <div class="book-item" 
-            :style="{ maxHeight: scales.maxItemHeight-4 + 'px', 
-            height: itemHeight(getIDP(item,'height'))-4 + 'px' , 
-            background: itemColour(getIDP(item, 'colour')),
-            width:scales.minItemWidth + 'px'}" 
-            :class="{lowlight: isHighlight}">
-            <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                zoomOut : zoomLevel === '0',
+                zoomMid : zoomLevel === '50',
+                zoomIn : zoomLevel === '100',
+            }"
+         v-on="itemHandlers" 
+         :style="{ maxHeight: scales.maxItemHeight + 'px', 
+         height: itemHeight(getIDP(item,'height')) + 'px', 
+         width:scales.minItemWidth + 'px'}"> 
+
+        <div class="agent-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
+
+        <div class="agent-item" 
+        :style="{ maxHeight: scales.maxItemHeight-4 + 'px',
+         height: itemHeight(getIDP(item,'height'))-4 + 'px', 
+         background: itemColour(getIDP(item, 'colour')),
+         width:scales.minItemWidth + 'px'}" 
+        :class="{lowlight: isHighlight}">
+        <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
             </div>
             <div v-if="zoomLevel === '50'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
                 <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
@@ -82,7 +84,7 @@
                             <vueper-slide
                                 v-for="itemImage in imageSlides.image.slice(-1)"
                                 :key="itemImage"
-                                :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imageFolder}/${item[itemID]}/${itemImage.name}`"
+                                :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imageFolder}/${_item[itemID]}/${itemImage.name}`"
                             />
                         </vueper-slides>
                     </div>
@@ -108,7 +110,7 @@
                 </p>
             </div>
             <div class="item-menu-totals-wrapper">
-            <div class="item-menu-totals">
+                <div class="item-menu-totals">
                         <div class="item-menu-totals-badge">
                             <div class="item-menu-icon-container">
                                 <svg xmlns="http://www.w3.org/2000/svg" :width="11*icons.agentIcon.iconWidth" :height="33*icons.agentIcon.iconHeight" viewBox="0 0 11 33" fill="none">
@@ -161,27 +163,21 @@ import { VueperSlides, VueperSlide } from 'vueperslides'
 import { storeToRefs } from "pinia";
 import 'vueperslides/dist/vueperslides.css'
 
-
 const loadedCheck = ref(false);
 const loadedFail = ref(false);
-
 //Props
-const {item, itemBundle} = defineProps(['item', 'itemBundle']);
+const {item, itemBundle, articleView} = defineProps(['item', 'itemBundle', 'articleView']);
 const {viewDetails} = defineEmits(['viewDetails']);
 const supabase = useSupabaseClient()
 
-// STATE MANAGERS IMPORT //    
+// STATE MANAGERS IMPORT //  
+
+//Article Store
+const articleStore = useArticleStore();
+const { allArticles } = storeToRefs(articleStore)
+        
 //View State
 const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        formattedItemLibrary,
-        filterLibrary,
-        itemHeight,
-        itemColour, 
-        viewHeightBounds, 
-        viewColourSet } = storeToRefs(viewStore)
 const { parseDatabase,
         handleViewSelection,
         getIDP,
@@ -189,18 +185,26 @@ const { parseDatabase,
         getItemLibrary,
         getItemLibraryCount } = useViewStore();
     
-//Reference Constants
-const referenceStore = useReferenceStore();
-const { zoomLevel,
-        categoryMap, 
-        invCategoryMap, 
-        scales } = storeToRefs(referenceStore)
 
 // COMPOPSABLES
 //Utility Functions
 const { handleObjectProperty,
         contrastHandler } = useUtils();
 
+//Reference Constants
+const referenceStore = useReferenceStore();
+const { categoryMap } = storeToRefs(referenceStore)
+const zoomLevel = ref(allArticles.value[articleView.name][articleView.section].references.zoomLevel)
+const scales = ref(allArticles.value[articleView.name][articleView.section].references.scales)
+const libraryItemBundle = ref(allArticles.value[articleView.name][articleView.section].references.libraryItemBundle)
+            
+const itemHeight = ref(allArticles.value[articleView.name][articleView.section].library.itemH)
+const itemColour = ref(allArticles.value[articleView.name][articleView.section].library.itemC)
+
+
+
+
+const _item = ref()        
 const itemID = ref();
 const imageRequestID = ref();
 const imageFolder = ref();
@@ -217,7 +221,9 @@ const imageSlides = ref(
 function updateItemRefs(){
     imageFound.value = false
     if(itemType.value === 'Agent'){
-        itemID.value = 'FemaleAgentID'
+        itemID.value = 'MargID'
+        imageRequestID.value = 'MargID'
+        imageFolder.value = 'mark-images'
     } 
     if(itemType.value === 'Book'){
         itemID.value = 'BookID'
@@ -232,11 +238,12 @@ function updateItemRefs(){
 }
 
 async function getImages(item){
+    _item.value = item['Marks'][0];
     imageFound.value = false
     const { data, error } = await supabase
     .storage
     .from(`${imageFolder.value}`)
-    .list(`${item[imageRequestID.value]}`, {
+    .list(`${item['Marks'][0][imageRequestID.value]}`, {
         limit: 100,
         offset: 0,
         sortBy: { column: 'name', order: 'asc' },
@@ -258,10 +265,8 @@ onMounted(()=>{
         updateItemRefs(item)
         getItemLibrary(item)
         watch(item,()=>{
-            if(itemType.value !== 'Agent') {
                 // console.log('itemTYpe ',itemType.value)
                 getImages(item)
-            }
         }, { immediate: true })
     }
     })
@@ -269,9 +274,9 @@ onMounted(()=>{
         
 //Function format written to use local vairables and return to reactive value
 function iconDimensions(){
-    const scaleWidth = 0.8;
-    const scaleHeight = 0.8;
-    const fill = '#555';
+    const scaleWidth = 1;
+    const scaleHeight = 1;
+    const fill = '#999';
     return {
         agentIcon:{
             iconHeight: 0.9  * scaleHeight,
@@ -325,7 +330,7 @@ function handleMouseOut(d) {
 
 function getUpPos(elm, isUp) {
     if( elm.classList.contains('item-wrapper')){
-        return `translate(0, ${(isUp ? -10 : 0)}px)`
+    return `translate(0, ${(isUp ? -10 : 0)}px)`
     }
 }
 

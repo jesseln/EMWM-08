@@ -166,22 +166,18 @@ const loadedCheck = ref(false);
 const loadedFail = ref(false);
 
 //Props
-const {item, itemBundle} = defineProps(['item', 'itemBundle']);
+const {item, itemBundle, articleView} = defineProps(['item', 'itemBundle', 'articleView']);
 const {viewDetails} = defineEmits(['viewDetails']);
 const supabase = useSupabaseClient()
 
-// STATE MANAGERS IMPORT //    
+// STATE MANAGERS IMPORT //  
+
+//Article Store
+const articleStore = useArticleStore();
+const { allArticles } = storeToRefs(articleStore)
+        
 //View State
 const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        formattedItemLibrary,
-        filterLibrary,
-        itemHeight,
-        itemColour, 
-        viewHeightBounds, 
-        viewColourSet } = storeToRefs(viewStore)
 const { parseDatabase,
         handleViewSelection,
         getIDP,
@@ -189,17 +185,24 @@ const { parseDatabase,
         getItemLibrary,
         getItemLibraryCount } = useViewStore();
     
-//Reference Constants
-const referenceStore = useReferenceStore();
-const { zoomLevel,
-        categoryMap, 
-        invCategoryMap, 
-        scales } = storeToRefs(referenceStore)
 
 // COMPOPSABLES
 //Utility Functions
 const { handleObjectProperty,
         contrastHandler } = useUtils();
+
+//Reference Constants
+const referenceStore = useReferenceStore();
+const { categoryMap } = storeToRefs(referenceStore)
+const zoomLevel = ref(allArticles.value[articleView.name][articleView.section].references.zoomLevel)
+const scales = ref(allArticles.value[articleView.name][articleView.section].references.scales)
+const libraryItemBundle = ref(allArticles.value[articleView.name][articleView.section].references.libraryItemBundle)
+            
+const itemHeight = ref(allArticles.value[articleView.name][articleView.section].library.itemH)
+const itemColour = ref(allArticles.value[articleView.name][articleView.section].library.itemC)
+
+
+
 
 const itemID = ref();
 const imageRequestID = ref();

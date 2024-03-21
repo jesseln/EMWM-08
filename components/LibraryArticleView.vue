@@ -1,34 +1,8 @@
 <template>
-    <div class="library-wrapper">
-        <!-- <div class="slider-wrapper">
-            <div class="slider range">
-                <label for="fader"> </label>
-                <input type="range" min="0" max="100" v-model="zoomLevel" id="fader" step="50" list="volsettings">
-                <datalist id="volsettings">
-                    <option>0</option><option>50</option><option>100</option>
-                </datalist>
-            </div> 
-        </div> -->
+    <div class="article-library-wrapper">
     
-        <div class="slider-wrapper" v-if="useY > 300">
-            <div class="library-catalogue-title-box">
-                <h2 class="library-catalogue-title">Adjust Zoom</h2>
-                <h3 class="library-catalogue-subtitle">Click below to Zoom In and Out of the library</h3>
-
-            </div>
-            <div class="shelf-button slider-box">
-                <p @click="zoomOut">-</p>  
-                <input class="slider range" type="range" min="0" max="100" v-model="zoomLevel" id="fader" step="50" list="volsettings" ref="zoomSlider">
-                <p @click="zoomIn">+</p>  
-            </div>
-            <div id="volsettings" >
-                <p value="0" label="Close-Up" :class="{ activeZoom : zoomLevel === '100'}">Close-Up</p>
-                <p value="50" label="Standard View" :class="{ activeZoom : zoomLevel === '50'}">Standard View</p>
-                <p value="100" label="Overview" :class="{ activeZoom : zoomLevel === '0'}">Overview</p>
-            </div>
-        </div>
-    <div class="shelf" v-for="shelf in filterLibrary" :key="shelf">
-        <div class="shelf-title-box">
+    <div class="article-shelf" v-for="shelf in filterLibrary" :key="shelf">
+        <div v-if="shelf[0] !== 'All Items'" class="shelf-title-box">
             <h2 class="shelf-title">{{shelf[0]}}</h2>
         </div>
         <div class="shelf-inner" >
@@ -63,9 +37,9 @@
                         v-for="item in bookend[1].slice(0,1)" 
                         :key="JSON.stringify(item)" 
                         :style="{ height: scales.maxShelfHeight + 'px'}">
-                            <LazyAgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
-                            <LazyBookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
-                            <LazyMarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
+                            <LazyAgentItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Agent" :articleView="articleView"/>
+                            <LazyBookItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Book" :articleView="articleView"/>
+                            <LazyMarkItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Mark" :articleView="articleView"/>
                     </div> 
                 
                     </div>
@@ -79,9 +53,9 @@
                         }"
                         :key="JSON.stringify(item)" 
                         :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <LazyAgentItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="item" :itemBundle="libraryItemBundle.Agent"/>
-                        <LazyBookItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="item" :itemBundle="libraryItemBundle.Book"/>
-                        <LazyMarkItem @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="item" :itemBundle="libraryItemBundle.Mark"/>
+                        <LazyAgentItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Agent" :articleView="articleView"/>
+                        <LazyBookItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Book" :articleView="articleView"/>
+                        <LazyMarkItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Mark" :articleView="articleView"/>
                     </div>
                 </template>
         </div>
@@ -97,6 +71,7 @@
 </template>
 
 <script setup>
+    import * as d3 from "d3";
     import { storeToRefs } from "pinia";
     const {articleView} = defineProps(['articleView']);
    
@@ -105,64 +80,32 @@
     //Library State
 const libraryStore = useLibraryStore();
 
+//Article Store
+const articleStore = useArticleStore();
+const { allArticles } = storeToRefs(articleStore)
 
 //View State
 const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        filterLibrary,
-        itemHeight,
-        itemColour, 
-        viewHeightBounds, 
-        viewColourSet } = storeToRefs(viewStore)
 const { parseDatabase,
         handleViewSelection,
         getIDP,
         itemTypeCheck } = useViewStore();
-    
-const yourCollectionStore = useYourCollectionStore();
-const { allCollections,
-        yourCollection, 
-        itemLibraryYC, 
-        dataSizeYC,
-        libraryDisplayYC,
-        formattedLibraryYC,
-        formattedItemLibraryYC,
-        filterLibraryYC, 
-        heightCategoryYC,
-        itemHeightYC,
-        itemColourYC,
-        colourScaleYC,
-        colourScaleConverterYC,
-        colourSetYC, 
-        ordinalColourMapYC,
-        viewColourSetYC,
-        domainIndexYC,
-        viewHeightBoundsYC,
-        domainColourIndexYC,
-        viewColourBoundsYC,
-        activeFiltersYC,
-        filterObjectYC,
-        getActiveFiltersYC } = storeToRefs(yourCollectionStore)
-const { getItemLibraryYC,
-        getFilterObjectYC,
-        filterActiveToggleYC,
-        parseDatabaseYC,
-        handleViewSelectionYC,
-        getIDP_YC,
-        getIFP_YC,
-        itemTypeCheckYC,
-        addToCollection, 
-        removeFromCollection } = useYourCollectionStore();
+
+const { alphabetically,
+    handleFilterValue,
+ } = useUtils();
         
-    //Reference Constants
-    const referenceStore = useReferenceStore();
-    const { zoomLevel,
-            categoryMap, 
-            invCategoryMap, 
-            scales,
-            libraryItemBundle } = storeToRefs(referenceStore)
+
+const libraryDisplay = ref(allArticles.value[articleView.name][articleView.section].library.libraryDisplay)
+const filterLibrary = ref(allArticles.value[articleView.name][articleView.section].library.filterLibrary)
+
+//Reference Constants
+const referenceStore = useReferenceStore();
+const { categoryMap } = storeToRefs(referenceStore)
+const zoomLevel = ref(allArticles.value[articleView.name][articleView.section].references.zoomLevel)
+const scales = ref(allArticles.value[articleView.name][articleView.section].references.scales)
+const libraryItemBundle = ref(allArticles.value[articleView.name][articleView.section].references.libraryItemBundle)
+            
 
   const itemModalContent = ref(null)
   const itemModalContentOuter = ref(null)
@@ -170,23 +113,102 @@ const { getItemLibraryYC,
   const _item = ref(null)
 
 
-    // console.log("setQueryView", setQueryView)
-    // console.log("viewStore", viewStore.libraryDisplay)
-    // console.log("query check", setQueryView.view.itemType)
-    Object.assign(viewStore.libraryDisplay.view, articleView.view)
-    Object.assign(viewStore.libraryDisplay.viewType, articleView.viewType)
-    Object.assign(viewStore.libraryDisplay.pageText, articleView.pageText)
+watchEffect(()=>{
+    console.log('articleView', articleView) 
+    console.log('allArticles', allArticles.value[articleView.name][articleView.section].library.libraryDisplay)
+    console.log('allArticles filterLibrary', allArticles.value[articleView.name][articleView.section].library.filterLibrary)
+    console.log('allArticles library', allArticles.value[articleView.name][articleView.section].library)
+    console.log('allArticles total', allArticles.value)
+})
 
-//    console.log('library display', viewStore.libraryDisplay)
-//    console.log('computed ', formattedLibrary)
-//    console.log('computed length', formattedLibrary.length !== undefined)
-   
+//REFORMAT HEIGHT LOCALLY
+// HANDLE HEIGHT //
+function formatHeight() {
+    const viewSelection = libraryDisplay.value.view.height
+    if(viewSelection !== "Not Selected") {
+        //Returns a function which takes the log scale of the input then invokes the d3 scale function (IIFE)
+        if(allArticles.value[articleView.name][articleView.section].library.heightCategory.logarithmic.includes(viewSelection)){
+            return (value)=>{ 
+                return (d3.scaleLinear()
+                            .domain(chooseHeightDomain(allArticles.value[articleView.name][articleView.section].library.libraryData).map(d => Math.log(d))) 
+                            .unknown(scales.value.minItemHeight) //Set all non-numeric values to max height
+                            .range([scales.value.minItemHeight, scales.value.maxItemHeight])
+                            .clamp(true)
+                        )(Math.log(value)); 
+            }
+        }else{
+            return d3.scaleLinear()
+                        .domain(chooseHeightDomain(allArticles.value[articleView.name][articleView.section].library.libraryData)) 
+                        .unknown(scales.value.minItemHeight) //Set all non-numeric values to max height
+                        .range([scales.value.minItemHeight, scales.value.maxItemHeight])
+                        .clamp(true);     
+        }
+    }else{
+        return (_)=> {return scales.value.maxItemHeight}
+    }
+}
 
-    watchEffect(()=>{
-        parseDatabase(libraryStore[viewStore.libraryDisplay.view.itemType])
-        // console.log('watchEffect',formattedLibrary)
+function chooseHeightDomain(data){   
+        const viewSelection = libraryDisplay.value.view.height
+        if(allArticles.value[articleView.name][articleView.section].library.heightCategory.year.includes(viewSelection)) {
+            return [1450, 1750] //was - clamp(1450, longestNumber, 1750)
+        }else{
+            return [getIDP(data[allArticles.value[articleView.name][articleView.section].library.domainIndex.min], 'height'), getIDP(data[allArticles.value[articleView.name][articleView.section].library.domainIndex.max], 'height')]
+        }
+}
+
+articleStore.allArticles[articleView.name][articleView.section].library.itemH = formatHeight()
+
+    // HANDLE COLOUR //
+    function formatColour(){
+        if(libraryDisplay.value.view.colour !== "Not Selected"){
+            return (
+                    (colourByValue) => {
+                        if(colourByValue !== "no data")
+                        {
+                            return colourScaleConverter.value(colourScale.value(colourByValue)) //Returns nested scale function after applying band function (IIFE)
+                        }
+                        else{
+                            return '#EEEEEE'
+                        }
+                    }
+                )   
+        }else{
+            return (_)=> {return '#fff281'}
+        }    
+    }
+
+    const colourScale = ref()
+    const colourScaleConverter = ref()
+
+    function processColourSet(data){
+       return new Set(data.flatMap(d=> getIDP(d, 'colour')).sort((a,b)=>alphabetically(true)(handleFilterValue(a), handleFilterValue(b))))
+    }
+
+    //Get unique values in colour set
+    const getColourSet = computed (() => {
+        return processColourSet(allArticles.value[articleView.name][articleView.section].library.libraryData)
     })
-         
+    //Returns bandscale for colour values
+    function colourBandscale(){
+        return d3.scaleBand().domain(Array.from(getColourSet.value)) //Range defaults to [0,1]
+    }
+
+    colourScale.value = colourBandscale();
+
+    function colourFunction() {
+        const viewMode = 'colour'
+        const viewSelection = libraryDisplay.value.view[viewMode]
+        const viewModeType = libraryDisplay.value.viewType[viewMode]
+        const colourFunction = referenceStore.viewMap.get(viewModeType)[viewSelection].func
+        const colourScheme = referenceStore.viewMap.get(viewModeType)[viewSelection].scheme
+        return d3[colourFunction](d3[colourScheme]) //Applies colour functions and schemes from Object. Domain defaults to [0,1]
+    }
+
+    colourScaleConverter.value =  colourFunction();
+
+    articleStore.allArticles[articleView.name][articleView.section].library.itemC = formatColour()
+
   function showModal(item){
     //Component Prop
     _item.value = item;

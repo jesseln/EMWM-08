@@ -9,8 +9,32 @@
     <div class="shelf-separator-container"><div class="shelf-separator"></div></div>
     <div class="article-library-title">
         <h1>Visual</h1>
+        <div v-if="dataCheck[0]">
+        <LibraryBottomNavArticle :articleView="{
+                name: articleViewSet.name, 
+                section: articleViewSet.sections[0]
+                }" />
+        </div>
+        <div v-if="dataCheck[0]">
+            <LibraryArticleView :articleView="{
+                name: articleViewSet.name, 
+                section: articleViewSet.sections[0]
+                }" />
+        </div>
         <h2><span>Definition:</span></h2>
         <h4>The database uses the term graffiti for a range of marks that are primarily visual in nature, consisting of images, pasted material, object traces, letter practice, doodles, smudges and stains.</h4>
+        <div v-if="dataCheck[1]">
+        <LibraryBottomNavArticle :articleView="{
+                name: articleViewSet.name, 
+                section: articleViewSet.sections[1]
+                }" />
+        </div>
+        <div v-if="dataCheck[1]">
+            <LibraryArticleView :articleView="{
+                name: articleViewSet.name, 
+                section: articleViewSet.sections[1]
+                }" />
+        </div>
         <div class="article-hero">
         <NuxtImg class="explore-item-image" 
             :class="[heroImageClass]"
@@ -72,15 +96,6 @@
     </div>
 
 
-
-
-    <!-- <button @click="showAnnotations=!showAnnotations" class="annotation-button" :class="{ 'active': showAnnotations }">
-        🖊️
-    </button>
-        <AnnotationPanel v-if="showAnnotations"/> -->
-    <!-- <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button> -->
-
-
     </div>
 </template>
 
@@ -100,6 +115,7 @@ const supabase = useSupabaseClient()
 
 //Library State
 const libraryStore = useLibraryStore();
+const { complete } = storeToRefs(libraryStore)
 
 //View State
 const viewStore = useViewStore();
@@ -119,12 +135,19 @@ const { libraryData,
         viewHeightBounds,
         domainColourIndex,
         viewColourBounds,
-        viewColourSet } = storeToRefs(viewStore)
-        const { parseDatabase,
+        viewColourSet,
+        viewUpdated } = storeToRefs(viewStore)
+
+const { parseDatabase,
         handleViewSelection,
         getIDP,
         filterActiveToggle,
-        handleColour } = useViewStore();
+        updateView,
+        getFilterObject,
+        formatHeight,
+        formatColour,
+        getAllFilters,
+        updateFilteredLibrary } = useViewStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
@@ -132,14 +155,77 @@ const { categoryMap,
         viewMap,
         invCategoryMap, 
         colourMapFiltered,
-        scales } = storeToRefs(referenceStore)
+        scales,
+        filterMap,
+        zoomLevel } = storeToRefs(referenceStore)
+const { updateScales } = useReferenceStore();
 
-        //Utility Functions
+//Article Store
+const articleStore = useArticleStore();
+const { allArticles } = storeToRefs(articleStore)
+const { cloneLibrary,
+    cloneReferences } = useArticleStore();
+
+//Utility Functions
 const { handleObjectProperty,
-        contrastHandler } = useUtils();
+        contrastHandler,
+        checkObjectPath } = useUtils();
 
+const articleViewSet = ref(referenceStore.viewRouteQueries[route.params.articlePage])
+const dataCheck = ref([])
+setDataChecks(articleViewSet.value)
 
+async function cloneStores(articleViewSet, i){
+    const articleName = articleViewSet.name
+    const articleSection = articleViewSet.sections[i]
+    const articleItemType = articleViewSet.sectionViews[i].view.itemType
 
+    const useFilter = articleViewSet.sectionViews[i].articleFilter.useFilter
+    const filterItemType = articleViewSet.sectionViews[i].articleFilter.itemType
+    const filterCategory = articleViewSet.sectionViews[i].articleFilter.category
+    const filterOption = articleViewSet.sectionViews[i].articleFilter.option
+
+    Object.assign(viewStore.libraryDisplay.view, articleViewSet.sectionViews[i].view)
+    Object.assign(viewStore.libraryDisplay.viewType, articleViewSet.sectionViews[i].viewType)
+    Object.assign(viewStore.libraryDisplay.pageText, articleViewSet.sectionViews[i].pageText)
+    await parseDatabase(libraryStore[articleItemType])
+    referenceStore.zoomLevel = articleViewSet.sectionViews[i].zoom.zoomLevel
+    updateScales()
+    updateView()
+    getAllFilters()
+    if(useFilter){
+        console.log('filter section number', useFilter, i)
+        filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
+        updateFilteredLibrary()
+    }
+    await cloneLibrary(viewStore, articleName, articleSection )
+    await cloneReferences(referenceStore, articleName, articleSection)
+    if(useFilter){
+        console.log('filter section number', useFilter, i)
+        filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
+        updateFilteredLibrary()
+    }
+    // articleStore.allArticles[articleName][articleSection].library.itemC = formatColour()
+    // articleStore.allArticles[articleName][articleSection].library.itemH = formatHeight()
+    dataCheck.value[i] = true
+    console.log('dataCheck', dataCheck.value[i])
+}
+
+function setDataChecks(articleViewSet){
+    articleViewSet.sections.forEach((elm,i)=>{
+        dataCheck.value[i] = false
+    })
+}
+async function cloneAllStores(){
+    await cloneStores(articleViewSet.value, 0)
+    await cloneStores(articleViewSet.value, 1)
+}
+
+watch([libraryStore.complete],()=>{
+    if(libraryStore.complete.agent && libraryStore.complete.mark && libraryStore.complete.book) {
+        cloneAllStores()
+    }
+},{immediate:true, deep:true})
 
     // To Top Button
     const { x, y } = useWindowScroll() // To replace below
@@ -147,22 +233,6 @@ const { handleObjectProperty,
     const useY = ref(y)
     const toExploreButton = ref();
     const toTopButton = ref();
-    // onMounted(() => {
-    //     watchEffect(()=>{
-    //         if (useY.value > 550) {
-    //             toTopButton.value.classList.add("showButton");
-    //         } else {
-    //             toTopButton.value.classList.remove("showButton");
-    //         }
-    //     })
-    // })
-    const scrollToExplore = () => {
-        window.scrollTo({ top: 540, behavior: "smooth" });
-    };
-
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
 
     const heroImageClass = ref('graffitiHero')
 

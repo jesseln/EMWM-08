@@ -7,6 +7,7 @@ export const useLibraryStore = defineStore('library', ()=>{
     const Agent = ref([]);
     const Book = ref([]);
     const Mark = ref([]);
+    const complete = reactive({agent:false, mark: false, book: false})
     const libraryItemsTest = ref([])
 
     //Generic Getter - Returns single table as specified by tableName and orderColumn
@@ -17,16 +18,19 @@ export const useLibraryStore = defineStore('library', ()=>{
     //Returns Agent Structed Object - Relationally nested Marks then nested by Books 
     async function getAgents() {
       Agent.value = await getTable('Agents', 'FemaleAgentID')
+      complete.agent = true
     }
 
     //Returns Book Structed Object - Relationally nested Marks then nested by Agents
     async function getBooks() {
       Book.value = await getTable('Books', 'BookID')
+      complete.book = true
     }
 
     //Returns Mark Structed Object - Relationally nested Books and Agents on same level 
     async function getMarks() {
       Mark.value = await getTable('Marks', 'MargID')
+      complete.mark = true
     }
 
     //Test Function
@@ -36,5 +40,5 @@ export const useLibraryStore = defineStore('library', ()=>{
   
   
 
-      return {items, Agent, Book, Mark, getItems, getAgents, getBooks, getMarks, getLibraryItemsTest}
+      return {items, Agent, Book, Mark, complete, getItems, getAgents, getBooks, getMarks, getLibraryItemsTest}
   })

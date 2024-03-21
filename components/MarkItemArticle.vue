@@ -4,60 +4,63 @@
         :delay="{ show: 50, hide: 200 }"
         @show="menuShown"
     >
-    <div class="item-wrapper" 
-        :class="{ 
-                    zoomOut : zoomLevel === '0',
-                    zoomMid : zoomLevel === '50',
-                    zoomIn : zoomLevel === '100',
-                }"
-        v-on="itemHandlers" 
-        :style="{ maxHeight: scales.maxItemHeight + 'px', 
-        height: itemHeight(getIDP(item,'height')) + 'px', 
-        width:scales.minItemWidth + 'px'}">    
-        <div class="book-item-background" :style="{ maxHeight: scales.maxItemHeight + 'px', height: itemHeight(getIDP(item,'height')) + 'px',width:scales.minItemWidth + 4 + 'px'}"></div>
-        <div class="book-item" 
-            :style="{ maxHeight: scales.maxItemHeight-4 + 'px', 
-            height: itemHeight(getIDP(item,'height'))-4 + 'px' , 
-            background: itemColour(getIDP(item, 'colour')),
-            width:scales.minItemWidth + 'px'}" 
-            :class="{lowlight: isHighlight}">
-            <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-            </div>
-            <div v-if="zoomLevel === '50'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-                <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
-            </div>
-            <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-                <div class="item-menu-header-container">
-                    <h2 class="item-menu-header" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">{{ itemBundle.menuHeader }}</h2>
-                    <h2 class="item-menu-subheader-ID" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">{{ handleObjectProperty(item, itemBundle.ownProp1) }}</h2>
-                    <h2 class="item-menu-subheader" 
-                    :class="{ 
+        <div class="item-wrapper"
+            :class="{ 
+                        zoomOut : zoomLevel === '0',
+                        zoomMid : zoomLevel === '50',
+                        zoomIn : zoomLevel === '100',
+                    }"
+             v-on="itemHandlers" 
+             :style="{ maxHeight: scales.maxItemHeight + 'px', 
+             height: itemHeight(getIDP(item,'height')) + 'px', 
+             width:scales.minItemWidth + 'px'}">    
+            <div class="mark-item-top" :style="{ background: itemColour(getIDP(item, 'colour')), width:scales.minItemWidth + zoomOffsetTopWidth - 2 + 'px'}"></div>
+            <div class="mark-item-top-background" :style="{ width:scales.minItemWidth + zoomOffsetTopWidth + 2 + 'px'}"></div>
+            <div class="mark-item-background" :style="{ maxHeight: scales.maxItemHeight + zoomOffsetBotHeight -20  + 'px', height: itemHeight(getIDP(item,'height'))-20 + 'px',width:scales.minItemWidth + 2 + 'px'}"></div>
+            <div class="mark-item" 
+                :style="{ maxHeight: scales.maxItemHeight + zoomOffsetBotHeight -23 + 'px', 
+                height: itemHeight(getIDP(item,'height'))-23 + 'px' , 
+                background: itemColour(getIDP(item, 'colour')),
+                width:scales.minItemWidth - 2 + 'px'}" 
+                :class="{lowlight: isHighlight}">
+                <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: textColour}">
+                </div>
+                <div v-if="zoomLevel === '50'" class="item-value" :style="{ color:  textColour}">
+                    <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+                </div>
+                <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: textColour}">
+                    <div class="item-menu-header-container">
+                        <h2 class="item-menu-header" :style="{ color: textColour}">{{ itemBundle.menuHeader }}</h2>
+                        <h2 class="item-menu-subheader-ID" :style="{ color: textColour}">{{ handleObjectProperty(item, itemBundle.ownProp1) }}</h2>
+                        <h2 class="item-menu-subheader" 
+                        :class="{ 
                             zoomOut : zoomLevel === '0',
                             zoomMid : zoomLevel === '50',
                             zoomIn : zoomLevel === '100',
                         }"
-                    :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}"> 
-                        {{ handleObjectProperty(item, itemBundle.menuSubheader) }}
-                    </h2>
-                    <h5 class="item-menu-subheader-type" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-                        {{categoryMap.get(itemBundle.itemType)[itemBundle.menuSubheader]}}
-                    </h5>
+                        :style="{ color: textColour}"> 
+                            {{ handleObjectProperty(item, itemBundle.menuSubheader) }}
+                        </h2>
+                        <h5 class="item-menu-subheader-type" :style="{ color: textColour}">
+                            {{categoryMap.get(itemBundle.itemType)[itemBundle.menuSubheader]}}
+                        </h5>
+                    </div>
                 </div>
-            </div>
-            <div class="item-embedded-images-wrapper">
+
+        <div class="item-embedded-images-wrapper">
                 <div v-if="!loadedCheck && !loadedFail && imageSlides.image.length !== 0 && zoomLevel === '100'">
                     <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
                 </div>
                 <div v-if="loadedFail">
                     <div v-if="imageFound && zoomLevel === '100'">
-                        <p class="item-menu-subheader-type base no-border" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                        <p class="item-menu-subheader-type base no-border" :style="{ color: textColour}">
                             This image filetype cannot be displayed
                         </p>
                     </div>   
                 </div>
                 <!-- <div v-if="!loadedFail">
                     <div v-if="!imageFound && zoomLevel === '100'">
-                        <p class="item-menu-subheader-type base no-border" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                        <p class="item-menu-subheader-type base no-border" :style="{ color: textColour}">
                             This item has no book images
                         </p>
                     </div>   
@@ -87,8 +90,8 @@
                         </vueper-slides>
                     </div>
                 </div>
-                <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-                    <h5 class="item-menu-subheader-type base" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour'))), borderColor: contrastHandler(itemColour(getIDP(item, 'colour')))}">
+                <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: textColour}">
+                    <h5 class="item-menu-subheader-type base" :style="{ color: textColour, borderColor: contrastHandler(itemColour(getIDP(item, 'colour')))}">
                         {{imageSlides.image.length}} Images
                     </h5>
                 </div>
@@ -108,7 +111,7 @@
                 </p>
             </div>
             <div class="item-menu-totals-wrapper">
-            <div class="item-menu-totals">
+                <div class="item-menu-totals">
                         <div class="item-menu-totals-badge">
                             <div class="item-menu-icon-container">
                                 <svg xmlns="http://www.w3.org/2000/svg" :width="11*icons.agentIcon.iconWidth" :height="33*icons.agentIcon.iconHeight" viewBox="0 0 11 33" fill="none">
@@ -162,26 +165,22 @@ import { storeToRefs } from "pinia";
 import 'vueperslides/dist/vueperslides.css'
 
 
+
 const loadedCheck = ref(false);
 const loadedFail = ref(false);
-
 //Props
-const {item, itemBundle} = defineProps(['item', 'itemBundle']);
+const {item, itemBundle, articleView} = defineProps(['item', 'itemBundle', 'articleView']);
 const {viewDetails} = defineEmits(['viewDetails']);
 const supabase = useSupabaseClient()
 
-// STATE MANAGERS IMPORT //    
+// STATE MANAGERS IMPORT //  
+
+//Article Store
+const articleStore = useArticleStore();
+const { allArticles } = storeToRefs(articleStore)
+        
 //View State
 const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        formattedItemLibrary,
-        filterLibrary,
-        itemHeight,
-        itemColour, 
-        viewHeightBounds, 
-        viewColourSet } = storeToRefs(viewStore)
 const { parseDatabase,
         handleViewSelection,
         getIDP,
@@ -189,17 +188,23 @@ const { parseDatabase,
         getItemLibrary,
         getItemLibraryCount } = useViewStore();
     
-//Reference Constants
-const referenceStore = useReferenceStore();
-const { zoomLevel,
-        categoryMap, 
-        invCategoryMap, 
-        scales } = storeToRefs(referenceStore)
 
 // COMPOPSABLES
 //Utility Functions
 const { handleObjectProperty,
         contrastHandler } = useUtils();
+
+//Reference Constants
+const referenceStore = useReferenceStore();
+const { categoryMap } = storeToRefs(referenceStore)
+const zoomLevel = ref(allArticles.value[articleView.name][articleView.section].references.zoomLevel)
+const scales = ref(allArticles.value[articleView.name][articleView.section].references.scales)
+const libraryItemBundle = ref(allArticles.value[articleView.name][articleView.section].references.libraryItemBundle)
+            
+const itemHeight = ref(allArticles.value[articleView.name][articleView.section].library.itemH)
+const itemColour = ref(allArticles.value[articleView.name][articleView.section].library.itemC)
+
+const textColour = ref(contrastHandler(itemColour.value(getIDP(item, 'colour'))))
 
 const itemID = ref();
 const imageRequestID = ref();
@@ -253,25 +258,29 @@ async function getImages(item){
 
 onMounted(()=>{
     watchEffect(()=>{
-    if(zoomLevel.value === '100'){
-        itemType.value = itemTypeCheck(item)
-        updateItemRefs(item)
-        getItemLibrary(item)
-        watch(item,()=>{
-            if(itemType.value !== 'Agent') {
-                // console.log('itemTYpe ',itemType.value)
-                getImages(item)
-            }
-        }, { immediate: true })
-    }
+
+        if(zoomLevel.value === '100'){
+            console.log('check for images')
+            itemType.value = itemTypeCheck(item)
+            updateItemRefs(item)
+            getItemLibrary(item)
+            watch(item,()=>{
+                if(itemType.value !== 'Agent') {
+                    // console.log('itemTYpe ',itemType.value)
+                    getImages(item)
+                }
+            }, { immediate: true })
+        }
     })
 })
+
+
         
 //Function format written to use local vairables and return to reactive value
 function iconDimensions(){
-    const scaleWidth = 0.8;
-    const scaleHeight = 0.8;
-    const fill = '#555';
+    const scaleWidth = 1;
+    const scaleHeight = 1;
+    const fill = '#999';
     return {
         agentIcon:{
             iconHeight: 0.9  * scaleHeight,
@@ -291,10 +300,21 @@ function iconDimensions(){
     }
 }
 
+const zoomOffsetBotHeight = ref()
+const zoomOffsetTopWidth = ref()
+
+
 const icons = ref()
 
 watchEffect(()=>{
     icons.value = iconDimensions()
+    if(zoomLevel.value === '0') {
+        zoomOffsetBotHeight.value = 5
+        zoomOffsetTopWidth.value = 2
+    }else{
+        zoomOffsetBotHeight.value = 0
+        zoomOffsetTopWidth.value = 0
+    }
 })
 
 //Kept due to temporary use in template.
@@ -325,7 +345,7 @@ function handleMouseOut(d) {
 
 function getUpPos(elm, isUp) {
     if( elm.classList.contains('item-wrapper')){
-        return `translate(0, ${(isUp ? -10 : 0)}px)`
+    return `translate(0, ${(isUp ? -10 : 0)}px)`
     }
 }
 
