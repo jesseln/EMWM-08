@@ -192,7 +192,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
             ['Location sig. ; p. ; pp.']: 'Location',
             ['Recording type']: 'Recording type',
             ['Transcription']: 'Transcription',
-            ['Mark type (Mark of?)']: 'Type of mark',
+            ['Mark type (Mark of?)']: 'Type of Mark',
             ['Images of marginal mark']: 'Images',
             ['Class']: 'Class',
             ['Position on page']: 'Position on page',
