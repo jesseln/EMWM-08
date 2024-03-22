@@ -53,9 +53,9 @@
                         }"
                         :key="JSON.stringify(item)" 
                         :style="{ height: scales.maxShelfHeight + 'px'}">
-                        <LazyAgentItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Agent" :articleView="articleView"/>
-                        <LazyBookItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Book" :articleView="articleView"/>
-                        <LazyMarkItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Mark" :articleView="articleView"/>
+                            <LazyAgentItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Agent'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Agent" :articleView="articleView"/>
+                            <LazyBookItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Book'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Book" :articleView="articleView"/>
+                            <LazyMarkItemArticle @viewDetails="showModal" v-if="itemTypeCheck(item) === 'Mark'" :item="{...item, ...libraryDisplay}" :itemBundle="libraryItemBundle.Mark" :articleView="articleView"/>
                     </div>
                 </template>
         </div>

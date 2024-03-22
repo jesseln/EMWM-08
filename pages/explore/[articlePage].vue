@@ -198,8 +198,17 @@ async function cloneStores(articleViewSet, i){
         filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
         updateFilteredLibrary()
     }
+    await cloneLibrary(viewStore.libraryData,'libraryData', articleName, articleSection )
+    await cloneLibrary(viewStore.libraryDisplay,'libraryDisplay', articleName, articleSection )
+    await cloneLibrary(viewStore.filterLibrary, 'filterLibrary', articleName, articleSection )
+    await cloneLibrary(viewStore.domainIndex, 'domainIndex', articleName, articleSection )
+    await cloneLibrary(viewStore.heightCategory, 'heightCategory', articleName, articleSection )
     await cloneLibrary(viewStore, articleName, articleSection )
-    await cloneReferences(referenceStore, articleName, articleSection)
+    await cloneReferences(referenceStore.libraryItemBundle, 'libraryItemBundle', articleName, articleSection)
+    await cloneReferences(referenceStore.zoomLevel, 'zoomLevel', articleName, articleSection)
+    await cloneReferences(referenceStore.scales, 'scales', articleName, articleSection)
+    // await cloneLibrary(viewStore, articleName, articleSection )
+    // await cloneReferences(referenceStore, articleName, articleSection)
     if(useFilter){
         console.log('filter section number', useFilter, i)
         filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)

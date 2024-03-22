@@ -7,16 +7,19 @@ export const useArticleStore = defineStore('article', ()=>{
 
 
     //Generic Getter - Returns single table as specified by tableName and orderColumn
-    async function cloneLibrary(library, articleName, articleSection) {
+    async function cloneLibrary(data, dataName, articleName, articleSection) {
         allArticles.value[articleName] = allArticles.value[articleName] || {}
         allArticles.value[articleName][articleSection] = allArticles.value[articleName][articleSection] || {}
-        allArticles.value[articleName][articleSection].library = await JSON.parse(stringify(library))
+        allArticles.value[articleName][articleSection]['library'] = allArticles.value[articleName][articleSection]['library'] || {}
+        allArticles.value[articleName][articleSection]['library'][dataName] = await JSON.parse(stringify(data))
         return true
     }
-    async function cloneReferences(references, articleName, articleSection) {
+    
+    async function cloneReferences(data, dataName , articleName, articleSection) {
         allArticles.value[articleName] = allArticles.value[articleName] || {}
         allArticles.value[articleName][articleSection] = allArticles.value[articleName][articleSection] || {}
-        allArticles.value[articleName][articleSection].references = await JSON.parse(stringify(references))
+        allArticles.value[articleName][articleSection]['references'] = allArticles.value[articleName][articleSection]['references'] || {}
+        allArticles.value[articleName][articleSection]['references'][dataName] = await JSON.parse(stringify(data))
         return true
     }
 
