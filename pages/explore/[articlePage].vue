@@ -11,7 +11,7 @@
         <div class="article-title-topsection">
         <div class="article-title-subsection">
             <h1>Visual</h1>
-            <h2><span>Definition:</span></h2>
+            <h2><span>A Definition of Graffiti:</span></h2>
             <h4>The database uses the term graffiti for a range of marks that are primarily visual in nature, consisting of images, pasted material, object traces, letter practice, doodles, smudges and stains.</h4>
         </div>
         <div>
