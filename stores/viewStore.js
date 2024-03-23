@@ -410,26 +410,27 @@ export const useViewStore = defineStore('view', ()=>{
             //Agent Item paths
             library = [
                 item, 
-                getUnique(item['Marks'], 'MargID').sort((a, b) => alphabetically(true)(a['MargID'],b['MargID'])), 
                 getUnique(item['Marks'].map(d => d['Books']).sort((a, b) => alphabetically(true)(a['BookID'],b['BookID'])), 
+                getUnique(item['Marks'], 'MargID').sort((a, b) => alphabetically(true)(a['MargID'],b['MargID'])), 
                 'BookID')
             ].flat()
         }else if(itemType === 'Book'){
             //Book Item paths                 
-            library = [item, 
+            library = [ 
+                        getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID').sort((a, b) => alphabetically(true)(a['FemaleAgentID'],b['FemaleAgentID'])),
+                        item, 
                         getUnique(item['Marks'], 'MargID').sort((a, b) => alphabetically(true)(a['MargID'],b['MargID'])), 
-                        getUnique(item['Marks'].map(d => d['Agents']), 'FemaleAgentID').sort((a, b) => alphabetically(true)(a['FemaleAgentID'],b['FemaleAgentID']))
                     ].flat()
         }else if(itemType === 'Mark'){
             //Mark Item paths
             library = [
-                    item, 
-                    item['Agents'], 
-                    item['Books']
+                        item['Agents'], 
+                        item['Books'],
+                        item, 
                 ]
         }
 
-        library ? itemLibrary.value = library : "no data"
+        return library ? itemLibrary.value = library : "no data"
     }
 
     function getItemLibraryCount(item){

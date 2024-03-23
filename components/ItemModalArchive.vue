@@ -1,16 +1,34 @@
 <template>
-    <div class="item-modal-container scrollable">
+    <div class="item-modal-container">
         <div class="item-modal-header">
-            <div>
-                <h2>Item</h2>
-                <h2>Details</h2>
+            <div class="item-modal-header-LHS">
+                    <p>Library Item:</p>
+                <div v-if="itemTypeCheck(_item) === 'Agent'"  class="item-modal-header-title"  :style="{ borderRadius: '5rem', background: itemColour(getIDP(_item, 'colour')), color: contrastHandler(itemColour(getIDP(_item, 'colour')))}">
+                    <!-- <p>Library Item Selected </p> -->
+                    <p>{{ onMountedType }} </p>
+                    <h3>{{onMounteditem['Female agent name']}}</h3>
+                </div>
+                <div v-if="itemTypeCheck(_item) === 'Book'"  class="item-modal-header-title"  :style="{ borderRadius: '0.25rem', background: itemColour(getIDP(_item, 'colour')), color: contrastHandler(itemColour(getIDP(_item, 'colour')))}">
+                    <!-- <p>Library Item Selected </p> -->
+                    <p>{{ onMountedType }} No. </p>
+                    <h3>{{onMounteditem[onMountedID]}}</h3>
+                </div>
+                <div v-if="itemTypeCheck(_item) === 'Mark'"  class="item-modal-header-title"  :style="{ borderWidth: '0.125rem', margin: '0 0 0 1rem', borderRadius: '0.25rem', background: itemColour(getIDP(_item, 'colour')), color: contrastHandler(itemColour(getIDP(_item, 'colour')))}">
+                    <div class="mark-item-top-imageModal mark-item-modal" :style="{ background: itemColour(getIDP(_item, 'colour')), width:scalesStandard.minItemWidth - 2 + 'px'}"></div>
+                    <div class="mark-item-top-background-imageModal mark-item-modal" :style="{ width:scalesStandard.minItemWidth -1 + 'px'}"></div> <!-- <p>Library Item Selected </p> -->
+                    <p>{{ onMountedType }} No. </p>
+                    <h3>{{onMounteditem[onMountedID]}}</h3>
+                </div>
             </div>
             <div class="item-modal-add-to-colleciton">
+            <div>
+                <!-- <h3 >Your Collections</h3> -->
+            </div>
             <div class="item-modal-add-to-colleciton-controls">
             <div class="aselect" >
                 <div ref="section" class="selector" @click="toggle('section', $event)">
                     <div class="label">
-                        <p class="dropdown" v-if="Object.keys(allCollections).length > 0">
+                        <p v-if="Object.keys(allCollections).length > 0">
                             {{ collectionName }}
                         </p>
                         <p v-else >
@@ -59,136 +77,96 @@
                     </div>
                 </div>
             </div>
-            <button class="icon-button" @click="addItemsToCollection(itemLibrary, _item, onMountedID, onMountedType)"> 
-                <div class="icon-button-wrapper">
-                    <h4 class="item-modal-text">Add to</h4>
-                    <h4 class="item-modal-text">Collection</h4>     
-                </div>
-            </button>
+            <div class="shelf-button-wrapper item-modal-button">
+                    <button class="shelf-button" @click="addItemsToCollection(itemLibrary, _item, onMountedID, onMountedType)"> Add to Collection </button>
+            </div>
         </div>
         </div>
 
         <div class="item-modal-header-RHS">
-            <div v-if="imageFound && !imagePageDisplay">
-                <button  class="shelf-button-item-modal icon-button" @click="toggleImageDisplay()"> 
-                    <div class="icon-button-wrapper item-modal-button">
-                        <h4 class="item-modal-text" > View</h4>
-                        <h4 class="item-modal-text" > Images</h4>
-                    </div>
-                    <div class="shelf-button-wrapper item-modal-button">
-                        <h3 class="item-modal-text" > {{ imageList.length }}</h3>
-                    </div>
-                    <div class="shelf-button-wrapper item-modal-button">
-                        <Icon name="ic:baseline-chevron-right" size="1rem" class="prevent-close-on-click no-pointers" />
-                    </div>
-                </button>
-            </div>
-
-            <div v-if="!imageFound && !imagePageDisplay">
-                <button  class="shelf-button-item-modal shelf-button"> 
-                    <div class="shelf-button-wrapper item-modal-button">
-                        <h4 class="item-modal-text" > No images</h4>
-                        <h4 class="item-modal-text" > in achive</h4>
-                    </div>
-                </button>
-            </div>
-
-            <div v-if="imagePageDisplay">
-                <button  class="shelf-button-item-modal shelf-button" @click="toggleImageDisplay()"> 
-                    <div class="shelf-button-wrapper item-modal-icon">
-                        <Icon name="ic:baseline-chevron-left" size="1rem" class="prevent-close-on-click no-pointers" />
-                    </div>
-                    <div class="shelf-button-wrapper item-modal-button">
-                        <h4 class="item-modal-text" > Back to</h4>
-                        <h4 class="item-modal-text" > Item Details</h4>
-                    </div>
-                </button>
-            </div>
+            <p v-if="imageFound" > Total Images: {{ imageSlides.image.length }}</p>
             
             <button class="shelf-button item-modal-close-button" @click="$emit('close')"> 
                 <Icon name="ic:baseline-cancel" size="1.5rem" class="close-button" />
             </button>
         </div>
         </div>
-        <div v-if="!imagePageDisplay"   class="item-modal-details-wrapper">
-            <div class="item-modal-details">
-                <div class="item-modal-details-title">
-                    <p >Agent No.</p>
-                    <h3 >{{ itemLibrary[0]['FemaleAgentID'] }}</h3>
-                </div>
-                <div class="item-modal-details-category-wrapper">
-                    <div v-for="category in itemModalMap.get('Agent')">
-                        <div v-if="category !== 'Agent bio'" class="item-modal-details-category">
-                            <h3>{{handleObjectPath(itemLibrary[0], '', invCategoryMap.get('Agent')[category])}}</h3>
-                            <p>{{category}}</p>
-                        </div>
-                        <div v-else class="item-modal-details-category special-title">
-                            <h3>{{handleObjectPath(itemLibrary[0], '', invCategoryMap.get('Agent')[category])}}</h3>
-                            <p>{{category}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item-modal-details">
-                <div class="item-modal-details-title">
-                    <p >Book No.</p>
-                    <h3 >{{ itemLibrary[1]['BookID'] }}</h3>
-                </div>
-                <div class="item-modal-details-category-wrapper">
-                    <div v-for="category in itemModalMap.get('Book')">
-                        <div v-if="category !== 'Book Title' && category !== 'Book Notes'" class="item-modal-details-category">
-                            <h3>{{handleObjectPath(itemLibrary[1], '', invCategoryMap.get('Book')[category])}}</h3>
-                            <p>{{category}}</p>
-                        </div>
-                        <div v-else class="item-modal-details-category special-title">
-                            <h3>{{handleObjectPath(itemLibrary[1], '', invCategoryMap.get('Book')[category])}}</h3>
-                            <p>{{category}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item-modal-details">
-                <div class="item-modal-details-title">
-                    <p >Mark No.</p>
-                    <h3 >{{ itemLibrary[2]['MargID'] }}</h3>
-                </div>
-                <div class="item-modal-details-category-wrapper">
-                    <div v-for="category in itemModalMap.get('Mark')">
-                        <div v-if="category !== 'Transcription'" class="item-modal-details-category">
-                            <h3>{{handleObjectPath(itemLibrary[2], '', invCategoryMap.get('Mark')[category])}}</h3>
-                            <p>{{category}}</p>
-                        </div>
-                        <div v-else class="item-modal-details-category special-title">
-                            <h3>{{handleObjectPath(itemLibrary[2], '', invCategoryMap.get('Mark')[category])}}</h3>
-                            <p>{{category}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div v-if="imagePageDisplay">
-            <div class="item-modal-images">
+        <div v-if="imageFound" class="item-modal-images">
             <div class="item-modal-image-slider">
+
                 <vueper-slides :dragging-distance="70"
                 class="no-shadow" 
                 slide-image-inside
+                :visible-slides="imageSlides.image.length <= 4? imageSlides.image.length: 4"
                 slide-multiple
-                :visible-slides="imageList.length <= 2? imageList.length: 2"
+                :slide-ratio="1 / 4"
+                fixed-height="30vh"
                 :gap="1"
                 :arrows-outside="false"
                 prevent-y-scroll 
+                lazy 
+                lazy-load-on-drag
                 >
                     <vueper-slide
-                        v-for="itemImage in imageList"
+                        v-for="itemImage in imageSlides.image"
                         :key="itemImage"
-                        :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${itemImage.imageFolder}/${itemImage.item[itemImage.itemID]}/${itemImage.name}`"
-                        @click="openImageViewer(itemImage)"
+                        :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imageFolder}/${item[itemID]}/${itemImage.name}`"
+                        @click="openImageViewer({item: item, itemID: itemID, imageFolder: imageFolder, name: itemImage.name})"
                         />
                 </vueper-slides>
             </div>
         </div>
+        <div v-else class="no-image-found">
+                 <Icon name="ic:outline-add-photo-alternate" size="5rem" class="prevent-close-on-click no-image" color="grey" />
         </div>
+        <div class="item-modal-details">
+            <div class="item-modal-details-title">
+                <p >{{ itemType }} No.</p>
+                <h3 >{{ item[itemID] }}</h3>
+            </div>
+            <div class="item-modal-details-category-wrapper">
+                <div v-for="category in itemModalMap.get(itemType)">
+                    <div class="item-modal-details-category">
+                        <h3>{{handleObjectPath(item, '', invCategoryMap.get(itemType)[category])}}</h3>
+                        <p>{{category}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item-modal-associated">
+            <div class="item-modal-shelf scrollable" v-for="shelf in formattedItemLibrary" :key="shelf">
 
+                <div class="shelf-inner">
+            <div class="shelf-title-box item-modal-title-box">
+            <h2 class="shelf-title">Item Connections in Library</h2>
+            <div class="section-shelf-box">
+                    <!-- Shelf Box DO NOT DELETE -->
+                    </div>
+        </div>
+            <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend" >
+                <div class="section-title-box-wrapper">
+                <div class="section-title-box" :style="{ height: scalesStandard.maxShelfHeight-20 + 'px'}">
+                    <h3 class="section-category item-modal-category">{{ bookend[1].length }}</h3>
+                    <h3 class="section-value">{{ bookend[0] }}s</h3>
+                    <div class="section-shelf-box">
+                    <!-- Shelf Box DO NOT DELETE -->
+                    </div>
+                </div>
+                <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(0,1)" :key="JSON.stringify(item2Display)" :style="{ height: scalesStandard.maxShelfHeight-20  + 'px'}">
+                        <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Agent'? true : false "/>
+                        <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Book'? true : false "/>
+                        <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="itemTypeCheck(_item) === 'Mark'? true : false "/>
+                    </div> 
+                </div>
+                    <div class="section-inner section-inner-item-modal" v-for="item2Display in bookend[1].slice(1, bookend[1].length)" :key="JSON.stringify(item2Display)" :style="{ height: scalesStandard.maxShelfHeight-20  + 'px'}">
+                        <AgentItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Agent'" :item="item2Display" :itemBundle="libraryItemBundle.Agent" :itemModalColour="'#fbd524'" :itemSelected="false"/>
+                        <BookItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Book'" :item="item2Display" :itemBundle="libraryItemBundle.Book" :itemModalColour="'#fbd524'" :itemSelected="false"/>
+                        <MarkItemModal @viewDetails="updateModal" v-if="itemTypeCheck(item2Display) === 'Mark'" :item="item2Display" :itemBundle="libraryItemBundle.Mark" :itemModalColour="'#fbd524'" :itemSelected="false"/>
+                    </div>
+                </template>
+            </div>
+            </div>
+        </div>
         <div class="image-modal-background"  ref="imageModalBackground" @click="closeImageModal">
             <div class="image-modal-content-outer" ref="imageModalContentOuter">
                 <div class="image-modal-content" ref="imageModalContent">
@@ -221,6 +199,7 @@ const { libraryData,
         libraryDisplay,
         formattedLibrary, 
         formattedItemLibrary,
+        itemLibrary,
         filterLibrary,
         itemHeight,
         itemColour, 
@@ -286,8 +265,7 @@ const { categoryMap,
 //Utility Functions
 const { handleObjectProperty,
         handleObjectPath,
-        contrastHandler,
-        isArray } = useUtils();
+        contrastHandler } = useUtils();
 
 
 const onMounteditem = ref(_item) 
@@ -300,9 +278,14 @@ const imageRequestID = ref();
 const imageFolder = ref();
 const itemType = ref()
 const imageFound = ref(false);
-const itemLibrary = ref()
-const imageList = ref()
-const imagePageDisplay = ref(false)
+const imageSlides = ref(
+    { 
+        image: [],
+        title: "my title",
+        content: "my content",
+    }
+)
+
 
 function updateModal(updateItem){
     item.value = updateItem
@@ -338,45 +321,12 @@ function updateItemRefs(){
     } 
 }
 
-// async function getImages(item){
-//     imageFound.value = false
-//     const { data, error } = await supabase
-//     .storage
-//     .from(`${imageFolder.value}`)
-//     .list(`${item[imageRequestID.value]}`, {
-//         limit: 100,
-//         offset: 0,
-//         sortBy: { column: 'name', order: 'asc' },
-//     })
-//     if(error) {
-//             console.log(error)
-//     }
-//     if(data){
-//         imageSlides.value.image = data
-//         imageFound.value = data.length > 0 ? true : false
-//         return data
-//     }
-// }
-
-function toggleImageDisplay(){
-    imagePageDisplay.value =  !imagePageDisplay.value;
-}
-
-async function getAllImages(itemLibrary){
-    const bookImages = await getBookImages(itemLibrary[1])
-    const allImages = bookImages.concat(await getMarkImages(itemLibrary[2]))
-    if(allImages.length > 0 ) imageFound.value = true
-    imageList.value = allImages.map((obj, i, array)=>{ return {...obj, ...{'imageIndex': i, 'imageTotal': array.length}}})
-    console.log('imageList.value', imageList.value)
-}
-
-
-
-async function getBookImages(item){
+async function getImages(item){
+    imageFound.value = false
     const { data, error } = await supabase
     .storage
-    .from('book-images')
-    .list(`${item['BookID']}`, {
+    .from(`${imageFolder.value}`)
+    .list(`${item[imageRequestID.value]}`, {
         limit: 100,
         offset: 0,
         sortBy: { column: 'name', order: 'asc' },
@@ -384,36 +334,24 @@ async function getBookImages(item){
     if(error) {
             console.log(error)
     }
-    if(isArray(data)){
-        return data.map((obj)=>{ return {...obj, ...{'item': item, 'itemID': 'BookID', 'imageFolder': 'book-images'}}})
-    }
-    else if(data){
-        return {...obj, ...{'item': item, 'itemID': 'BookID', 'imageFolder': 'book-images'}}
-    }
-}
-async function getMarkImages(item){
-    const { data, error } = await supabase
-    .storage
-    .from('mark-images')
-    .list(`${item['MargID']}`, {
-        limit: 100,
-        offset: 0,
-        sortBy: { column: 'name', order: 'asc' },
-    })
-    if(error) {
-            console.log(error)
-    }
-    if(isArray(data)){
-        return data.map((obj)=>{ return {...obj, ...{'item': item, 'itemID': 'MargID', 'imageFolder': 'mark-images'}}})
-    }
-    else if(data){
-        return {...obj, ...{'item': item, 'itemID': 'MargID', 'imageFolder': 'mark-images'}}
+    if(data){
+        imageSlides.value.image = data
+        imageFound.value = data.length > 0 ? true : false
+        return data
     }
 }
 
-itemLibrary.value = getItemLibrary(item.value)
-getAllImages(itemLibrary.value)
-
+onMounted(()=>{
+    itemType.value = itemTypeCheck(item.value)
+    updateItemRefs(item.value)
+    getItemLibrary(item.value)
+    watch(item,()=>{
+        if(itemType.value !== 'Agent') {
+            // console.log('itemTYpe ',itemType.value)
+            getImages(item.value)
+        }
+    }, { immediate: true })
+})
 
 
 const value = computed (()=> {
@@ -421,24 +359,28 @@ const value = computed (()=> {
             section: `${viewStore.libraryDisplay.viewType['shelf']}:${[viewStore.libraryDisplay.view['shelf']]}`,
     }
     })
+
     const visible = reactive({
         section: false,
     })
+
     const section = ref(false)
-    const toggle = (option, e)=> {
+
+   const toggle = (option, e)=> {
     console.log(e==='input')
         if(!e.target.matches('.prevent-close-on-click')) {
             visible[option] = !visible[option]
         }
     }
     
-//Create New Option
+    //Create New Option
 const createNewSelected = ref(false)
 const editSelected = ref(false)
 const message = ref()
 const editMessage = ref()
 const editRef = ref()
 const editName = ref()
+// const collectionNames = reactive({})
 
 const editFunctionRef = (name) => {
   editName.value = name
@@ -449,8 +391,14 @@ const newNameRef = ref()
 function createNewButton(){
     createNewSelected.value = true
     if(Object.keys(allCollections.value).length > 0){
+        console.log('create New Check', Object.keys(allCollections.value).length)
+        console.log(' New keys check', Object.keys(allCollections.value))
+        console.log('allCollections Check', allCollections.value)
         Object.keys(allCollections.value).forEach((name)=> allCollections.value[name].edit = false)
     }
+    console.log('create New Check 11', Object.keys(allCollections.value).length)
+        console.log(' New keys check 11', Object.keys(allCollections.value))
+        console.log('allCollections.value Check 11', allCollections.value)
 }
 
 function selectCollection(name){
@@ -563,7 +511,6 @@ const imageModalContent = ref(null)
 </script>
 
 <style lang="scss" scoped>
-
 .mark-item-top-imageModal{
 	top: 18px;
 	left: 143px;
@@ -616,7 +563,7 @@ const imageModalContent = ref(null)
     align-content: center;
 }
   .image-modal-content {
-    // grid-row: 1 / 2;
+    grid-row: 1 / 2;
     display: flex;
     flex-flow: column wrap;
     visibility: hidden;
@@ -675,16 +622,14 @@ const imageModalContent = ref(null)
     display: flex;
     flex-flow: column wrap;
     border-right: 1px solid #ccc;
-    min-width: 8vw;
+    min-width: 6rem;
     padding: 0 0.5rem 0 0;
     justify-content: center;
     align-content: flex-start;
     align-items: flex-start;
-    flex-shrink: 100;
 }
 .item-modal-details-title p{
-    margin: 0;
-    padding: 0 0 0.1rem;
+
 	font-family: 'Raleway', sans-serif;
 	font-size: 1rem;
 	font-weight: 550;
@@ -704,19 +649,14 @@ const imageModalContent = ref(null)
 .item-modal-details-category-wrapper{
     display: flex;
     flex-flow: row wrap;
-    align-items: flex-end;
-    gap: 1.5rem 0;
-    max-width: 80vw;
-    align-content: center;
-    justify-content: flex-start;
+    align-items: center;
 }
 .item-modal-details-category{
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    margin: 0 1.5rem 0;
+    margin: 0 1.5rem 2vh;
 }
-
 .item-modal-details-category h3{
 	font-family: 'Raleway', sans-serif;
 	font-size: 0.9rem;
@@ -724,28 +664,14 @@ const imageModalContent = ref(null)
 	color: rgb(30, 30, 30);
 	width: 100%;
 	text-align: center;
+    max-width: 16rem;
     text-overflow: ellipsis;
     overflow:hidden;
     display: -webkit-box;
     max-height: 100px;
-    max-width: 10rem;
-    -webkit-line-clamp: 6;
-    -webkit-box-orient: vertical;
-}
 
-.item-modal-details-category.special-title h3{
-	font-family: 'Raleway', sans-serif;
-	font-size: 0.9rem;
-	font-weight: 550;
-	color: rgb(30, 30, 30);
-	width: 100%;
-	text-align: center;
-    text-overflow: ellipsis;
-    overflow:hidden;
-    display: -webkit-box;
-    max-height: 500px;
-    max-width: 100%;
-    -webkit-line-clamp: 20;
+    max-width: 200px;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 }
 
@@ -753,11 +679,9 @@ const imageModalContent = ref(null)
 .item-modal-details-category p{
 	margin: 0.2rem 0 0rem;
 	font-family: 'Raleway', sans-serif;
-	font-size: 0.55rem;
+	font-size: 0.6rem;
 	font-weight: 450;
-    text-transform: uppercase;
-    letter-spacing: 0.02rem;
-	color: rgb(59, 59, 59);
+	color: rgb(97,97,97);
 	width: 100%;
 	text-align: center;
 }
@@ -766,24 +690,16 @@ const imageModalContent = ref(null)
 }
 
 .item-modal-header{
+    // background: #e2e2e2;
+    // grid-row: 1/2;
     margin: 0 0 0.5rem;
     height: clamp(2rem, 4vh, 4rem);
     width: 100%;
     display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
+    flex-flow: row wrap;
+    justify-content: space-between;
     align-items: center;
-    align-content: space-between;
-}
 
-.item-modal-header h2{
-	font-family: 'Raleway', sans-serif;
-	font-size: 1.25rem;
-	font-weight: 450;
-    letter-spacing: 0.35rem;
-    line-height: 1.25rem;
-    margin: 0.25rem 0.5rem 0.25rem 0;
-    color: #303030;
 }
 .item-modal-header .item-modal-header-title h3{
 	font-family: 'Raleway', sans-serif;
@@ -825,7 +741,7 @@ const imageModalContent = ref(null)
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
-    align-items: flex-start;
+    align-items: center;
     gap: 2rem;
 }
 .item-modal-header-LHS{
@@ -898,10 +814,9 @@ const imageModalContent = ref(null)
     align-content: flex-end;
     align-items: flex-start;
     color: black;
-    width: 100%;
-    max-height: 90vh;
     // text-align: left;
 }
+
 
 
 .item-modal-images{
@@ -910,29 +825,21 @@ const imageModalContent = ref(null)
     position: relative;
     // grid-row: 2 / 3;
     // left: 3rem;
-    width: 75vw;
-    min-height: 60vh;
-    margin: 0;
-    padding: 0;
+    max-width: 75vw;
+    max-height: 32vh;
 }
 .item-modal-image-slider{
-    min-height: 60vh;
+    height: fit-content;
 
 }
 .item-modal-details{
     width: 100%;
     // grid-row: 3 / 4;
-    margin: 1rem 0 0;
-    padding: 1rem;
-    border-radius: 0.35rem;
+    margin: 1vh 1rem 0.5vh;
     display: flex;
     flex-flow: row nowrap;
-    max-height: 50vh;
-    // background-color: rgba(0, 0, 0, 0.025);
-    border: 0.1rem solid rgba(0, 0, 0, 0.2);
+    height: clamp(7rem, 20vh, 12rem);
 }
-
-
 .item-modal-associated{
     // grid-row: 4 / 5;
     width: 100%;
@@ -945,7 +852,7 @@ const imageModalContent = ref(null)
     bottom:0;
 }
 .item-modal-add-to-colleciton{
-    // grid-row: 5/6;
+    grid-row: 5/6;
     // min-width: 75vw;
     // align-self: end;
     display: flex;
@@ -956,7 +863,7 @@ const imageModalContent = ref(null)
     justify-content: center;
 }
 .item-modal-add-to-colleciton-controls{
-    // grid-row: 5/6;
+    grid-row: 5/6;
     // min-width: 75vw;
     // align-self: end;
     display: flex;
@@ -1011,7 +918,9 @@ li.create-collection button{
         background: #ffffff;
         padding: 0 0.5rem 0 0;
         position: relative;
-        border-radius: 1rem;
+        border-radius: 2rem;
+
+
         cursor: pointer;
 
     }
@@ -1020,7 +929,7 @@ li.create-collection button{
     .arrow {
             position: absolute;
             right: 10px;
-            top: 10px;
+            top: 0;
             // width: 0;
             // height: 0;
             // border-left: 5px solid transparent;
@@ -1096,7 +1005,7 @@ li.create-collection button{
         visibility: visible;
     }
 
-    .label, .label p, p.dropdown {
+    .label, .label p {
         z-index: 5;
         display: flex;
         flex-flow: row nowrap;
@@ -1105,10 +1014,10 @@ li.create-collection button{
         min-width: 24rem;
         white-space: nowrap;
         width: 100%;
-        padding: 0.5rem 1.25rem 0.3rem 1rem;
+        padding: 0.2rem 1.25rem 0.15rem 1rem;
         // margin: 0.5rem 0 0 0;
         font-family: 'Raleway', sans-serif;
-        font-size: 0.85rem;
+        font-size: 0.725rem;
         font-weight: 500;
         letter-spacing: 0.05rem;
         line-height: 1.25rem;

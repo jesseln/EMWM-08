@@ -3,28 +3,27 @@
         <div class="imageitem-modal-wrapper">
         <div class="item-modal-header">
             <div class="item-modal-header-LHS">
-                    <p>Library Item:</p>
-                <div v-if="itemTypeCheck(_itemImage.item) === 'Agent'"  class="item-modal-header-title"  :style="{ borderRadius: '5rem', background: itemColour(getIDP(_itemImage.item, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage.item, 'colour')))}">
+                    <p>Item:</p>
+                <div v-if="itemTypeCheck(_itemImage.item) === 'Agent'"  class="item-modal-header-title"  >
                     <!-- <p>Library Item Selected </p> -->
-                    <p>{{ onMountedType }} </p>
-                    <h3>{{onMounteditem['Female agent name']}}</h3>
+                    <p>Agent</p>
+                    <h3>{{_itemImage.item['Female agent name']}}</h3>
                 </div>
-                <div v-if="itemTypeCheck(_itemImage.item) === 'Book'"  class="item-modal-header-title"  :style="{ borderRadius: '0.25rem', background: itemColour(getIDP(_itemImage.item, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage.item, 'colour')))}">
+                <div v-if="itemTypeCheck(_itemImage.item) === 'Book'"  class="item-modal-header-title"  >
                     <!-- <p>Library Item Selected </p> -->
-                    <p>{{ onMountedType }} No. </p>
-                    <h3>{{onMounteditem[onMountedID]}}</h3>
+                    <p>Book No. </p>
+                    <h3>{{_itemImage.item[_itemImage.itemID]}}</h3>
                 </div>
-                <div v-if="itemTypeCheck(_itemImage.item) === 'Mark'"  class="item-modal-header-title"  :style="{ borderWidth: '0.125rem', margin: '0 0 0 1rem', borderRadius: '0.25rem', background: itemColour(getIDP(_itemImage.item, 'colour')), color: contrastHandler(itemColour(getIDP(_itemImage.item, 'colour')))}">
-                    <div class="mark-item-top-imageModal mark-item-modal" :style="{ background: itemColour(getIDP(_itemImage.item, 'colour')), width:scalesStandard.minItemWidth - 2 + 'px'}"></div>
-                    <div class="mark-item-top-background-imageModal mark-item-modal" :style="{ width:scalesStandard.minItemWidth -1 + 'px'}"></div> <!-- <p>Library Item Selected </p> -->
-                    <p>{{ onMountedType }} No. </p>
-                    <h3>{{onMounteditem[onMountedID]}}</h3>
+                <div v-if="itemTypeCheck(_itemImage.item) === 'Mark'"  class="item-modal-header-title"  >
+                   
+                    <p>Mark No. </p>
+                    <h3>{{_itemImage.item[_itemImage.itemID]}}</h3>
                 </div>
             </div>
 
 
             <div class="item-modal-header-RHS">
-                <p v-if="imageFound" > Image No. {{ imageSlides.image.findIndex((entry) => entry.name === _itemImage.name) + 1 }} of {{ imageSlides.image.length }}</p>
+                <p> Image No. {{ _itemImage.imageIndex + 1 }} of {{ _itemImage.imageTotal }}</p>
                
                 <button class="shelf-button item-modal-close-button" @click="$emit('close')"> 
                     <Icon name="ic:baseline-cancel" size="1.5rem" class="close-button" />
@@ -84,6 +83,7 @@ const {_itemImage} = defineProps(['_itemImage']);
 const {close} = defineEmits(['close']);
 const supabase = useSupabaseClient()
 
+// const _itemImage = ref(newItemImage)
 
 
 //Old Colour Scheme for non selected items
@@ -110,43 +110,6 @@ const { parseDatabase,
         itemTypeCheck,
         getItemLibrary } = useViewStore();
 
-//View State
-const yourCollectionStore = useYourCollectionStore();
-const { allCollections,
-        collectionName,
-        yourCollection, 
-        itemLibraryYC, 
-        dataSizeYC,
-        libraryDisplayYC,
-        formattedLibraryYC,
-        formattedItemLibraryYC,
-        filterLibraryYC, 
-        heightCategoryYC,
-        itemHeightYC,
-        itemColourYC,
-        colourScaleYC,
-        colourScaleConverterYC,
-        colourSetYC, 
-        ordinalColourMapYC,
-        viewColourSetYC,
-        domainIndexYC,
-        viewHeightBoundsYC,
-        domainColourIndexYC,
-        viewColourBoundsYC,
-        activeFiltersYC,
-        filterObjectYC,
-        getActiveFiltersYC } = storeToRefs(yourCollectionStore)
-const { getItemLibraryYC,
-        getFilterObjectYC,
-        filterActiveToggleYC,
-        parseDatabaseYC,
-        handleViewSelectionYC,
-        getIDP_YC,
-        getIFP_YC,
-        itemTypeCheckYC,
-        addToCollection, 
-        removeFromCollection,
-        getCollectionData } = useYourCollectionStore();
 
 //Reference Constants
 const referenceStore = useReferenceStore();
@@ -172,11 +135,6 @@ const onMounteditem = ref(_itemImage.item)
 const onMountedID = ref(); 
 const onMountedName = ref();
 const onMountedType = ref();
-const item = ref(_itemImage.item)
-const itemID = ref();
-const imageRequestID = ref();
-const imageFolder = ref();
-const itemType = ref()
 const imageFound = ref(false);
 const imageSlides = ref(
     { 
@@ -185,73 +143,6 @@ const imageSlides = ref(
         content: "my content",
     }
 )
-
-
-function updateModal(updateItem){
-    item.value = updateItem
-    itemType.value = itemTypeCheck(item.value)
-    updateItemRefs(item.value)
-}
-
-function getItemID(soureItem){
-    let itemType = itemTypeCheck(soureItem)
-    if(itemType === 'Agent') return 'FemaleAgentID'
-    if(itemType === 'Book') return 'BookID'
-    if(itemType === 'Mark') return 'MargID'
-}
-
-
-onMountedID.value = getItemID(_itemImage.item)
-onMountedType.value = itemTypeCheck(_itemImage.item)
-
-function updateItemRefs(){
-    imageFound.value = false
-    if(itemType.value === 'Agent'){
-        itemID.value = 'FemaleAgentID'
-    } 
-    if(itemType.value === 'Book'){
-        itemID.value = 'BookID'
-        imageRequestID.value = 'BookID'
-        imageFolder.value = 'book-images'
-    } 
-    if(itemType.value === 'Mark'){
-        itemID.value = 'MargID'
-        imageRequestID.value = 'MargID'
-        imageFolder.value = 'mark-images'
-    } 
-}
-
-async function getImages(item){
-    imageFound.value = false
-    const { data, error } = await supabase
-    .storage
-    .from(`${imageFolder.value}`)
-    .list(`${item[imageRequestID.value]}`, {
-        limit: 100,
-        offset: 0,
-        sortBy: { column: 'name', order: 'asc' },
-    })
-    if(error) {
-            console.log(error)
-    }
-    if(data){
-        imageSlides.value.image = data
-        imageFound.value = data.length > 0 ? true : false
-        return data
-    }
-}
-
-onMounted(()=>{
-    itemType.value = itemTypeCheck(item.value)
-    updateItemRefs(item.value)
-    getItemLibrary(item.value)
-    watch(item,()=>{
-        if(itemType.value !== 'Agent') {
-            // console.log('itemTYpe ',itemType.value)
-            getImages(item.value)
-        }
-    }, { immediate: true })
-})
 
 
 const value = computed (()=> {
@@ -265,8 +156,6 @@ const value = computed (()=> {
     })
 
     const section = ref(false)
-
-
 
 
 const imageHover = ref()
@@ -285,7 +174,7 @@ const maxImageHeight = computed(()=>{
 const expandOption = ref(false);
 const zoomOption = ref(false);
 
-
+console.log('_itemImage', _itemImage)
 
 const toggleExpand = ()=>{
     expandOption.value = !expandOption.value
@@ -573,17 +462,15 @@ onMounted(()=>{
 }
 .item-modal-header .item-modal-header-title h3{
 	font-family: 'Raleway', sans-serif;
-	font-size: 0.95rem;
+	font-size: 1.15rem;
 	font-weight: 550;
     line-height: 1.25rem;
 }
 .item-modal-header .item-modal-header-title p{
-    margin: 0 0.75rem 0 0;
-    font-family: 'Raleway', sans-serif;
-	font-size: 0.8rem;
-	font-weight: 450;
-    letter-spacing: 0rem;
-    line-height: 0.8rem;
+	font-family: 'Raleway', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 550;
+    line-height: 1.25rem;
 }
 .item-modal-header-title{
     display: flex;

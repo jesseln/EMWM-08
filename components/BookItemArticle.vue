@@ -24,7 +24,7 @@
             <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
             </div>
             <div v-if="zoomLevel === '50'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
-                <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+                <p >Book No. {{ getIDP(item, itemBundle.labelViewMode) }}</p>
             </div>
             <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: contrastHandler(itemColour(getIDP(item, 'colour')))}">
                 <div class="item-menu-header-container">

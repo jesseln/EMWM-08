@@ -234,7 +234,7 @@ const iconScaleFactor = ref(0.5)
     // height: 100%;
     max-width: 100vw;
     z-index: 15;
-    border-bottom: 2px solid rgb(241, 241, 241);
+    // border-bottom: 2px solid rgb(241, 241, 241);
 }
 .library-nav-colour-wrapper{
     grid-row: 2/3;

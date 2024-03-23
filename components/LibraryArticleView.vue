@@ -468,8 +468,8 @@ input[type=range]:hover::-webkit-slider-runnable-track {
     grid-template-rows: 100vh;
     position: fixed;
     top: 0;
-    max-width: 76vw;
-    left: 12vw;
+    max-width: 80vw;
+    left: 10vw;
     align-items: center;
     justify-content: center;
     align-content: center;

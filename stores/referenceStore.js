@@ -221,14 +221,14 @@ export const useReferenceStore = defineStore('reference', ()=>{
 
     const zoomLevel = ref("0");
     const zoomFactor = reactive({
-        0: {height: 1.5*0.25, width: 2*0.25},
+        0: {height: 1.5*0.3, width: 2*0.25},
         50: {height: 1.5*1, width: 2*1},
         100: {height: 1.5*2, width: 1.4*5},
     })
 
     const scales = reactive({
         maxItemHeight: 100 * zoomFactor[zoomLevel.value].height,
-        maxShelfHeight: 110 * zoomFactor[zoomLevel.value].height,
+        maxShelfHeight: 120 * zoomFactor[zoomLevel.value].height,
         minItemHeight: 50 * zoomFactor[zoomLevel.value].height,
         minItemWidth: 16 * zoomFactor[zoomLevel.value].width     
     })
@@ -247,7 +247,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
 
     function updateScales(){
         scales.maxItemHeight = 100 * zoomFactor[zoomLevel.value].height;
-        scales.maxShelfHeight = 110 * zoomFactor[zoomLevel.value].height;
+        scales.maxShelfHeight = 120 * zoomFactor[zoomLevel.value].height;
         scales.minItemHeight = 50 * zoomFactor[zoomLevel.value].height;
         scales.minItemWidth = 16 * zoomFactor[zoomLevel.value].width;
     }

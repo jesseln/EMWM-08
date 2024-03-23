@@ -26,7 +26,7 @@
                 <div v-if="zoomLevel === '0'" class="item-value" :style="{ color: textColour}">
                 </div>
                 <div v-if="zoomLevel === '50'" class="item-value" :style="{ color:  textColour}">
-                    <p >{{ getIDP(item, itemBundle.labelViewMode) }}</p>
+                    <p >{{ getIDP(item, itemBundle.labelViewMode) }} </p>
                 </div>
                 <div v-if="zoomLevel === '100'" class="item-value" :style="{ color: textColour}">
                     <div class="item-menu-header-container">
