@@ -145,7 +145,7 @@ const {
 
   const dropdownExploreLibraryRef = ref(null)
   const dropdownExploreLibraryRefContent = ref(null)
-  const dropdownYourCollectionsRef = ref(null)
+  const dropdownYourCollectionsRef = ref(null)  
   const dropdownYourCollectionsRefContent = ref(null)
 
   useHead({

@@ -146,7 +146,8 @@ const supabase = useSupabaseClient()
 
 //Library State
 const libraryStore = useLibraryStore();
-const { complete } = storeToRefs(libraryStore)
+const { complete,
+    Agent, Book, Mark } = storeToRefs(libraryStore)
 
 //View State
 const viewStore = useViewStore();
@@ -160,6 +161,7 @@ const { libraryData,
         dataSize,
         getActiveFilters,
         filterObject,
+        filterLibrary,
         colourScaleConverter,
         ordinalColourMap,
         domainIndex,
@@ -195,7 +197,10 @@ const { updateScales } = useReferenceStore();
 const articleStore = useArticleStore();
 const { allArticles } = storeToRefs(articleStore)
 const { cloneLibrary,
-    cloneReferences } = useArticleStore();
+    cloneReferences,
+    _cloneLibrary,
+    _cloneReferences,
+    parseReferences } = useArticleStore();
 
 //Utility Functions
 const { handleObjectProperty,
@@ -219,7 +224,9 @@ async function cloneStores(articleViewSet, i){
     Object.assign(viewStore.libraryDisplay.view, articleViewSet.sectionViews[i].view)
     Object.assign(viewStore.libraryDisplay.viewType, articleViewSet.sectionViews[i].viewType)
     Object.assign(viewStore.libraryDisplay.pageText, articleViewSet.sectionViews[i].pageText)
-    await parseDatabase(libraryStore[articleItemType])
+    parseDatabase(structuredClone(toRaw(libraryStore[articleItemType])))
+
+
     referenceStore.zoomLevel = articleViewSet.sectionViews[i].zoom.zoomLevel
     updateScales()
     updateView()
@@ -230,14 +237,16 @@ async function cloneStores(articleViewSet, i){
         updateFilteredLibrary()
     }
      cloneLibrary(viewStore.libraryData,'libraryData', articleName, articleSection )
+     console.log('viewStore.libraryData',viewStore.libraryData)
      cloneLibrary(viewStore.libraryDisplay,'libraryDisplay', articleName, articleSection )
      cloneLibrary(viewStore.domainIndex, 'domainIndex', articleName, articleSection )
      cloneLibrary(viewStore.heightCategory, 'heightCategory', articleName, articleSection )
-     cloneLibrary(viewStore, articleName, articleSection )
-     cloneReferences(referenceStore.libraryItemBundle, 'libraryItemBundle', articleName, articleSection)
+    //  cloneLibrary(viewStore, articleName, articleSection )
+     _cloneReferences(referenceStore.libraryItemBundle, 'libraryItemBundle', articleName, articleSection)
      cloneReferences(referenceStore.zoomLevel, 'zoomLevel', articleName, articleSection)
      cloneReferences(referenceStore.scales, 'scales', articleName, articleSection)
-    await cloneLibrary(viewStore.filterLibrary, 'filterLibrary', articleName, articleSection )
+     console.log('viewStore.filterLibrary',viewStore.filterLibrary)
+     _cloneLibrary(viewStore.filterLibrary, 'filterLibrary', articleName, articleSection)
     // await cloneLibrary(viewStore, articleName, articleSection )
     // await cloneReferences(referenceStore, articleName, articleSection)
     if(useFilter){
