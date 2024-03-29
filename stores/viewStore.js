@@ -312,7 +312,7 @@ export const useViewStore = defineStore('view', ()=>{
     // EXTERNAL FUNCTIONS //
     //Parse Data Object from Supabase
     function parseDatabase(tableData) {
-            libraryData.value = structuredClone(tableData)
+            libraryData.value = tableData
             return true
             // unformattedData.value =  await JSON.parse(JSON.stringify(libraryData.value))
             // formattedLibrary.value =  formatLibrary(libraryData.value, libraryDisplay);

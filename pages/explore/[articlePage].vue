@@ -224,7 +224,7 @@ async function cloneStores(articleViewSet, i){
     Object.assign(viewStore.libraryDisplay.view, articleViewSet.sectionViews[i].view)
     Object.assign(viewStore.libraryDisplay.viewType, articleViewSet.sectionViews[i].viewType)
     Object.assign(viewStore.libraryDisplay.pageText, articleViewSet.sectionViews[i].pageText)
-    parseDatabase(structuredClone(toRaw(libraryStore[articleItemType])))
+    parseDatabase(libraryStore[articleItemType])
 
 
     referenceStore.zoomLevel = articleViewSet.sectionViews[i].zoom.zoomLevel
@@ -232,12 +232,12 @@ async function cloneStores(articleViewSet, i){
     updateView()
     getAllFilters()
     if(useFilter){
-        console.log('filter section number', useFilter, i)
+        // console.log('filter section number', useFilter, i)
         filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
         updateFilteredLibrary()
     }
-     cloneLibrary(viewStore.libraryData,'libraryData', articleName, articleSection )
-     console.log('viewStore.libraryData',viewStore.libraryData)
+     cloneLibrary(viewStore.libraryData,'libraryData', articleName, articleSection)
+    //  console.log('viewStore.libraryData',viewStore.libraryData)
      cloneLibrary(viewStore.libraryDisplay,'libraryDisplay', articleName, articleSection )
      cloneLibrary(viewStore.domainIndex, 'domainIndex', articleName, articleSection )
      cloneLibrary(viewStore.heightCategory, 'heightCategory', articleName, articleSection )
@@ -245,19 +245,19 @@ async function cloneStores(articleViewSet, i){
      _cloneReferences(referenceStore.libraryItemBundle, 'libraryItemBundle', articleName, articleSection)
      cloneReferences(referenceStore.zoomLevel, 'zoomLevel', articleName, articleSection)
      cloneReferences(referenceStore.scales, 'scales', articleName, articleSection)
-     console.log('viewStore.filterLibrary',viewStore.filterLibrary)
+    //  console.log('viewStore.filterLibrary',viewStore.filterLibrary)
      _cloneLibrary(viewStore.filterLibrary, 'filterLibrary', articleName, articleSection)
     // await cloneLibrary(viewStore, articleName, articleSection )
     // await cloneReferences(referenceStore, articleName, articleSection)
     if(useFilter){
-        console.log('filter section number', useFilter, i)
+        // console.log('filter section number', useFilter, i)
         filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
         updateFilteredLibrary()
     }
     // articleStore.allArticles[articleName][articleSection].library.itemC = formatColour()
     // articleStore.allArticles[articleName][articleSection].library.itemH = formatHeight()
     dataCheck.value[i] = true
-    console.log('dataCheck', dataCheck.value[i])
+    // console.log('dataCheck', dataCheck.value[i])
 }
 
 function setDataChecks(articleViewSet){
