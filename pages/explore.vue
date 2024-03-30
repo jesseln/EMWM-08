@@ -1,5 +1,8 @@
 <template>
-    <NuxtPage />
+    <div  v-if="route.params.articlePage">
+        <NuxtPage />
+    </div>
+
     <div v-if="!route.params.articlePage" class="library-explorer-container">
 
     <!-- <div class="query-box">
@@ -66,55 +69,6 @@ import 'floating-vue/dist/style.css'
 const route = useRoute()
 
     // STATE MANAGERS IMPORT //    
-    //View State
-    const viewStore = useViewStore();
-    const { libraryData,
-            libraryDisplay,
-            formattedLibrary, 
-            filterLibrary,
-            itemHeight,
-            itemColour, 
-            viewHeightBounds, 
-            viewColourSet } = storeToRefs(viewStore)
-    const { parseDatabase,
-            handleViewSelection,
-            getIDP,
-            itemTypeCheck } = useViewStore();
-        
-const yourCollectionStore = useYourCollectionStore();
-const { allCollections,
-        yourCollection, 
-        itemLibraryYC, 
-        dataSizeYC,
-        libraryDisplayYC,
-        formattedLibraryYC,
-        formattedItemLibraryYC,
-        filterLibraryYC, 
-        heightCategoryYC,
-        itemHeightYC,
-        itemColourYC,
-        colourScaleYC,
-        colourScaleConverterYC,
-        colourSetYC, 
-        ordinalColourMapYC,
-        viewColourSetYC,
-        domainIndexYC,
-        viewHeightBoundsYC,
-        domainColourIndexYC,
-        viewColourBoundsYC,
-        activeFiltersYC,
-        filterObjectYC,
-        getActiveFiltersYC } = storeToRefs(yourCollectionStore)
-const { getItemLibraryYC,
-        getFilterObjectYC,
-        filterActiveToggleYC,
-        parseDatabaseYC,
-        handleViewSelectionYC,
-        getIDP_YC,
-        getIFP_YC,
-        itemTypeCheckYC,
-        addToCollection, 
-        removeFromCollection } = useYourCollectionStore();
         
     //Reference Constants
     const referenceStore = useReferenceStore();
@@ -157,34 +111,6 @@ function getUpPos(elm, isUp) {
         return `translate(0, ${(isUp ? -10 : 0)}px)`
     }
 }
-
-    const icons = ref()
-
-    // const showAnnotations = ref(false)
-
-    // To Top Button
-    const { x, y } = useWindowScroll() // To replace below
-    const useX = ref(x)
-    const useY = ref(y)
-    const toExploreButton = ref();
-    const toTopButton = ref();
-    // onMounted(() => {
-    //     watchEffect(()=>{
-    //         if (useY.value > 550) {
-    //             toTopButton.value.classList.add("showButton");
-    //         } else {
-    //             toTopButton.value.classList.remove("showButton");
-    //         }
-    //     })
-    // })
-    const scrollToExplore = () => {
-        window.scrollTo({ top: 540, behavior: "smooth" });
-    };
-
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
 
 
 </script>

@@ -55,42 +55,46 @@
                 Visualisation of a breakdown of types of graffiti
             </h2>
         </div>
-        <div v-if="dataCheck[0]">
-        <LibraryBottomNavArticle :articleView="{
-                name: articleViewSet.name, 
-                section: articleViewSet.sections[0]
-                }" />
-        </div>
-        <div v-if="dataCheck[0]" class="article-view-insert">
-            <LibraryArticleView :articleView="{
-                name: articleViewSet.name, 
-                section: articleViewSet.sections[0]
-                }" />
+        <div v-if="dataCheck[0]" >
+            <div>
+            <LibraryBottomNavArticle :articleView="{
+                    name: articleViewSet.name, 
+                    section: articleViewSet.sections[0]
+                    }" />
+            </div>
+            <div class="article-view-insert">
+                <LibraryArticleView :articleView="{
+                    name: articleViewSet.name, 
+                    section: articleViewSet.sections[0]
+                    }" />
+            </div>
         </div>
         <div v-else>
-        <div class="article-library-loading-wrapper">
-            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
-        </div>
+            <div class="article-library-loading-wrapper">
+                <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
+            </div>
         </div>
         <h2 class="article-view-title">
             Visualisations of types of marginalia in the database, with graffiti as a percentage against ownership, annotation, and recording.
         </h2>
-        <div v-if="dataCheck[1]">
-        <LibraryBottomNavArticle :articleView="{
-                name: articleViewSet.name, 
-                section: articleViewSet.sections[1]
-                }" />
-        </div>
-        <div v-if="dataCheck[1]" class="article-view-insert">
-            <LibraryArticleView :articleView="{
-                name: articleViewSet.name, 
-                section: articleViewSet.sections[1]
-                }" />
+        <div v-if="dataCheck[1]"> 
+            <div >
+            <LibraryBottomNavArticle :articleView="{
+                    name: articleViewSet.name, 
+                    section: articleViewSet.sections[1]
+                    }" />
+            </div>
+            <div class="article-view-insert">
+                <LibraryArticleView :articleView="{
+                    name: articleViewSet.name, 
+                    section: articleViewSet.sections[1]
+                    }" />
+            </div>
         </div>
         <div v-else>
             <div class="article-library-loading-wrapper">
-            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
-        </div>  
+                <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
+            </div>  
         </div>
         <div class="article-para-section">
             <p class="article-para ">
@@ -156,30 +160,10 @@ const supabase = useSupabaseClient()
 
 //Library State
 const libraryStore = useLibraryStore();
-const { complete,
-    Agent, Book, Mark } = storeToRefs(libraryStore)
 
 //View State
 const viewStore = useViewStore();
-const { libraryData,
-        libraryDisplay,
-        formattedLibrary, 
-        itemHeight,
-        itemColour, 
-        colourSet,
-        colourScale,
-        dataSize,
-        getActiveFilters,
-        filterObject,
-        filterLibrary,
-        colourScaleConverter,
-        ordinalColourMap,
-        domainIndex,
-        viewHeightBounds,
-        domainColourIndex,
-        viewColourBounds,
-        viewColourSet,
-        viewUpdated } = storeToRefs(viewStore)
+
 
 const { parseDatabase,
         handleViewSelection,
@@ -219,87 +203,67 @@ const { handleObjectProperty,
 
 const articleViewSet = ref(referenceStore.viewRouteQueries[route.params.articlePage])
 const dataCheck = ref([])
-setDataChecks(articleViewSet.value)
-
-async function cloneStores(articleViewSet, i){
-    const articleName = articleViewSet.name
-    const articleSection = articleViewSet.sections[i]
-    const articleItemType = articleViewSet.sectionViews[i].view.itemType
-
-    const useFilter = articleViewSet.sectionViews[i].articleFilter.useFilter
-    const filterItemType = articleViewSet.sectionViews[i].articleFilter.itemType
-    const filterCategory = articleViewSet.sectionViews[i].articleFilter.category
-    const filterOption = articleViewSet.sectionViews[i].articleFilter.option
-
-    Object.assign(viewStore.libraryDisplay.view, articleViewSet.sectionViews[i].view)
-    Object.assign(viewStore.libraryDisplay.viewType, articleViewSet.sectionViews[i].viewType)
-    Object.assign(viewStore.libraryDisplay.pageText, articleViewSet.sectionViews[i].pageText)
-    parseDatabase(libraryStore[articleItemType])
-
-
-    referenceStore.zoomLevel = articleViewSet.sectionViews[i].zoom.zoomLevel
-    updateScales()
-    updateView()
-    getAllFilters()
-    if(useFilter){
-        // console.log('filter section number', useFilter, i)
-        filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
-        updateFilteredLibrary()
-    }
-     cloneLibrary(viewStore.libraryData,'libraryData', articleName, articleSection)
-    //  console.log('viewStore.libraryData',viewStore.libraryData)
-     cloneLibrary(viewStore.libraryDisplay,'libraryDisplay', articleName, articleSection )
-     cloneLibrary(viewStore.domainIndex, 'domainIndex', articleName, articleSection )
-     cloneLibrary(viewStore.heightCategory, 'heightCategory', articleName, articleSection )
-    //  cloneLibrary(viewStore, articleName, articleSection )
-     _cloneReferences(referenceStore.libraryItemBundle, 'libraryItemBundle', articleName, articleSection)
-     cloneReferences(referenceStore.zoomLevel, 'zoomLevel', articleName, articleSection)
-     cloneReferences(referenceStore.scales, 'scales', articleName, articleSection)
-    //  console.log('viewStore.filterLibrary',viewStore.filterLibrary)
-     _cloneLibrary(viewStore.filterLibrary, 'filterLibrary', articleName, articleSection)
-    // await cloneLibrary(viewStore, articleName, articleSection )
-    // await cloneReferences(referenceStore, articleName, articleSection)
-    if(useFilter){
-        // console.log('filter section number', useFilter, i)
-        filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
-        updateFilteredLibrary()
-    }
-    // articleStore.allArticles[articleName][articleSection].library.itemC = formatColour()
-    // articleStore.allArticles[articleName][articleSection].library.itemH = formatHeight()
-    dataCheck.value[i] = true
-    // console.log('dataCheck', dataCheck.value[i])
-}
-
 function setDataChecks(articleViewSet){
     articleViewSet.sections.forEach((elm,i)=>{
         dataCheck.value[i] = false
     })
 }
-async function cloneAllStores(){
-    await cloneStores(articleViewSet.value, 0)
-    await cloneStores(articleViewSet.value, 1)
-}
+setDataChecks(articleViewSet.value)
+
 onMounted(()=>{
-    watch([libraryStore.complete],()=>{
-        if(libraryStore.complete.agent && libraryStore.complete.mark && libraryStore.complete.book) {
+    async function cloneStores(articleViewSet, i){
+        const articleName = articleViewSet.name
+        const articleSection = articleViewSet.sections[i]
+        const articleItemType = articleViewSet.sectionViews[i].view.itemType
+        const useFilter = articleViewSet.sectionViews[i].articleFilter.useFilter
+        const filterItemType = articleViewSet.sectionViews[i].articleFilter.itemType
+        const filterCategory = articleViewSet.sectionViews[i].articleFilter.category
+        const filterOption = articleViewSet.sectionViews[i].articleFilter.option
 
-                cloneAllStores()
+        Object.assign(viewStore.libraryDisplay.view, articleViewSet.sectionViews[i].view)
+        Object.assign(viewStore.libraryDisplay.viewType, articleViewSet.sectionViews[i].viewType)
+        Object.assign(viewStore.libraryDisplay.pageText, articleViewSet.sectionViews[i].pageText)
+        parseDatabase(libraryStore[articleItemType])
+        referenceStore.zoomLevel = articleViewSet.sectionViews[i].zoom.zoomLevel
+        updateScales()
+        updateView()
+        getAllFilters()
 
+        if(useFilter){
+            filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
+            updateFilteredLibrary()
         }
-    },{immediate:true, deep:true})
+        cloneLibrary(viewStore.libraryData,'libraryData', articleName, articleSection)
+        cloneLibrary(viewStore.libraryDisplay,'libraryDisplay', articleName, articleSection )
+        cloneLibrary(viewStore.domainIndex, 'domainIndex', articleName, articleSection )
+        cloneLibrary(viewStore.heightCategory, 'heightCategory', articleName, articleSection )
+        _cloneReferences(referenceStore.libraryItemBundle, 'libraryItemBundle', articleName, articleSection)
+        cloneReferences(referenceStore.zoomLevel, 'zoomLevel', articleName, articleSection)
+        cloneReferences(referenceStore.scales, 'scales', articleName, articleSection)
+        _cloneLibrary(viewStore.filterLibrary, 'filterLibrary', articleName, articleSection)
+        if(useFilter){
+            filterActiveToggle(viewStore.filterObject.get(filterItemType)[filterCategory][filterOption], filterCategory, filterItemType)
+            updateFilteredLibrary()
+        }
+        dataCheck.value[i] = true
+    }
+
+    async function cloneAllStores(){
+        await cloneStores(articleViewSet.value, 0)
+        await cloneStores(articleViewSet.value, 1)
+    }
+
+    const postPageload = ref(false)
+    watch(postPageload,()=>{
+        if(libraryStore.complete.agent && libraryStore.complete.mark && libraryStore.complete.book) {
+                cloneAllStores()
+        }
+    },{deep:true})
+    setTimeout(() => {postPageload.value = true}, 1)
 })
-
-    // To Top Button
-    const { x, y } = useWindowScroll() // To replace below
-    const useX = ref(x)
-    const useY = ref(y)
-    const toExploreButton = ref();
-    const toTopButton = ref();
-
-    const heroImageClass = ref('graffitiHero')
-    const stdImageClass = ref('stdImage')
-    const titleImageClass = ref('articleTitle')
-
+const heroImageClass = ref('graffitiHero')
+const stdImageClass = ref('stdImage')
+const titleImageClass = ref('articleTitle')
 
 </script>
 

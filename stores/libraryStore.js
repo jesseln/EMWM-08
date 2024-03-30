@@ -61,7 +61,6 @@ export const useLibraryStore = defineStore('library', ()=>{
                 selectedImagePreviews[setName].push(...imageData.map(image => ({name: image.name, itemID: [imageRefs.id], item: itemArray[index], imageFolder: imageRefs.folder})))
                 index++;
             }
-            return imagePreviews
     }
 
       return {items, Agent, Book, Mark, complete, selectedImageSet, selectedImagePreviews, getItems, getAgents, getBooks, getMarks, getSelectedImageSet,  getImagePreviewsofSize, getLibraryItemsTest}
