@@ -18,7 +18,9 @@ export const useViewStore = defineStore('view', ()=>{
             isString,
             isArray,
             containsNumber,
-            processDomain } = useUtils();
+            processDomain,
+            getImageRefs,
+            itemTypeCheck } = useUtils();
 
     // LIBRARY STATE OBJECT//
     const libraryData = ref({})
@@ -472,11 +474,6 @@ export const useViewStore = defineStore('view', ()=>{
         )
     }
 
-    function itemTypeCheck(item){
-        return  item.hasOwnProperty('FemaleAgentID') ? 'Agent' :
-                item.hasOwnProperty('BookID') ? 'Book' :
-                item.hasOwnProperty('MargID') ? 'Mark' : ''
-    }
 
     // FILTER HANDLING //
     const activeFilters = ref([])
@@ -566,13 +563,29 @@ export const useViewStore = defineStore('view', ()=>{
     })
 
 
-    
-    function getImageRefs(itemType){
-        if(itemType === 'Agent') return {id: 'FemaleAgentID', folder: 'mark-images'}
-        if(itemType === 'Book') return {id: 'BookID', folder: 'book-images'}
-        if(itemType === 'Mark') return {id: 'MargID', folder: 'mark-images'}
-    }
 
+
+    // async function getImagePreviewsofSize(itemArray, ofSize){
+    //     let itemType
+    //     let imageRefs 
+    //     let imageData
+    //     let imagePreviews = [];
+    //     let index = 0
+    //         while (index < ofSize){
+    //             console.log('BeginLoop')
+    //             itemType = itemTypeCheck(itemArray[index])
+    //             imageRefs = getImageRefs(itemType)
+    //             console.log('PreCall', itemArray[index], imageRefs)
+    //             imageData = await getImages(itemArray[index], imageRefs)
+    //             console.log('PostCall', imageData)
+    //             // console.log('imageData', imageData)
+    //             imagePreviews.push(...imageData.map(image => ({name: image.name, itemID: [imageRefs.id], item: itemArray[index], imageFolder: imageRefs.folder})))
+    //             index++;
+    //             console.log('EndLoop')
+                
+    //         }
+    //         return imagePreviews
+    // }
 
     async function getImagePreviewsofSize(itemArray, ofSize){
         let itemType
@@ -581,32 +594,25 @@ export const useViewStore = defineStore('view', ()=>{
         let imagePreviews = [];
         let index = 0
             while (index < ofSize){
+                console.log('BeginLoop')
                 itemType = itemTypeCheck(itemArray[index])
                 imageRefs = getImageRefs(itemType)
-                imageData = await getImages(itemArray[index], imageRefs)
+                console.log('PreCall', itemArray[index], imageRefs)
+                let { data, error } = await supabase
+                .storage
+                .from(`${imageRefs.folder}`)
+                .list(`${itemArray[index][imageRefs.id]}`)
+                imageData = data
+                console.log('PostCall', imageData)
                 // console.log('imageData', imageData)
                 imagePreviews.push(...imageData.map(image => ({name: image.name, itemID: [imageRefs.id], item: itemArray[index], imageFolder: imageRefs.folder})))
                 index++;
+                console.log('EndLoop')
+                
             }
             return imagePreviews
     }
 
-    async function getImages(item, imageRefs){
-        const { data, error } = await supabase
-        .storage
-        .from(`${imageRefs.folder}`)
-        .list(`${item[imageRefs.id]}`, {
-            limit: 100,
-            offset: 0,
-            sortBy: { column: 'name', order: 'asc' },
-        })
-        if(error) {
-                console.log(error)
-        }
-        if(data){
-            return data
-        }
-    }
 
 
 

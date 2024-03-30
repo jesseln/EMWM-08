@@ -10,31 +10,36 @@
 
     </NuxtLink>
     </header>
-    <div class="top-images">
-    <div v-if="imagePreviews" class="top-images-wrapper">
-      <div class="top-images-inner">
+<div class="top-images">
+    <div v-if="selectedImagePreviews.hasOwnProperty('TopBanner') && selectedImagePreviews['TopBanner'].length > 0" class="top-images-wrapper">
+        <div class="top-images-inner">
 
-          <vueper-slides :dragging-distance="70"
-          class="no-shadow" 
-          slide-image-inside
-          :visible-slides="15"
-          slide-multiple
-          :slide-ratio="1 / 2"
-          fixed-height="10vh"
-          :gap="1"
-          :bullets="false"
-          :arrows-outside="false"
-          prevent-y-scroll 
-          >
-              <vueper-slide
-                  v-for="imagePreview in imagePreviews"
-                  :key="imagePreview"
-                  :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imagePreview.imageFolder}/${imagePreview.item[imagePreview.itemID]}/${imagePreview.name}`"
-                  @click="openImageViewer({item: imagePreview.item, itemID: imagePreview.itemID, imageFolder: imagePreview.imageFolder, name: imagePreview.name})"
-                  />
-          </vueper-slides>
-      </div>
-  </div>
+            <vueper-slides :dragging-distance="70"
+            class="no-shadow" 
+            slide-image-inside
+            :visible-slides="15"
+            slide-multiple
+            :slide-ratio="1 / 2"
+            fixed-height="10vh"
+            :gap="1"
+            :bullets="false"
+            :arrows-outside="false"
+            prevent-y-scroll 
+            >
+                <vueper-slide
+                    v-for="imagePreview in selectedImagePreviews['TopBanner']"
+                    :key="imagePreview"
+                    :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imagePreview.imageFolder}/${imagePreview.item[imagePreview.itemID]}/${imagePreview.name}`"
+                    @click="openImageViewer({item: imagePreview.item, itemID: imagePreview.itemID, imageFolder: imagePreview.imageFolder, name: imagePreview.name})"
+                    />
+            </vueper-slides>
+        </div>
+    </div>
+    <div v-else>
+        <div class="topbanner-loading-wrapper">
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
+        </div>
+    </div>
 </div>
       <div class="main-navbar">
         <NuxtLink to="/" activeClass="nav-active">
@@ -100,26 +105,6 @@ import 'vueperslides/dist/vueperslides.css'
 
 
 
-
-  //View State
-const viewStore = useViewStore();
-const { 
-        libraryData,
-        libraryDisplay,
-        formattedLibrary,
-        filterLibrary,
-        activeFilters,
-        getActiveFilters,
-        filterObject,
-        dataSize,
-        filterTotalCount,
-         } = storeToRefs(viewStore)
-const { 
-        filterActiveToggle,
-        getImagePreviewsofSize,
-        } = useViewStore();
-
-
   //libraryStore call is placed in this layout file as this will initially update the store state from the database for all pages.
   const libraryStore = useLibraryStore();
 
@@ -128,16 +113,14 @@ const {
         Book,
         Mark,
         complete,
-        selectedImageSet
+        selectedImageSet,
+        selectedImagePreviews
          } = storeToRefs(libraryStore)
 
-libraryStore.getSelectedImageSet('Marks', 'MargID', 6, 'TopBanner')
+libraryStore.getSelectedImageSet('Marks', 'MargID', 30, 'TopBanner')
 
-  const imagePreviews = ref()
   watch(() => libraryStore.selectedImageSet['TopBanner'],()=>{
-        console.log('selectedImageSet["TopBanner"]', libraryStore.selectedImageSet['TopBanner'])
-        getImagePreviewsofSize(libraryStore.selectedImageSet['TopBanner'], 6).then(data=> imagePreviews.value = data);
-    // console.log('imagePreviewList', imagePreviews.value)
+        libraryStore.getImagePreviewsofSize(30, 'TopBanner')
   })
 
   onMounted(()=>{

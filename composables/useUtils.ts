@@ -257,6 +257,18 @@ export const useUtils = () => {
         };
       }
 
+          
+    function getImageRefs(itemType: string){
+        if(itemType === 'Agent') return {id: 'FemaleAgentID', folder: 'mark-images'}
+        if(itemType === 'Book') return {id: 'BookID', folder: 'book-images'}
+        if(itemType === 'Mark') return {id: 'MargID', folder: 'mark-images'}
+    }
+    function itemTypeCheck(item: object){
+        return  item.hasOwnProperty('FemaleAgentID') ? 'Agent' :
+                item.hasOwnProperty('BookID') ? 'Book' :
+                item.hasOwnProperty('MargID') ? 'Mark' : ''
+    }
+
 
     return {
         alphabetically,
@@ -284,5 +296,7 @@ export const useUtils = () => {
         processDomain,
         invertObject,
         checkObjectPath,
+        getImageRefs,
+        itemTypeCheck,
     }
 }

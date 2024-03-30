@@ -109,13 +109,13 @@ const { handleObjectProperty,
          } = storeToRefs(libraryStore)
 
 
-libraryStore.getSelectedImageSet('Marks', 'MargID', 3, 'HomeBanner')
-const imagePreviews = ref()
-  watch(() => libraryStore.selectedImageSet['HomeBanner'],()=>{
-        console.log('selectedImageSet["HomeBanner"]', libraryStore.selectedImageSet['HomeBanner'])
-        getImagePreviewsofSize(libraryStore.selectedImageSet['HomeBanner'], 3).then(data=> imagePreviews.value = data);
-    // console.log('imagePreviewList', imagePreviews.value)
-  })
+// libraryStore.getSelectedImageSet('Marks', 'MargID', 3, 'HomeBanner')
+// const imagePreviews = ref()
+//   watch(() => libraryStore.selectedImageSet['HomeBanner'],()=>{
+//         console.log('selectedImageSet["HomeBanner"]', libraryStore.selectedImageSet['HomeBanner'])
+//         getImagePreviewsofSize(libraryStore.selectedImageSet['HomeBanner'], 3).then(data=> imagePreviews.value = data);
+//     // console.log('imagePreviewList', imagePreviews.value)
+//   })
  
     function iconDimensions(){
     const scaleWidth = 1;

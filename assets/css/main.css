@@ -1609,6 +1609,15 @@ p.article-image-caption{
     gap: 0.2rem;
     width: 100%;
  }
+ .topbanner-loading-wrapper{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    width: 100vw;
+ }
 
  .item-embedded-images{
     width: 100%;

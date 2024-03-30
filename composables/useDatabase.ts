@@ -163,6 +163,19 @@ export const useDatabase = () => {
         */
       }
 
+      async function getImages(item: any, imageRefs: any){
+        const { data, error } = await supabase
+        .storage
+        .from(`${imageRefs.folder}`)
+        .list(`${item[imageRefs.id]}`)
+        if(error) {
+                console.log(error)
+        }
+        if(data){
+            return data
+        }
+    }
+
       function tableStructure(tableName: string){
         if(tableName === 'Agents') return (`*, Marks(*, Books(*))`)
         if(tableName === 'Books') return (`*, Marks(*, Agents(*))`)
@@ -179,6 +192,7 @@ export const useDatabase = () => {
         getPaginatedData,
         getTableCount,
         updateRecord,
-        deleteRecord
+        deleteRecord,
+        getImages
     }
 }
