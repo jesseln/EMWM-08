@@ -12,6 +12,25 @@ export const useDatabase = () => {
         return tableData
       }
 
+    async function getTableofSize(tableName: string, orderColumn: string, ofSize: number) {
+        let tableData: any
+        let tableSize: number =  await getTableCount(tableName) || 0;
+        if(ofSize > tableSize) ofSize = tableSize;
+        if(ofSize < 1000) {
+            tableData = await getPaginatedData(tableName,orderColumn,0,ofSize);
+            return tableData
+        }
+        else{
+            tableData = await getPaginatedData(tableName,orderColumn,0,999);
+
+            while(ofSize > tableData.length){
+              await getPaginatedData(tableName,orderColumn, tableData.length, tableData.length + 1000)
+              .then((data: any)=> {tableData.push(...data)})
+            }
+            return tableData
+        }
+      }
+
       //Test Function
       async function getTableTest(tableName: string, orderColumn: string) {
         let tableSize: number =  await getTableCount(tableName) || 0;
@@ -153,6 +172,7 @@ export const useDatabase = () => {
 
       return {
         getTable,
+        getTableofSize,
         getTableTest,
         updateCalulatedColumn,
         getSingleRecord,

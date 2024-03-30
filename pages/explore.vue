@@ -44,7 +44,7 @@
                         <!-- Shelf Box DO NOT DELETE -->
                         </div>
                     </div>
-                        <div class="explore-section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)">
+                        <div class="explore-section-inner" v-for="item in bookend[1]" :key="item">
                             <ExploreItem :item="item"/>
                     </div> 
                 </div>
@@ -129,40 +129,6 @@ const { getItemLibraryYC,
   const itemModalContentOuter = ref(null)
   const modalBackground = ref(null)
   const _item = ref(null)
-
-  console.log("topViewsList", topViewsList.value)
-         
-  function showModal(item){
-    //Component Prop
-    _item.value = item;
-    //Styles
-    itemModalContent.value.style.transitionDelay = '.15s'
-    itemModalContent.value.style.visibility = 'visible'
-    modalBackground.value.style.transitionDelay = '.075s'
-    modalBackground.value.style.visibility = 'visible'
-    itemModalContentOuter.value.style.transitionDelay = '.075s'
-    itemModalContentOuter.value.style.visibility = 'visible'
-  }
-
-  const hideModal = ()=>{
-    itemModalContent.value.style.transitionDelay = '.3s'
-    itemModalContent.value.style.visibility = 'hidden'
-    modalBackground.value.style.transitionDelay = '.15s'
-    modalBackground.value.style.visibility = 'hidden'
-    itemModalContentOuter.value.style.transitionDelay = '.15s'
-    itemModalContentOuter.value.style.visibility = 'hidden'
-  }
-
-  onClickOutside(itemModalContent, (event) => {
-    if(itemModalContent.value.style.visibility === 'visible' && event.target.matches('.modal-background')){
-        itemModalContent.value.style.transitionDelay = '.3s'
-        itemModalContent.value.style.visibility = 'hidden'
-        modalBackground.value.style.transitionDelay = '.15s'
-        modalBackground.value.style.visibility = 'hidden'
-        itemModalContentOuter.value.style.transitionDelay = '.15s'
-        itemModalContentOuter.value.style.visibility = 'hidden'
-    }  
-  })
 
   watchEffect(()=>{
     console.log('route.params.articlePage', route.params.articlePage)

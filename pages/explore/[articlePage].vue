@@ -67,6 +67,11 @@
                 section: articleViewSet.sections[0]
                 }" />
         </div>
+        <div v-else>
+        <div class="article-library-loading-wrapper">
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
+        </div>
+        </div>
         <h2 class="article-view-title">
             Visualisations of types of marginalia in the database, with graffiti as a percentage against ownership, annotation, and recording.
         </h2>
@@ -81,6 +86,11 @@
                 name: articleViewSet.name, 
                 section: articleViewSet.sections[1]
                 }" />
+        </div>
+        <div v-else>
+            <div class="article-library-loading-wrapper">
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>   
+        </div>  
         </div>
         <div class="article-para-section">
             <p class="article-para ">
@@ -269,12 +279,15 @@ async function cloneAllStores(){
     await cloneStores(articleViewSet.value, 0)
     await cloneStores(articleViewSet.value, 1)
 }
+onMounted(()=>{
+    watch([libraryStore.complete],()=>{
+        if(libraryStore.complete.agent && libraryStore.complete.mark && libraryStore.complete.book) {
 
-watch([libraryStore.complete],()=>{
-    if(libraryStore.complete.agent && libraryStore.complete.mark && libraryStore.complete.book) {
-        cloneAllStores()
-    }
-},{immediate:true, deep:true})
+                cloneAllStores()
+
+        }
+    },{immediate:true, deep:true})
+})
 
     // To Top Button
     const { x, y } = useWindowScroll() // To replace below

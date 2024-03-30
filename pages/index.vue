@@ -85,7 +85,7 @@ const { parseDatabase,
         handleViewSelection,
         getIDP,
         filterActiveToggle,
-        getImagePreviews,
+        getImagePreviewsofSize,
         handleColour } = useViewStore();
 
 //Reference Constants
@@ -103,14 +103,17 @@ const { handleObjectProperty,
         const { 
         Agent,
         Book,
-        Mark
+        Mark,
+        complete,
+        selectedImageSet
          } = storeToRefs(libraryStore)
 
-  const imagePreviews = ref()
-  watchEffect(()=>{
-    if(Mark.value.length > 0){
-         getImagePreviews(Mark.value).then(data=> imagePreviews.value = data);
-    }
+
+libraryStore.getSelectedImageSet('Marks', 'MargID', 3, 'HomeBanner')
+const imagePreviews = ref()
+  watch(() => libraryStore.selectedImageSet['HomeBanner'],()=>{
+        console.log('selectedImageSet["HomeBanner"]', libraryStore.selectedImageSet['HomeBanner'])
+        getImagePreviewsofSize(libraryStore.selectedImageSet['HomeBanner'], 3).then(data=> imagePreviews.value = data);
     // console.log('imagePreviewList', imagePreviews.value)
   })
  

@@ -116,8 +116,8 @@ const {
          } = storeToRefs(viewStore)
 const { 
         filterActiveToggle,
-        getImagePreviews,
- } = useViewStore();
+        getImagePreviewsofSize,
+        } = useViewStore();
 
 
   //libraryStore call is placed in this layout file as this will initially update the store state from the database for all pages.
@@ -126,19 +126,24 @@ const {
   const { 
         Agent,
         Book,
-        Mark
+        Mark,
+        complete,
+        selectedImageSet
          } = storeToRefs(libraryStore)
 
-  libraryStore.getAgents();
-  libraryStore.getBooks();
-  libraryStore.getMarks();
+libraryStore.getSelectedImageSet('Marks', 'MargID', 6, 'TopBanner')
 
   const imagePreviews = ref()
-  watchEffect(()=>{
-    if(Mark.value.length > 0){
-         getImagePreviews(Mark.value).then(data=> imagePreviews.value = data);
-    }
+  watch(() => libraryStore.selectedImageSet['TopBanner'],()=>{
+        console.log('selectedImageSet["TopBanner"]', libraryStore.selectedImageSet['TopBanner'])
+        getImagePreviewsofSize(libraryStore.selectedImageSet['TopBanner'], 6).then(data=> imagePreviews.value = data);
     // console.log('imagePreviewList', imagePreviews.value)
+  })
+
+  onMounted(()=>{
+    libraryStore.getAgents();
+    libraryStore.getBooks();
+    libraryStore.getMarks(); 
   })
 
 

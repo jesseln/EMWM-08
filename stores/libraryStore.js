@@ -1,12 +1,13 @@
 // import { defineStore } from 'pinia'
 
 export const useLibraryStore = defineStore('library', ()=>{
-    const { getTable, getTableTest } = useDatabase();
+    const { getTable, getTableTest, getTableofSize } = useDatabase();
     
     const items = ref([]); //Genereric Getting in case single table is required only
     const Agent = ref([]);
     const Book = ref([]);
     const Mark = ref([]);
+    const selectedImageSet = reactive({})
     const complete = reactive({agent:false, mark: false, book: false})
     const libraryItemsTest = ref([])
 
@@ -32,6 +33,10 @@ export const useLibraryStore = defineStore('library', ()=>{
       Mark.value = await getTable('Marks', 'MargID')
       complete.mark = true
     }
+    async function getSelectedImageSet(tableName, orderColumn, ofSize, setName) {
+        selectedImageSet[setName] = await getTableofSize(tableName, orderColumn, ofSize)
+        return true
+    }
 
     //Test Function
     async function getLibraryItemsTest(tableName, orderColumn) {
@@ -40,5 +45,5 @@ export const useLibraryStore = defineStore('library', ()=>{
   
   
 
-      return {items, Agent, Book, Mark, complete, getItems, getAgents, getBooks, getMarks, getLibraryItemsTest}
+      return {items, Agent, Book, Mark, complete, selectedImageSet, getItems, getAgents, getBooks, getMarks, getSelectedImageSet, getLibraryItemsTest}
   })

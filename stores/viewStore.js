@@ -574,13 +574,13 @@ export const useViewStore = defineStore('view', ()=>{
     }
 
 
-    async function getImagePreviews(itemArray){
+    async function getImagePreviewsofSize(itemArray, ofSize){
         let itemType
         let imageRefs 
         let imageData
         let imagePreviews = [];
         let index = 0
-            while (index < 20){
+            while (index < ofSize){
                 itemType = itemTypeCheck(itemArray[index])
                 imageRefs = getImageRefs(itemType)
                 imageData = await getImages(itemArray[index], imageRefs)
@@ -635,7 +635,7 @@ export const useViewStore = defineStore('view', ()=>{
                 filterTotalCount,
                 imagePreviewList,
                 viewUpdated,
-                getImagePreviews,
+                getImagePreviewsofSize,
                 getItemLibrary,
                 getFilterObject,
                 getAllFilters,
