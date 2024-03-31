@@ -670,7 +670,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 {   view: {
                     itemType: "Mark",
                     id: 'MargID',
-                    shelf: 'Not Selected', //Primary sort
+                    shelf: 'Graffiti type', //Primary sort
                     bookend: 'Graffiti type', //Secondary sort
                     height: 'Not Selected',
                     colour: 'Graffiti type',
@@ -700,7 +700,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
                 {   view: {
                     itemType: "Mark",
                     id: 'MargID',
-                    shelf: 'Not Selected', //Primary sort
+                    shelf: 'Graffiti type', //Primary sort
                     bookend: 'Mark type (Mark of?)', //Secondary sort
                     height: 'Not Selected',
                     colour: 'Mark type (Mark of?)',

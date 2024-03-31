@@ -195,6 +195,58 @@ export const useViewStore = defineStore('view', ()=>{
     function formatNullShelf(data, viewMode){
         return d3.flatGroup(d3.sort(data,(a, b) => alphabetically(true)(getISP(a, viewMode), getISP(b, viewMode))), d => 'All Items'); 
     }
+
+    //Refactor of d3.flatGroup(d3.sort()) functions which were executive separately to improve performance.
+    function formatLibraryRebuild(data){
+        let shelfIndex = -1;
+        let shelfIndexStr = '0';
+        let shelfNames = {};
+        let bookendIndex = -1;
+        let bookendIndexStr = '0';
+        let bookendNames = {};
+        let libraryCompile = {};
+        let libraryComplete = [];
+        let currentShelf;
+        let currentBookend;
+        for (let i = 0; i < data.length; i++) {
+            currentShelf = getIDP(data[i], 'shelf') || 'No Data'
+            currentBookend = getIDP(data[i], 'bookend') || 'No Data'
+            if(!(currentShelf in shelfNames)){
+                shelfNames[currentShelf] = ++shelfIndex;
+            }
+            if(!(currentBookend in bookendNames)){
+                bookendNames[currentBookend] = ++bookendIndex;
+            }
+            shelfIndexStr = '' + shelfNames[currentShelf]
+            bookendIndexStr = '' + bookendNames[currentBookend]
+            libraryCompile[shelfIndexStr] = libraryCompile[shelfIndexStr] || {}
+            libraryCompile[shelfIndexStr][bookendIndexStr] = libraryCompile[shelfIndexStr][bookendIndexStr] || []
+            libraryCompile[shelfIndexStr][bookendIndexStr].push(data[i])
+        }
+        
+
+        let sortedShelfNames = d3.sort(Object.keys(shelfNames),(a, b) => alphabetically(true)(a, b))
+        let sortedBookendNames = d3.sort(Object.keys(bookendNames),(a, b) => alphabetically(true)(a, b))
+
+        let iStr;
+        let jStr;
+        for (let i = 0; i <= shelfIndex; i++) {
+            for (let j = 0; j <= bookendIndex; j++) {
+                iStr = "" + shelfNames[sortedShelfNames[i]]
+                jStr = "" + bookendNames[sortedBookendNames[j]]
+                if(libraryCompile[iStr].hasOwnProperty(jStr)){
+                    libraryComplete[i] = libraryComplete[i] || [sortedShelfNames[i], []]
+                    libraryComplete[i][1] = libraryComplete[i][1] || []
+                    libraryComplete[i][1].push([sortedBookendNames[j], libraryCompile[iStr][jStr]])
+                        
+                }
+            }
+        }
+        
+        return libraryComplete
+        
+    }
+
     
     //Set Bookends
     function formatBookend(data, viewMode){
@@ -208,15 +260,21 @@ export const useViewStore = defineStore('view', ()=>{
 
     //Combine Shelves & Bookend
     function formatLibrary(data) {
+        /*
         //Shelves - Sort & Group Items by Shelf Category
         const shelfFormatData = libraryDisplay.view.shelf !== "Not Selected"
-        ? formatShelf(data, 'shelf') 
+        ? formatShelf(data, 'shelf')
         : formatNullShelf(data, 'id'); //Default
         //Bookends - Further Sort & Group Items by Bookend Category
         const shelfBookendFormatData = libraryDisplay.view.bookend !== "Not Selected"
         ? formatBookend(shelfFormatData, 'bookend') 
         : formatNullBookend(shelfFormatData, 'id'); //Default
+        // console.log('formatLibrarRebuild',formatLibraryRebuild(data))
+        // console.log('shelfBookendFormatData',shelfBookendFormatData)
+        
         return shelfBookendFormatData
+        */
+       return formatLibraryRebuild(data)
     }
 
     // HANDLE HEIGHT //
@@ -556,36 +614,6 @@ export const useViewStore = defineStore('view', ()=>{
                 return filterValue.name === itemValue }
         })
     }
-
-
-    watchEffect(() => {
-        // filterLibrary.value = getFilterLibrary()
-    })
-
-
-
-
-    // async function getImagePreviewsofSize(itemArray, ofSize){
-    //     let itemType
-    //     let imageRefs 
-    //     let imageData
-    //     let imagePreviews = [];
-    //     let index = 0
-    //         while (index < ofSize){
-    //             console.log('BeginLoop')
-    //             itemType = itemTypeCheck(itemArray[index])
-    //             imageRefs = getImageRefs(itemType)
-    //             console.log('PreCall', itemArray[index], imageRefs)
-    //             imageData = await getImages(itemArray[index], imageRefs)
-    //             console.log('PostCall', imageData)
-    //             // console.log('imageData', imageData)
-    //             imagePreviews.push(...imageData.map(image => ({name: image.name, itemID: [imageRefs.id], item: itemArray[index], imageFolder: imageRefs.folder})))
-    //             index++;
-    //             console.log('EndLoop')
-                
-    //         }
-    //         return imagePreviews
-    // }
 
     async function getImagePreviewsofSize(itemArray, ofSize){
         let itemType

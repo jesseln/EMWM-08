@@ -38,7 +38,7 @@
         </div>
         <div class="shelf-inner" >
             <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend">
-                    <div class="section-title-box-wrapper">
+                    <div class="explore-section-title-box-wrapper">
                     <div class="section-title-box">
                         <!-- <h3 class="section-value">
                             {{ bookend[0]}}

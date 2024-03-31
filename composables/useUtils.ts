@@ -236,10 +236,10 @@ export const useUtils = () => {
           }
       
           // nulls sort after anything else
-          if (a === 'no data') {
+          if (a === 'no data' || a === 'No Data') {
               return 1;
           }
-          if (b === 'no data') {
+          if (b === 'no data' || b === 'No Data') {
               return -1;
           }
       

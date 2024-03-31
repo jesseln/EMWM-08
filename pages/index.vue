@@ -14,7 +14,7 @@
         
         </div>
         <div class="home-images">
-    <div v-if="imagePreviews" class="home-images-wrapper">
+    <div v-if="topViewsList" class="home-images-wrapper">
       <div class="home-images-inner">
 
           <vueper-slides :dragging-distance="70"
@@ -30,13 +30,14 @@
           prevent-y-scroll 
           lazy-load-on-drag
           >
-              <vueper-slide
-                  v-for="imagePreview in imagePreviews"
-                  :key="imagePreview"
-                  :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imagePreview.imageFolder}/${imagePreview.item[imagePreview.itemID]}/${imagePreview.name}`"
-                  @click="openImageViewer({item: imagePreview.item, itemID: imagePreview.itemID, imageFolder: imagePreview.imageFolder, name: imagePreview.name})"
+                <vueper-slide
+              v-for="imagePreview in articleImageSet" 
+                :key="imagePreview"
+                  :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imagePreview.imageFolder}/${imagePreview.itemID}/${imagePreview.itemImage.name}`"
+                  @click=""
                   />
-          </vueper-slides>
+        </vueper-slides>
+
       </div>
   </div>
 </div>
@@ -94,7 +95,8 @@ const { categoryMap,
         viewMap,
         invCategoryMap, 
         colourMapFiltered,
-        scales } = storeToRefs(referenceStore)
+        scales,
+        topViewsList } = storeToRefs(referenceStore)
 
         //Utility Functions
 const { handleObjectProperty,
@@ -108,7 +110,11 @@ const { handleObjectProperty,
         selectedImageSet
          } = storeToRefs(libraryStore)
 
+         const articleImageSet = ref([])
 
+         topViewsList.value.map((shelf)=> shelf[1].map((bookend) => bookend[1].map((item) => articleImageSet.value.push(item))))
+         console.log('topViewsList', topViewsList)
+         console.log('articleImageSet', articleImageSet)
 // libraryStore.getSelectedImageSet('Marks', 'MargID', 3, 'HomeBanner')
 // const imagePreviews = ref()
 //   watch(() => libraryStore.selectedImageSet['HomeBanner'],()=>{

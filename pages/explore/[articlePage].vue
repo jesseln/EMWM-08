@@ -254,7 +254,7 @@ onMounted(()=>{
     }
 
     const postPageload = ref(false)
-    watch(postPageload,()=>{
+    watch([postPageload, libraryStore.complete],()=>{
         if(libraryStore.complete.agent && libraryStore.complete.mark && libraryStore.complete.book) {
                 cloneAllStores()
         }
