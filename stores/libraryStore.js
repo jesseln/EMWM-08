@@ -20,20 +20,23 @@ export const useLibraryStore = defineStore('library', ()=>{
 
     //Returns Agent Structed Object - Relationally nested Marks then nested by Books 
     async function getAgents() {
-      Agent.value = await getTable('Agents', 'FemaleAgentID')
-      complete.agent = true
+        complete.agent = false
+        Agent.value = await getTable('Agents', 'FemaleAgentID')
+        complete.agent = true
     }
 
     //Returns Book Structed Object - Relationally nested Marks then nested by Agents
     async function getBooks() {
-      Book.value = await getTable('Books', 'BookID')
-      complete.book = true
+        complete.book = false
+        Book.value = await getTable('Books', 'BookID')
+        complete.book = true
     }
 
     //Returns Mark Structed Object - Relationally nested Books and Agents on same level 
     async function getMarks() {
-      Mark.value = await getTable('Marks', 'MargID')
-      complete.mark = true
+        complete.mark = false
+        Mark.value = await getTable('Marks', 'MargID')
+        complete.mark = true
     }
 
     //Test Function

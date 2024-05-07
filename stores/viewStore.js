@@ -5,6 +5,18 @@ export const useViewStore = defineStore('view', ()=>{
     const supabase = useSupabaseClient()
     const referenceStore = useReferenceStore();
 
+      //libraryStore call is placed in this layout file as this will initially update the store state from the database for all pages.
+  const libraryStore = useLibraryStore();
+
+  const { 
+        Agent,
+        Book,
+        Mark,
+        complete,
+        selectedImageSet,
+        selectedImagePreviews
+         } = storeToRefs(libraryStore)
+
     const { viewMap, filterMap, colourMapFiltered, scales } =  storeToRefs(referenceStore);
     const { alphabetically,
             handleNumeric,
@@ -242,9 +254,8 @@ export const useViewStore = defineStore('view', ()=>{
                 }
             }
         }
-        
+        console.log('formatLibraryRebuild fired')
         return libraryComplete
-        
     }
 
     
