@@ -26,9 +26,7 @@
                         </div>
                     </div>
                         <div class="explore-section-inner" v-for="item in bookend[1]" :key="JSON.stringify(item)">
-                        <NuxtLink to="/explore/graffiti">
                             <ExploreItem :item="item"/>
-                        </NuxtLink>
                     </div> 
                 </div>
             </template>

@@ -113,13 +113,13 @@ const libraryItemBundle = ref(allArticles.value[articleView.name][articleView.se
   const _item = ref(null)
 
 
-watchEffect(()=>{
-    console.log('articleView', articleView) 
-    console.log('allArticles', allArticles.value[articleView.name][articleView.section].library.libraryDisplay)
-    console.log('allArticles filterLibrary', allArticles.value[articleView.name][articleView.section].library.filterLibrary)
-    console.log('allArticles library', allArticles.value[articleView.name][articleView.section].library)
-    console.log('allArticles total', allArticles.value)
-})
+// watchEffect(()=>{
+//     console.log('articleView', articleView) 
+//     console.log('allArticles', allArticles.value[articleView.name][articleView.section].library.libraryDisplay)
+//     console.log('allArticles filterLibrary', allArticles.value[articleView.name][articleView.section].library.filterLibrary)
+//     console.log('allArticles library', allArticles.value[articleView.name][articleView.section].library)
+//     console.log('allArticles total', allArticles.value)
+// })
 
 //REFORMAT HEIGHT LOCALLY
 // HANDLE HEIGHT //

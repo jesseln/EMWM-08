@@ -573,14 +573,12 @@ body {
     max-width: 20vw;
 }
 .article-title-image{
-    height: 40rem;
-    width: 25rem;
     overflow: hidden;
 }
-.article-title-image-cropped{
+/* .article-title-image-cropped{
     margin: -6rem 0 0 -35rem;
     transform: scale(0.9)
-}
+} */
 
 .article-image-caption-container{
     display: flex;
