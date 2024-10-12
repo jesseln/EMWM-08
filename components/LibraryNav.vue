@@ -1,9 +1,9 @@
 <template>
     <div class="library-nav-container">
-        <div class="library-nav-intro-wrapper">
+        <!-- <div class="library-nav-intro-wrapper">
             <h2>Group, Sort, Resize and Colour the Items in the Library</h2>
             <p>Organise all the library items using the dropdowns below</p>
-            </div>
+            </div> -->
     <div class="library-nav-wrapper">
         <div class="library-nav-dropdown">
             <div class="library-nav-title-block">

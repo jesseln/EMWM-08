@@ -162,18 +162,17 @@
                         <div class="catalogue-filter-category-container scrollable form-style-1">
                             <div class="search-box"  >
                                 <Icon name="ic:baseline-search" size="1.5rem" class="search-icon" />
-                                    <input class="prevent-close-on-click item-modal-input" v-model="searchEntry" type="text" placeholder="search" autofocus ref="markInput"/>
-                                </div>
+                                <input class="prevent-close-on-click item-modal-input" v-model="searchEntry" type="text" placeholder="search" autofocus ref="markInput"/>
+                            </div>
                             <div class="unique-entries" >
                                 <h4 >Unique entries: {{ Object.keys(searchList(filterObject.get('Mark')[category], searchEntry)).length }}</h4>
                             </div> 
                             <button 
-                            v-for="filterValue in searchList(filterObject.get('Mark')[category], searchEntry)"
-                            @click="viewStore.filterActiveToggle(filterValue, category, 'Mark')" 
-                            class="catalogue-filter-category-box"
-                            :class="{ filterActive : filterObject.get('Mark')[category][filterValue.name].active }">
+                                v-for="filterValue in searchList(filterObject.get('Mark')[category], searchEntry)"
+                                @click="viewStore.filterActiveToggle(filterValue, category, 'Mark')" 
+                                class="catalogue-filter-category-box"
+                                :class="{ filterActive : filterObject.get('Mark')[category][filterValue.name].active }">
                                 <p class="catalogue-filter-category-list-value" >{{ filterValue.name }}</p>
-
                             </button>
                         </div>
                     </template>
@@ -325,21 +324,6 @@ onMounted(()=>{
 	// color: rgb(34, 34, 34);
 }
 
-.search-box{
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: flex-start;
-    border-radius: 1rem;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    border: 1px solid #BEBEBE;
-    margin: 0.5rem 0.5rem 0rem 0;
-    padding: 0.25rem 0 0.25rem 0.25rem;
-    width: fit-content;
-    max-width: 10vw;
-}
 .form-style-1 input[type=text]{
     border: none;
 	margin:0 0.1rem 0 0.1rem;
