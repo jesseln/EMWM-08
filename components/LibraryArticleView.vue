@@ -295,10 +295,10 @@ input {
   width: 50%;
 }
 .section-inner.zoomOut{
-	gap: 0px 0.28rem;
+	gap: 0px 0.15rem;
 }
 .section-inner.zoomMid{
-	gap: 0px 0.5rem;
+	gap: 0px 0.15rem;
 }
 .section-inner.zoomIn{
 	gap: 0px 0.8rem;

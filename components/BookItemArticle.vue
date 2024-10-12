@@ -107,7 +107,7 @@
                     {{categoryMap.get(itemBundle.itemType)[itemBundle.menuSubheader]}}
                 </p>
             </div>
-            <div class="item-menu-totals-wrapper">
+            <!-- <div class="item-menu-totals-wrapper">
             <div class="item-menu-totals">
                         <div class="item-menu-totals-badge">
                             <div class="item-menu-icon-container">
@@ -137,7 +137,7 @@
                         <p>{{itemLibraryCount[2]}}</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="item-menu-details-button">
                 <div class="shelf-button-wrapper">
                     <button class="catalogue-filter-category-box details-button" @click="$emit('viewDetails', item)"> View Details </button>

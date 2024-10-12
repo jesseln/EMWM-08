@@ -3,14 +3,14 @@
             Visualisations of types of marginalia in the database, with graffiti as a percentage against ownership, annotation, and recording.
         </h2>
         <div v-if="dataCheck"> 
-            <div >
-            <LibraryBottomNavArticle :articleView="{
+            <div class="article-view-insert">
+                <LibraryArticleView :articleView="{
                     name: content.name, 
                     section: content.section
                     }" />
             </div>
-            <div class="article-view-insert">
-                <LibraryArticleView :articleView="{
+            <div >
+            <LibraryBottomNavArticle :articleView="{
                     name: content.name, 
                     section: content.section
                     }" />

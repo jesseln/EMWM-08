@@ -54,10 +54,10 @@
                 </svg> -->
                 <p class="article-colour-label" v-if="libraryDisplay.viewType['colour'] !== 'NotSelected'">
                     <!-- {{libraryDisplay.viewType['colour']}} |  -->
-                    {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
+                    Colour highlights: {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
                 </p>
                 <p class="article-colour-label" v-else="">
-                    {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
+                    Colour highlights: {{categoryMap.get(libraryDisplay.viewType['colour'])[libraryDisplay.view['colour']]}}
                 </p>
             </div>
 </div>
@@ -225,11 +225,11 @@ const iconScaleFactor = ref(0.5)
 }
 
 .library-nav-container{
-    margin: 0 clamp(5rem, 10vw, 8rem) 1rem;
+    margin: 0 var(--ArticleLibraryMargins) 0;
     padding: 0 0 0.5rem;
     display: grid;
     grid-template-rows: auto auto;
-    justify-content: center;
+    justify-content: flex-start;
     border-top: 2px solid rgb(255, 255, 255);
     // height: 100%;
     max-width: 100vw;
@@ -237,7 +237,7 @@ const iconScaleFactor = ref(0.5)
     // border-bottom: 2px solid rgb(241, 241, 241);
 }
 .library-nav-colour-wrapper{
-    grid-row: 2/3;
+    grid-row: 1/2;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -476,7 +476,7 @@ const iconScaleFactor = ref(0.5)
 	color: black;
 }
     .bottom-label {
-        grid-row: 1/2;
+        grid-row: 2/2;
         display: flex;
         flex-flow: row wrap;
         align-items: center;
@@ -490,20 +490,24 @@ const iconScaleFactor = ref(0.5)
         letter-spacing: 0.05rem;
         line-height: 1.25rem;
         color: black;
-        justify-content: center;
+        justify-content: flex-start;
         // background-color: #e7e7e7;
         }
     .article-colour-label {
         margin: 0;
         padding: 0;
         display: block;
-        font-family: "Raleway", sans-serif;
-        font-size: 1.15rem;
-        font-weight: 500;
-        line-height: 1.5rem;
-        letter-spacing: 0.15rem;
-        color: rgb(80, 80, 80);
-        text-align: center;
+        // font-family: "Raleway", sans-serif;
+        // font-size: 1.15rem;
+        // font-weight: 500;
+        // line-height: 1.5rem;
+        // letter-spacing: 0.15rem;
+        color: black;
+	font-family: Raleway, sans-serif;
+	font-size: 0.8rem;
+	font-weight:600;
+        // color: rgb(80, 80, 80);
+        text-align: left;
         }
 
 </style>
