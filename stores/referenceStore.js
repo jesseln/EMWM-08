@@ -29,6 +29,12 @@ export const useReferenceStore = defineStore('reference', ()=>{
         ['Repositories']: {}
     })
 
+    // {name: 'Ownership', linkName: 'ownership',
+    //     imageFolder: 'mark-images',
+    //     itemID:'101',
+    //     itemImage: {name:'MargID_101_(2_of_2).jpg'},
+    //     class: 'topViewClassOwnership'},
+
     const topViewsList = ref(
         [[0,
             [[1,
@@ -41,8 +47,8 @@ export const useReferenceStore = defineStore('reference', ()=>{
 
                 {name: 'Ownership', linkName: 'ownership',
                 imageFolder: 'mark-images',
-                itemID:'101',
-                itemImage: {name:'MargID_101_(2_of_2).jpg'},
+                itemID:'47',
+                itemImage: {name:'MargID_47_(2_of_2).jpg'},
                 class: 'topViewClassOwnership'},
 
                 {name: 'Reading', linkName: 'reading',

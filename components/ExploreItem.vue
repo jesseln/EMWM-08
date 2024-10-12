@@ -55,12 +55,19 @@ const itemHandlers = {
 
 function handleMouseOver(d) {
     d3.select(d.currentTarget)
-        .style('transform', getUpPos(d.currentTarget, true));
+    .transition().ease(d3.easeQuadInOut)
+    .duration(500)
+        .style('transform', getUpPos(d.currentTarget, true))
+
 }
 
 function handleMouseOut(d) {
     d3.select(d.currentTarget)
-        .style('transform', getUpPos(d.currentTarget, false));
+    .transition().ease(d3.easeQuadInOut)
+    .duration(250)
+        .style('transform', getUpPos(d.currentTarget, false))
+
+
 }function getUpPos(elm, isUp) {
     if( elm.classList.contains('explore-item')){
         return `translate(0, ${(isUp ? -10 : 0)}px)`
@@ -81,6 +88,14 @@ function handleMouseOut(d) {
     letter-spacing: 0.15rem;
 }
 
+.explore-item-image{
+    transition: all 0.3s ease-in-out;
+}
+
+.explore-item-image:hover{
+    filter: brightness(70%);
+}
+
 .topViewClassWomen{
     position: absolute;
     bottom: -60px;
@@ -91,10 +106,10 @@ function handleMouseOut(d) {
 
 .topViewClassOwnership{
     position: absolute;
-	bottom: -87px;
-	left: -71px;
-    clip-path: circle(65px at 145px 155px);
-    height: 325px;
+	bottom: -26px;
+	left: -106px;
+    clip-path: circle(65px at 180px 110px);
+    height: 220px;
 }
 
 .topViewClassReading{
@@ -115,9 +130,9 @@ function handleMouseOut(d) {
 
 .topViewClassGraffiti{
     position: absolute;
-	bottom: -120px;
+	bottom: -116px;
 	left: -80px;
-    clip-path: circle(65px at 154px 196px);
+    clip-path: circle(65px at 154px 200px);
     height: 400px;
 }
 

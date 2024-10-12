@@ -30,7 +30,7 @@
                     v-for="imagePreview in selectedImagePreviews['TopBanner']"
                     :key="imagePreview"
                     :image="`https://hmgugjmjfcvjtmrrafjm.supabase.co/storage/v1/object/public/${imagePreview.imageFolder}/${imagePreview.item[imagePreview.itemID]}/${imagePreview.name}`"
-                    @click="openImageViewer({item: imagePreview.item, itemID: imagePreview.itemID, imageFolder: imagePreview.imageFolder, name: imagePreview.name})"
+                    @click="showModal(imagePreview.item)"
                     />
             </vueper-slides>
         </div>
@@ -85,10 +85,17 @@
             </div>   
           </NuxtLink> -->
       </div>
-      <div class="image-modal-background"  ref="imageModalBackground" @click="closeImageModal">
+        <!-- <div class="image-modal-background"  ref="imageModalBackground" @click="closeImageModal">
             <div class="image-modal-content-outer" ref="imageModalContentOuter">
                 <div class="image-modal-content" ref="imageModalContent">
                     <ImageModal :key="_itemImage" v-if="_itemImage" @close="hideImageModal" :_itemImage="_itemImage" />
+                </div>
+            </div>
+        </div> -->
+        <div class="modal-background"  ref="modalBackground">
+            <div class="item-modal-content-outer" ref="itemModalContentOuter">
+                <div class="item-modal-content" ref="itemModalContent" >
+                    <ItemModal :key="_item" v-if="_item" @close="hideModal" :_item="_item" />
                 </div>
             </div>
         </div>
@@ -129,8 +136,6 @@ libraryStore.getSelectedImageSet('Marks', 'MargID', 30, 'TopBanner')
     libraryStore.getMarks(); 
   })
 
-
-
   const dropdownExploreLibraryRef = ref(null)
   const dropdownExploreLibraryRefContent = ref(null)
   const dropdownYourCollectionsRef = ref(null)  
@@ -147,53 +152,48 @@ libraryStore.getSelectedImageSet('Marks', 'MargID', 30, 'TopBanner')
 //   script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
 })
 
+const itemModalContent = ref(null)
+const itemModalContentOuter = ref(null)
+const modalBackground = ref(null)
+const _item = ref(null)
 
-
-    // watch(imagePreviewList,()=>{
-
-        
-    //     imagePreviews
-    // })
- 
-  const showModal = (callRef)=>{
-    if(callRef === 'ExploreLibrary'){
-        dropdownExploreLibraryRefContent.value.style.transitionDelay = '.1s'
-        dropdownExploreLibraryRefContent.value.style.visibility = 'visible'
-    }
-    if(callRef === 'YourCollections') {
-        dropdownYourCollectionsRefContent.value.style.transitionDelay = '.1s'
-        dropdownYourCollectionsRefContent.value.style.visibility = 'visible'
-    }
-
+function showModal(item){
+    //Component Prop
+    _item.value = item;
+    //Styles
+    itemModalContent.value.style.transitionDelay = '.15s'
+    itemModalContent.value.style.visibility = 'visible'
+    modalBackground.value.style.transitionDelay = '.075s'
+    modalBackground.value.style.visibility = 'visible'
+    itemModalContentOuter.value.style.transitionDelay = '.075s'
+    itemModalContentOuter.value.style.visibility = 'visible'
   }
 
-  const hideModal = (callRef)=>{
-    if(callRef === 'ExploreLibrary'){
-        dropdownExploreLibraryRefContent.value.style.transitionDelay = '.1s'
-        dropdownExploreLibraryRefContent.value.style.visibility = 'hidden'
-    }
-    if(callRef === 'YourCollections') {
-        dropdownYourCollectionsRefContent.value.style.transitionDelay = '.1s'
-        dropdownYourCollectionsRefContent.value.style.visibility = 'hidden'
-    }
+  const hideModal = ()=>{
+    itemModalContent.value.style.transitionDelay = '.3s'
+    itemModalContent.value.style.visibility = 'hidden'
+    modalBackground.value.style.transitionDelay = '.15s'
+    modalBackground.value.style.visibility = 'hidden'
+    itemModalContentOuter.value.style.transitionDelay = '.15s'
+    itemModalContentOuter.value.style.visibility = 'hidden'
   }
 
-  const hideModalClicked = (callRef)=> {
-    if(callRef === 'ExploreLibrary'){
-        dropdownExploreLibraryRefContent.value.style.transitionDelay = '.1s'
-        dropdownExploreLibraryRefContent.value.style.visibility = 'hidden'
-    }
-    if(callRef === 'YourCollections') {
-        dropdownYourCollectionsRefContent.value.style.transitionDelay = '.1s'
-        dropdownYourCollectionsRefContent.value.style.visibility = 'hidden'
-    }
-}
+  onClickOutside(itemModalContent, (event) => {
+    if(itemModalContent.value.style.visibility === 'visible' && event.target.matches('.modal-background')){
+        itemModalContent.value.style.transitionDelay = '.3s'
+        itemModalContent.value.style.visibility = 'hidden'
+        modalBackground.value.style.transitionDelay = '.15s'
+        modalBackground.value.style.visibility = 'hidden'
+        itemModalContentOuter.value.style.transitionDelay = '.15s'
+        itemModalContentOuter.value.style.visibility = 'hidden'
+    }  
+  })
 
 
 const imageModalContent = ref(null)
-  const imageModalContentOuter = ref(null)
-  const imageModalBackground = ref(null)
-  const _itemImage = ref();
+const imageModalContentOuter = ref(null)
+const imageModalBackground = ref(null)
+const _itemImage = ref();
          
   function openImageViewer(itemImage){
     //Component Prop

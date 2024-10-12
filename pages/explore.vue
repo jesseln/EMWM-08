@@ -31,32 +31,31 @@
     </button>
         <AnnotationPanel v-if="showAnnotations"/> -->
     <!-- <button ref="toTopButton" @click="scrollToTop" class="to-top-button">☝️</button> -->
-    <div class="library-wrapper">
-    <div class="shelf" v-for="shelf in topViewsList" :key="shelf">
-        <div class="shelf-title-box">
-            <!-- <h2 class="explore-shelf-title">{{shelf[0]}}</h2> -->
-        </div>
-        <div class="shelf-inner" >
-            <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend">
-                    <div class="explore-section-title-box-wrapper">
-                    <div class="section-title-box">
-                        <!-- <h3 class="section-value">
-                            {{ bookend[0]}}
-                        </h3> -->
-                        <div class="section-shelf-box">
-                        <!-- Shelf Box DO NOT DELETE -->
+    <div class="explore-library-container">
+        <div class="explore-library-wrapper">
+            <div class="shelf" v-for="shelf in topViewsList" :key="shelf">
+                <div class="shelf-inner" >
+                    <template class="section-wrapper" v-for="bookend in shelf[1]" :key="bookend">
+                            <div class="explore-section-title-box-wrapper">
+                            <div class="section-title-box">
+                                <!-- <h3 class="section-value">
+                                    {{ bookend[0]}}
+                                </h3> -->
+                                <div class="section-shelf-box">
+                                <!-- Shelf Box DO NOT DELETE -->
+                                </div>
+                            </div>
+                                <div class="explore-section-inner" v-for="item in bookend[1]" :key="item">
+                                    <ExploreItem :item="item"/>
+                            </div> 
                         </div>
-                    </div>
-                        <div class="explore-section-inner" v-for="item in bookend[1]" :key="item">
-                            <ExploreItem :item="item"/>
-                    </div> 
+                    </template>
                 </div>
-            </template>
+            </div>
         </div>
     </div>
-</div>
 
-    </div>
+</div>
 
 </template>
 

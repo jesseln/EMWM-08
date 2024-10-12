@@ -450,47 +450,6 @@ input[type=range]:hover::-webkit-slider-runnable-track {
 }
 
    
-.modal-background{
-    display: block;
-    visibility: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.1);
-    -webkit-backdrop-filter: blur(0.06rem);
-    backdrop-filter: blur(0.06rem);
-}
-.item-modal-content-outer{
-    display: grid;
-    grid-template-rows: 100vh;
-    position: fixed;
-    top: 0;
-    max-width: 80vw;
-    left: 10vw;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-}
-  .item-modal-content {
-    grid-row: 1 / 2;
-    display: flex;
-    flex-flow: column wrap;
-    visibility: hidden;
-    height: fit-content;
-    width: fit-content;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 12px 0px;
-    z-index: 200;
-    background: #ffffff;
-    padding: 7px;
-    border: 0.1rem #eeeeee solid;
-    border-radius: 0.3rem;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-  }
   
   /* .dropdown-content a {
     color: black;

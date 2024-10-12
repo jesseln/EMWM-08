@@ -44,10 +44,8 @@ export const useLibraryStore = defineStore('library', ()=>{
       libraryItemsTest.value = await getTableTest(tableName, orderColumn)
     }
 
-
     async function getSelectedImageSet(tableName, orderColumn, ofSize, setName) {
         selectedImageSet[setName] = await getTableofSize(tableName, orderColumn, ofSize)
-
     }
     
     async function getImagePreviewsofSize(ofSize, setName){
