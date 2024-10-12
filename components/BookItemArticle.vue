@@ -140,7 +140,9 @@
             </div> -->
             <div class="item-menu-details-button">
                 <div class="shelf-button-wrapper">
-                    <button class="catalogue-filter-category-box details-button" @click="$emit('viewDetails', item)"> View Details </button>
+                    <button class="catalogue-filter-category-box details-button" @click="$emit('viewDetails', item)"> 
+                        More Details <Icon name="ic:baseline-chevron-right" size="1.25rem"/>
+                    </button>
                 </div>
             </div>
         </div>

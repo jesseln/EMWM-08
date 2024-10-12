@@ -221,7 +221,7 @@ export const useReferenceStore = defineStore('reference', ()=>{
     const zoomLevel = ref("0");
     const zoomFactor = reactive({
         0: {height: 1.5*0.3, width: 2*0.25},
-        50: {height: 1.5*0.6, width: 2*0.65},
+        50: {height: 1.5*0.6, width: 2*0.675},
         100: {height: 1.5*2, width: 1.4*5},
     })
 
