@@ -116,7 +116,7 @@
                 </div>
                 <div class="type-selector-wrapper" >
                     <div class="mainSearch-jumpTo-intro">
-                        <h2>Jump To Category:</h2>
+                        <h2>Jump to category:</h2>
                     </div>
                 <!-- <NuxtLink to="/library/marks"> -->
                     <VMenu
@@ -132,7 +132,7 @@
                                     </svg> -->
                                     <Icon name="ic:baseline-keyboard-arrow-down" size="1.25rem" />
                                 </div>
-                                <h3 :class="{ activePage : route.params.setQuery === 'marks'}">Marks</h3>
+                                <h3 :class="{ activePage : route.params.setQuery === 'marks'}">Mark categories</h3>
                             </div>
 
                         </div>
@@ -170,7 +170,7 @@
                                     </svg> -->
                                     <Icon name="ic:baseline-keyboard-arrow-down" size="1.25rem" />
                                 </div>
-                                <h3 :class="{ activePage : route.params.setQuery === 'agents'}">Agents</h3>   
+                                <h3 :class="{ activePage : route.params.setQuery === 'agents'}">Agent categories</h3>   
                             </div>
                         </div>
                         <template #popper >
@@ -209,7 +209,7 @@
                                     </svg> -->
                                     <Icon name="ic:baseline-keyboard-arrow-down" size="1.25rem" />
                                 </div>
-                                <h3 :class="{ activePage : route.params.setQuery === 'books'}">Books</h3>
+                                <h3 :class="{ activePage : route.params.setQuery === 'books'}">Book categories</h3>
                             </div>
                         </div>
                         <template #popper >
@@ -299,34 +299,44 @@
                 <!-- <LibraryNav /> -->
             </div>
 
-            <div v-if="getActiveFilters.length" class="filters-bar">
-                <div class="goto-search-box">
-                    <div class="goto-search-inner">
-                        <h3>Show Selected Items</h3>
-                    </div>
-                </div>
+            <div class="filters-bar">
                 <!-- <h4 class="library-nav-view-filters">Items Selected</h4> -->
-                <div class="catalogue-filter-category-container-active-inview scrollable">
-                    <div v-for="filterMap in filterGroupBy" class="catalogue-filter-category-wrapper">
-                        <div  class="catalogue-filter-category-titles-wrapper">
-                            <h2 class="catalogue-filter-item" >
+                <div v-if="getActiveFilters.length" class="selected-filter-category-container-active-inview scrollable">
+                    <div v-for="filterMap in filterGroupBy" class="selected-filter-category-wrapper">
+                        <div  class="selected-filter-category-titles-wrapper">
+                            <h2 class="selected-filter-item" >
                                 {{ filterMap[0] }}
                             </h2>
-                            <h3 class="catalogue-filter-category" >
+                            <h3 class="selected-filter-category" >
                                 {{ categoryMap.get(filterMap[0])[filterMap[1]] }}
                             </h3>
                         </div>
                         <button 
                             v-for="filterValue in filterMap[2]"
                             @click="filterActiveToggle(filterValue, filterValue.category, filterValue.itemType)" 
-                            class="catalogue-filter-category-active"
+                            class="selected-filter-category-active"
                             :class="{ filterActive : filterObject.get(filterValue.itemType)[filterValue.category][filterValue.name].active }">
-                                <div class="catalogue-filter-category-value-container">
-                                    <p class="catalogue-filter-category-value" >  {{filterValue.name}} </p>
+                                <div class="selected-filter-category-value-container">
+                                    <p class="selected-filter-category-value" >  {{filterValue.name}} </p>
                                 </div>
                         </button>
                     </div>
             </div>
+            <div v-if="!getActiveFilters.length" class="selected-filter-category-container-active-inview scrollable">
+                <h3 class="selected-filter-category not-selected" >
+                    No items Selected
+                </h3>
+            </div>
+            <div class="goto-search-box">
+                    <div class="goto-search-inner" :class="{ active : getActiveFilters.length}">
+                        <h3 >Show Items in Library</h3>
+                    </div>
+                </div>
+            <div class="goto-search-box">
+                    <div class="goto-search-inner">
+                        <h3>Clear selection</h3>
+                    </div>
+                </div>
             </div>
             
             <div class="explore-loading-page" v-if="!dataCheck">
@@ -505,7 +515,7 @@ const filterGroupBy = ref();
 onMounted(()=>{
     activeFilters.value = []
     watchEffect(()=>{
-        filterGroupBy.value = d3.flatGroup(activeFilters.value.reverse(), d => d.itemType, d => d.category)
+        filterGroupBy.value = d3.flatGroup(activeFilters.value, d => d.itemType, d => d.category)
         // console.log('filterGroupBy',filterGroupBy.value)
         viewStore.filterTotalCount
 
