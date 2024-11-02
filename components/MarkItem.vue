@@ -263,7 +263,7 @@ onMounted(()=>{
             itemType.value = itemTypeCheck(item)
             updateItemRefs(item)
             getItemLibrary(item)
-            watch(item,()=>{
+            watch(()=> item,()=>{
                 if(itemType.value !== 'Agent') {
                     // console.log('itemTYpe ',itemType.value)
                     getImages(item)

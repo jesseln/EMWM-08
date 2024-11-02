@@ -285,7 +285,7 @@ onMounted(()=>{
         itemType.value = itemTypeCheckYC(item)
         updateItemRefs(item)
         // getItemLibraryYC(item)
-        watch(item,()=>{
+        watch(()=> item,()=>{
                 // console.log('itemTYpe ',itemType.value)
                 getImages(item)
         }, { immediate: true })
