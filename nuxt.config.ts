@@ -82,14 +82,14 @@ export default defineNuxtConfig({
   },
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate'],
+  },
+  runtimeConfig: {
+    // The private keys which are only available within server-side
+      supabaseKey: process.env.SUPABASE_KEY,
+    // Keys within public, will be also exposed to the client-side
+    public: {
+      supabaseUrl: process.env.SUPABASE_URL,
+    }
   }
-  // runtimeConfig: {
-  //   // The private keys which are only available within server-side
-  //     supabaseKey: process.env.SUPABASE_KEY,
-  //   // Keys within public, will be also exposed to the client-side
-  //   public: {
-  //     supabaseUrl: process.env.SUPABASE_URL,
-  //   }
-  // }
 })
 
