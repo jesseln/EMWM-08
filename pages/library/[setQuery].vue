@@ -282,7 +282,7 @@
                                 v-for="filterValue in searchList(filterObject.get('Book')[category], searchEntry)"
                                 @click="viewStore.filterActiveToggle(filterValue, category, 'Book')" 
                                 class="mainSearch-catalogue-filter-category-box"
-                                :class="{ filterActive : filterObject.get('Book')[category][filterValue.name].active }">
+                                :class="{ filterActive: filterObject.get('Book')[category][filterValue.name].active }">
                                 <p class="mainSearch-catalogue-filter-category-list-value" >{{ filterValue.name }}</p>
                             </button>
                         </div>
