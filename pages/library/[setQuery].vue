@@ -567,8 +567,6 @@ onMounted(()=>{
 	outline: none;	
 }
 
-.form-style-1 input[type=text]:focus{
-}
 
 span{
     font-weight: 650;
@@ -598,15 +596,7 @@ span{
   }
 
 
-  .index-list-main h3.activePage {
 
-	//color: white;
-
-  }
-
-.library-explorer-container{
-    // max-width: 100vw;
-}
 
     .nav-div{
         z-index: 10;

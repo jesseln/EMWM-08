@@ -6,7 +6,14 @@ export default defineNuxtConfig({
       fs: {
         strict: false
       }
-    }
+    },
+    css: {
+        preprocessorOptions: {
+          scss: {
+            api: 'modern-compiler',
+          },
+        },
+      },
   },
   modules: [
     // '@nuxtjs/tailwindcss',
@@ -44,8 +51,7 @@ export default defineNuxtConfig({
   css: [
     // CSS file in the project
     '@/assets/css/main.css',
-    // SCSS file in the project
-    '@/assets/css/main.scss'
+
   ],
   app: {
     head: {

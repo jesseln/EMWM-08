@@ -183,12 +183,12 @@ export const useViewStore = defineStore('view', ()=>{
 
     //Get unique values in colour set
     const getColourSet = computed (() => {
-        return processColourSet(libraryData.value)
+        return processColourSet(Array.from(libraryData.value))
     })
 
     //Currently applies to Arrays only
     const viewColourSet = computed (() => {
-        return processColourItems(libraryData.value, getColourSet.value)
+        return processColourItems(Array.from(libraryData.value), getColourSet.value)
     })
 
     // INTERNAL FUNCTIONS //
@@ -254,7 +254,7 @@ export const useViewStore = defineStore('view', ()=>{
                 }
             }
         }
-        console.log('formatLibraryRebuild fired')
+        // console.log('formatLibraryRebuild fired')
         return libraryComplete
     }
 
@@ -391,7 +391,7 @@ export const useViewStore = defineStore('view', ()=>{
 
     //Update View Object from user input
     function handleViewSelection(viewMode, viewSelection, itemType){
-        console.log('handleViewSelection', viewMode, viewSelection, itemType)
+        // console.log('handleViewSelection', viewMode, viewSelection, itemType)
 
         if(itemType === 'NotSelected') {
             libraryDisplay.view[viewMode] = 'Not Selected'
@@ -591,6 +591,7 @@ export const useViewStore = defineStore('view', ()=>{
     })
 
     function getFilterLibrary(){
+        return formattedLibrary.value
         filterTotalCount.value = 0
         return formattedLibrary.value
             .reduce((library, shelf) => {
@@ -633,20 +634,20 @@ export const useViewStore = defineStore('view', ()=>{
         let imagePreviews = [];
         let index = 0
             while (index < ofSize){
-                console.log('BeginLoop')
+                // console.log('BeginLoop')
                 itemType = itemTypeCheck(itemArray[index])
                 imageRefs = getImageRefs(itemType)
-                console.log('PreCall', itemArray[index], imageRefs)
+                // console.log('PreCall', itemArray[index], imageRefs)
                 let { data, error } = await supabase
                 .storage
                 .from(`${imageRefs.folder}`)
                 .list(`${itemArray[index][imageRefs.id]}`)
                 imageData = data
-                console.log('PostCall', imageData)
+                // console.log('PostCall', imageData)
                 // console.log('imageData', imageData)
                 imagePreviews.push(...imageData.map(image => ({name: image.name, itemID: [imageRefs.id], item: itemArray[index], imageFolder: imageRefs.folder})))
                 index++;
-                console.log('EndLoop')
+                // console.log('EndLoop')
                 
             }
             return imagePreviews

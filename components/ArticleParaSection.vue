@@ -1,8 +1,6 @@
 <template>
     <div class="article-para-section">
-        <p v-for="para in content" :key="para" class="article-para">
-            <div v-html="para"></div>
-        </p>
+            <div v-for="para in content" :key="para" class="article-para" v-html="para"></div>
     </div>
 </template>
 

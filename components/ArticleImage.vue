@@ -6,9 +6,7 @@
             />
         </div>
         <div class="article-image-caption-container">
-            <p class="article-image-caption">
-                <div v-html="content.caption"></div>
-            </p>
+            <div class="article-image-caption" v-html="content.caption"></div>
         </div>
 </template>
 
